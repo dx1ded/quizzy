@@ -18,9 +18,9 @@
     "server:lint": "npm run --prefix @app/server lint",
     "lint": "run-p client:lint server:lint",
 
-    "client:lint-fix": "npm run --prefix @app/client lint-fix",
-    "server:lint-fix": "npm run --prefix @app/server lint-fix",
-    "lint-fix": "run-p client:lint-fix server:lint-fix"
+    "client:lint:fix": "npm run --prefix @app/client lint:fix",
+    "server:lint:fix": "npm run --prefix @app/server lint:fix",
+    "lint:fix": "run-p client:lint:fix server:lint:fix"
   },
   "husky": {
     "hooks": {
@@ -28,7 +28,7 @@
     }
   },
   "lint-staged": {
-    "*.{ts,tsx}": ["npm run lint-fix"]
+    "*.{ts,tsx}": ["npm run lint:fix", "git add"]
   },
   "devDependencies": {
     "husky": "^8.0.3",

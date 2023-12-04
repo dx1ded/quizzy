@@ -6,7 +6,7 @@
     "build": "npx tsc",
     "dev": "tsc -w & nodemon dist/index.js",
     "lint": "eslint . --ext ts --report-unused-disable-directives",
-    "lint-fix": "eslint . --ext ts --fix"
+    "lint:fix": "eslint . --ext ts --fix"
   },
   "devDependencies": {
     "@quizzy/eslint-config-default": "0.0.1",
