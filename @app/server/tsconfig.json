@@ -1,0 +1,8 @@
+{
+  "extends": "@quizzy/eslint-config-default/tsconfig.json",
+  "compilerOptions": {
+    "sourceMap": true,
+    "outDir": "./dist"
+  },
+  "include": ["src/**/*"]
+}

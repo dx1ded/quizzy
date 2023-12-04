@@ -1,0 +1,16 @@
+{
+  "name": "@quizzy/server",
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "build": "npx tsc",
+    "dev": "tsc -w & nodemon dist/index.js",
+    "lint": "eslint . --ext ts --report-unused-disable-directives",
+    "lint-fix": "eslint . --ext ts --fix"
+  },
+  "devDependencies": {
+    "@quizzy/eslint-config-default": "0.0.1",
+    "@types/node": "^20.10.1",
+    "typescript": "^5.3.2"
+  }
+}
