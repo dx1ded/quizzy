@@ -9,12 +9,14 @@
     "lint:fix": "eslint . --ext ts,tsx --fix"
   },
   "dependencies": {
+    "@types/uuid": "^9.0.7",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "uuid": "^9.0.1"
   },
   "devDependencies": {
-    "@quizzy/eslint-config-default": "0.0.1",
     "@conarti/eslint-plugin-feature-sliced": "^1.0.5",
+    "@quizzy/eslint-config-default": "0.0.1",
     "@types/react": "^18.2.37",
     "@types/react-dom": "^18.2.15",
     "@vitejs/plugin-react": "^4.2.0",

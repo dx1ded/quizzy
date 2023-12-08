@@ -23,6 +23,12 @@ module.exports = {
     "react/jsx-props-no-spreading": "off",
     "@conarti/feature-sliced/layers-slices": "error",
     "@conarti/feature-sliced/absolute-relative": "error",
-    "@conarti/feature-sliced/public-api": "off"
+    "@conarti/feature-sliced/public-api": "off",
+    "react/require-default-props": "off",
+    "react/jsx-sort-props": ["error", {
+      "callbacksLast": true,
+      "shorthandLast": true,
+      "reservedFirst": true
+    }]
   }
 }

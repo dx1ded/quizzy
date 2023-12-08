@@ -34,6 +34,7 @@ module.exports = {
     "quotes": ["error", "double"],
     "comma-dangle": "off",
     "no-unused-vars": "warn",
+    "@typescript-eslint/no-unused-vars": "warn",
     "import/prefer-default-export": "off",
     "no-underscore-dangle": "off",
     "no-else-return": "off",
