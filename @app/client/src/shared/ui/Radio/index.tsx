@@ -22,7 +22,7 @@ export function Radio({
   ...attrs
 }: PropsWithChildren<RadioProps>) {
   const id = uuidv4()
-  const className = `inline-flex items-center gap-1.5 ${attrs.className}`
+  const className = `inline-flex items-center gap-1.5 ${attrs.className || ""}`
 
   return (
     <label {...attrs} className={className} htmlFor={id}>
@@ -34,7 +34,7 @@ export function Radio({
         type="checkbox"
       />
       <div className="flex h-4 w-4 cursor-pointer items-center justify-center rounded-full border border-gray text-white peer-checked:border-secondary peer-checked:text-secondary">
-        <Tick className="h-3 w-3 text-current" />
+        <Tick className="text-current" height={0.75} width={0.75} />
       </div>
       {children}
     </label>
