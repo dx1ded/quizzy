@@ -1,7 +1,10 @@
 import { PropsWithChildren, HTMLAttributes, createElement } from "react"
 
 interface HeadingProps extends HTMLAttributes<HTMLHeadingElement> {
-  tag?: string
+  /**
+   * HTML tag name (provided with the components by default)
+   */
+  tag?: "h1" | "h2" | "h3" | "h4" | "h5" | "h6"
 }
 
 export function Heading({
@@ -9,7 +12,7 @@ export function Heading({
   tag = "h1",
   ...attrs
 }: PropsWithChildren<HeadingProps>) {
-  const className = `text-3xl font-bold leading-snug ${attrs.className}`
+  const className = `text-3xl font-bold leading-snug ${attrs.className || ""}`
   return createElement(tag, { ...attrs, className }, children)
 }
 
@@ -18,7 +21,7 @@ export function Subheading({
   tag = "h2",
   ...attrs
 }: PropsWithChildren<HeadingProps>) {
-  const className = `text-2xl font-semibold ${attrs.className}`
+  const className = `text-2xl font-semibold ${attrs.className || ""}`
   return createElement(tag, { ...attrs, className }, children)
 }
 
@@ -26,7 +29,7 @@ export function Text({
   children,
   ...attrs
 }: PropsWithChildren<HTMLAttributes<HTMLParagraphElement>>) {
-  const className = `text-lg font-normal ${attrs.className}`
+  const className = `text-lg font-normal ${attrs.className || ""}`
   return (
     <p {...attrs} className={className}>
       {children}
@@ -38,7 +41,7 @@ export function Caption({
   children,
   ...attrs
 }: PropsWithChildren<HTMLAttributes<HTMLSpanElement>>) {
-  const className = `text-xs font-normal ${attrs.className}`
+  const className = `text-xs font-normal ${attrs.className || ""}`
   return (
     <span {...attrs} className={className}>
       {children}

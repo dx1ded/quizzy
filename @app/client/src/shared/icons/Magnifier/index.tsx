@@ -1,6 +1,6 @@
 import { IconProps } from "../../types"
 
-export function Search({ width, height, color, className }: IconProps) {
+export function Magnifier({ width, height, color, className }: IconProps) {
   return (
     <svg
       className={className}

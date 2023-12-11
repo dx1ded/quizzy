@@ -2,7 +2,7 @@ const prettierConfig = require("@quizzy/eslint-config-default/.prettierrc.cjs")
 
 module.exports = {
   root: true,
-  extends: ["@quizzy/default", "airbnb/hooks"],
+  extends: ["@quizzy/default", "airbnb/hooks", "plugin:storybook/recommended"],
   plugins: [
     "react-refresh",
     "@conarti/feature-sliced"
@@ -30,5 +30,14 @@ module.exports = {
       "shorthandLast": true,
       "reservedFirst": true
     }]
-  }
+  },
+  overrides: [
+    {
+      files: ["src/**/*stories.{ts,tsx}"],
+      rules: {
+        "react/function-component-definition": "off",
+        "import/no-extraneous-dependencies": "off"
+      }
+    }
+  ]
 }

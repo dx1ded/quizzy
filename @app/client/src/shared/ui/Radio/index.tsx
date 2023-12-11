@@ -11,7 +11,13 @@ interface RadioProps
     LabelHTMLAttributes<HTMLLabelElement>,
     HTMLLabelElement
   > {
+  /**
+   * Radio name which is used for connection with other radios in HTML
+   */
   name: string
+  /**
+   * Checked state which determines if a radio is selected
+   */
   checked?: boolean
 }
 

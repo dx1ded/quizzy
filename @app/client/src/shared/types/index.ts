@@ -5,13 +5,14 @@ export interface PropsWithClassname {
 export interface IconProps extends PropsWithClassname {
   /**
    * Width in rem proportion
-   * @param width;
    */
   width?: number
   /**
    * Height in rem proportion
-   * @param height;
    */
   height?: number
+  /**
+   * Icon color
+   */
   color?: string
 }

@@ -11,7 +11,13 @@ interface CheckboxProps
     LabelHTMLAttributes<HTMLLabelElement>,
     HTMLLabelElement
   > {
+  /**
+   * Checkbox name which is used for connection with other checkboxes in HTML
+   */
   name: string
+  /**
+   * Checked state which determines if a checkbox is selected
+   */
   checked?: boolean
 }
 

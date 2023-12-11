@@ -3,6 +3,7 @@ import { Button } from "shared/ui/Button"
 import { Checkbox } from "shared/ui/Checkbox"
 import { Radio } from "shared/ui/Radio"
 import { Person } from "shared/icons/Person"
+import { Logo } from "shared/ui/Logo"
 
 export function App() {
   return (
@@ -15,6 +16,7 @@ export function App() {
         <p>Hey!</p>
       </Radio>
       <Person width={1} />
+      <Logo />
     </div>
   )
 }
