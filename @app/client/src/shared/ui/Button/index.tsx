@@ -1,4 +1,9 @@
-import { PropsWithChildren, ButtonHTMLAttributes } from "react"
+import {
+  PropsWithChildren,
+  ButtonHTMLAttributes,
+  ElementType,
+  ComponentPropsWithoutRef,
+} from "react"
 
 type ButtonVariants = "primary" | "secondary" | "white"
 
@@ -21,7 +26,8 @@ const sizes: Record<ButtonSizes, string> = {
   xs: "text-[0.625rem]",
 }
 
-interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+interface ButtonProps<T>
+  extends PropsWithChildren<ButtonHTMLAttributes<HTMLButtonElement>> {
   /**
    * Button variant (primary | secondary | white)
    */
@@ -30,28 +36,34 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
    * Button size (lg | md | sm | xs)
    */
   size?: ButtonSizes
+  /**
+   * Component polymorphism
+   */
+  as?: T
 }
 
-export function Button({
+export function Button<T extends ElementType = "button">({
   type = "button",
   variant = "primary",
   size = "lg",
   children,
-  ...attrs
-}: PropsWithChildren<ButtonProps>) {
+  as,
+  ...props
+}: ButtonProps<T> & Omit<ComponentPropsWithoutRef<T>, keyof ButtonProps<T>>) {
   const className = `${variants[variant]} ${
     sizes[size]
-  } rounded font-semibold px-2 py-1 ${attrs.className || ""}`
+  } rounded font-semibold px-2 py-1 ${props.className || ""}`
+  const Component = as || "button"
 
   return (
     // Used because there's an issue that type should be always static (not dynamic)
     // However it's not our case and that's the reason we suppress the error
-    <button
+    <Component
       // eslint-disable-next-line react/button-has-type
       type={type}
-      {...attrs}
+      {...props}
       className={className}>
       {children}
-    </button>
+    </Component>
   )
 }

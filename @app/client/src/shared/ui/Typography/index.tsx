@@ -21,7 +21,9 @@ export function Subheading({
   tag = "h2",
   ...attrs
 }: PropsWithChildren<HeadingProps>) {
-  const className = `text-2xl font-semibold ${attrs.className || ""}`
+  const className = `text-2xl font-semibold leading-snug ${
+    attrs.className || ""
+  }`
   return createElement(tag, { ...attrs, className }, children)
 }
 
@@ -29,7 +31,7 @@ export function Text({
   children,
   ...attrs
 }: PropsWithChildren<HTMLAttributes<HTMLParagraphElement>>) {
-  const className = `text-lg font-normal ${attrs.className || ""}`
+  const className = `text-lg leading-8 font-normal ${attrs.className || ""}`
   return (
     <p {...attrs} className={className}>
       {children}
@@ -41,7 +43,9 @@ export function Caption({
   children,
   ...attrs
 }: PropsWithChildren<HTMLAttributes<HTMLSpanElement>>) {
-  const className = `text-xs font-normal ${attrs.className || ""}`
+  const className = `text-sm leading-relaxed font-normal ${
+    attrs.className || ""
+  }`
   return (
     <span {...attrs} className={className}>
       {children}

@@ -29,7 +29,8 @@ module.exports = {
       "callbacksLast": true,
       "shorthandLast": true,
       "reservedFirst": true
-    }]
+    }],
+    "react/no-unescaped-entities": "off"
   },
   overrides: [
     {
@@ -39,5 +40,5 @@ module.exports = {
         "import/no-extraneous-dependencies": "off"
       }
     }
-  ]
+  ],
 }
