@@ -1,4 +1,4 @@
-import { IconProps } from "../../types"
+import { IconProps } from "../../lib/types"
 
 export function AddPhoto({ width, height, color, className }: IconProps) {
   return (

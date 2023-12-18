@@ -1,5 +1,9 @@
-import { InputHTMLAttributes } from "react"
-import { PropsWithClassname } from "../../types"
+import {
+  InputHTMLAttributes,
+  forwardRef,
+  ComponentPropsWithoutRef,
+} from "react"
+import { PropsWithClassname } from "shared/lib/types"
 import { Magnifier } from "../../icons/Magnifier"
 
 type InputVariants = "primary" | "secondary"
@@ -29,15 +33,21 @@ interface InputProps
   isCentered?: boolean
 }
 
-export function Input({
-  variant = "primary",
-  withMagnifier = false,
-  isCentered = false,
-  magnifierWidth,
-  magnifierHeight,
-  magnifierClassName,
-  ...attrs
-}: InputProps) {
+export const Input = forwardRef<
+  HTMLInputElement,
+  ComponentPropsWithoutRef<"input">
+>(function Input(
+  {
+    variant = "primary",
+    withMagnifier = false,
+    isCentered = false,
+    magnifierWidth,
+    magnifierHeight,
+    magnifierClassName,
+    ...attrs
+  }: InputProps,
+  ref
+) {
   const className = `${
     variants[variant]
   } rounded text-base bg-white py-1 px-2.5 outline-none placeholder:text-current ${
@@ -55,10 +65,10 @@ export function Input({
           height={magnifierHeight || 1}
           width={magnifierWidth || 1}
         />
-        <input className={`${className} pl-10`} {...attrs} />
+        <input {...attrs} ref={ref} className={`${className} pl-10`} />
       </div>
     )
   }
 
-  return <input className={className} {...attrs} />
-}
+  return <input {...attrs} ref={ref} className={className} />
+})

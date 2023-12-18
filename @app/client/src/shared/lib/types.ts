@@ -1,3 +1,5 @@
+import { PropsWithChildren, ReactElement } from "react"
+
 export interface PropsWithClassname {
   className?: string
 }
@@ -15,4 +17,8 @@ export interface IconProps extends PropsWithClassname {
    * Icon color
    */
   color?: string
+}
+
+export interface ChildrenAsFunction<T> {
+  children(props: T): ReactElement<PropsWithChildren>
 }

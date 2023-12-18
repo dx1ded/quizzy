@@ -1,14 +1,14 @@
 import { Container } from "shared/ui/Container"
-import { Caption, Subheading } from "shared/ui/Typography"
+import { Caption, Heading } from "shared/ui/Typography"
 
 export function Examples() {
   return (
     <section className="bg-primary pb-24 pt-14">
       <Container>
-        <Subheading className="mb-4 text-center text-white">
+        <Heading className="mb-4 text-center text-white">
           You will have a lot of{" "}
           <span className="font-lobster text-accent">fun!</span>
-        </Subheading>
+        </Heading>
         <Caption className="mx-auto mb-16 block max-w-lg text-center text-white">
           At Quizzy, the fun never stops as you immerse yourself in a world of
           interactive learning adventures. Engage in lively quizzes that

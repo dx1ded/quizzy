@@ -1,0 +1,10 @@
+{
+  "name": "@quizzy/common",
+  "version": "0.0.1",
+  "type": "module",
+  "main": "./src/index.ts",
+  "devDependencies": {
+    "@quizzy/eslint-config-default": "*",
+    "typescript": "^5.3.2"
+  }
+}

@@ -1,5 +1,5 @@
 import { ComponentPropsWithoutRef, ElementType } from "react"
-import { PropsWithClassname } from "../../types"
+import { PropsWithClassname } from "../../lib/types"
 
 interface LogoProps<T> extends PropsWithClassname {
   /**
