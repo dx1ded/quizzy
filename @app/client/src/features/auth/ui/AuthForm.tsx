@@ -6,7 +6,7 @@ import { Button } from "shared/ui/Button"
 import { MultistepProps } from "shared/ui/Multistep"
 import { ChildrenAsFunction } from "shared/lib"
 
-interface AuthFormProps<T> extends MultistepProps<T> {
+interface AuthFormProps<T> extends Partial<MultistepProps<T>> {
   /**
    * the title is used for the left side (card)
    */

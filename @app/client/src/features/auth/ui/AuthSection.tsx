@@ -2,6 +2,8 @@ import { MouseEvent } from "react"
 import { Multistep, MultistepProps } from "shared/ui/Multistep"
 import { Button } from "shared/ui/Button"
 import { AuthForm } from "./AuthForm"
+import { SignIn } from "./sign-in"
+import { SignUp } from "./sign-up"
 
 type AuthMethods = "" | "sign-in" | "sign-up"
 
@@ -34,7 +36,7 @@ export function AuthSection() {
                 <Button
                   className="flex-1"
                   data-method="sign-up"
-                  size="md"
+                  size="lg"
                   variant="white"
                   onClick={(e) => methodClickHandler(e, props)}>
                   Sign up
@@ -42,7 +44,7 @@ export function AuthSection() {
                 <Button
                   className="flex-1"
                   data-method="sign-in"
-                  size="md"
+                  size="lg"
                   variant="secondary"
                   onClick={(e) => methodClickHandler(e, props)}>
                   Sign in
@@ -50,7 +52,7 @@ export function AuthSection() {
               </div>
             )}
           </AuthForm>
-          <div>123</div>
+          {props.data.authMethod === "sign-in" ? <SignIn /> : <SignUp />}
         </>
       )}
     </Multistep>
