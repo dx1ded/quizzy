@@ -9,7 +9,7 @@ export const AuthInput = forwardRef<
     <Input
       ref={ref}
       {...props}
-      className="w-full text-sm [&:not(:last-child)]:mb-5"
+      className="w-full !py-1.5 text-sm [&:not(:last-of-type)]:mb-5"
     />
   )
 })

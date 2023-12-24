@@ -4,6 +4,7 @@ import { Button } from "shared/ui/Button"
 import { AuthForm } from "./AuthForm"
 import { SignIn } from "./sign-in"
 import { SignUp } from "./sign-up"
+import { authCard } from "../lib"
 
 type AuthMethods = "" | "sign-in" | "sign-up"
 
@@ -27,8 +28,8 @@ export function AuthSection() {
       {(props) => (
         <>
           <AuthForm
-            cardCaption="Choose an authentication method to have access to our platform!"
-            cardTitle="Authentication"
+            cardCaption={authCard.caption}
+            cardTitle={authCard.title}
             withNavigation={false}
             {...props}>
             {() => (
@@ -52,7 +53,11 @@ export function AuthSection() {
               </div>
             )}
           </AuthForm>
-          {props.data.authMethod === "sign-in" ? <SignIn /> : <SignUp />}
+          {props.data.authMethod === "sign-in" ? (
+            <SignIn parentSetPrev={props.setPrevStep} />
+          ) : (
+            <SignUp parentSetPrev={props.setPrevStep} />
+          )}
         </>
       )}
     </Multistep>

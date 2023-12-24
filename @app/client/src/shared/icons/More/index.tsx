@@ -1,4 +1,4 @@
-import { IconProps } from "../../lib/types"
+import { IconProps } from "../../lib"
 
 export function More({ width, height, color, className }: IconProps) {
   return (

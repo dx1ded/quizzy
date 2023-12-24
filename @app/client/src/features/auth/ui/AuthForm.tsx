@@ -1,12 +1,19 @@
 import { Children, useMemo } from "react"
-import { useForm, UseFormRegister, FieldValues } from "react-hook-form"
+import {
+  useForm,
+  UseFormRegister,
+  SubmitHandler,
+  FieldValues,
+  Control,
+} from "react-hook-form"
 import { Caption, Subheading } from "shared/ui/Typography"
 import { ArrowBack } from "shared/icons/ArrowBack"
 import { Button } from "shared/ui/Button"
 import { MultistepProps } from "shared/ui/Multistep"
 import { ChildrenAsFunction } from "shared/lib"
 
-interface AuthFormProps<T> extends Partial<MultistepProps<T>> {
+interface AuthFormProps<T>
+  extends Partial<Pick<MultistepProps<T>, "setPrevStep" | "setNextStep">> {
   /**
    * the title is used for the left side (card)
    */
@@ -23,23 +30,33 @@ interface AuthFormProps<T> extends Partial<MultistepProps<T>> {
    * Used to add / remove the navigation on the bottom
    */
   withNavigation?: boolean
+  /**
+   * Function to be invoked when one of the nav buttons is clicked
+   * Has a middleware function next() which should be called to get into the
+   * next stage
+   */
+  onSubmit?(data: T, next: () => void): void
 }
 
-interface AuthFormChildrenProps {
-  register: UseFormRegister<FieldValues>
+interface AuthFormChildrenProps<T extends FieldValues> {
+  register: UseFormRegister<T>
+  control: Control<T>
 }
 
-export function AuthForm<T>({
+export function AuthForm<T extends FieldValues>({
   children,
   cardTitle,
   cardCaption,
   title = "",
   withNavigation = true,
-}: AuthFormProps<T> & ChildrenAsFunction<AuthFormChildrenProps>) {
-  const { register, handleSubmit } = useForm()
+  setPrevStep = () => {},
+  setNextStep = () => {},
+  onSubmit = () => {},
+}: AuthFormProps<T> & ChildrenAsFunction<AuthFormChildrenProps<T>>) {
+  const { register, control, handleSubmit } = useForm<T>()
 
-  const onSubmit = () => {
-    console.log(1)
+  const submitHandler: SubmitHandler<T> = (data) => {
+    onSubmit(data, setNextStep)
   }
 
   const invokedChildren = useMemo(
@@ -47,9 +64,10 @@ export function AuthForm<T>({
       Children.toArray(
         children({
           register,
+          control,
         })
       ),
-    [children, register]
+    [children, register, control]
   )
 
   return (
@@ -59,11 +77,16 @@ export function AuthForm<T>({
         <Caption>{cardCaption}</Caption>
       </div>
       <div className="flex flex-1 flex-col justify-between p-5">
-        <Subheading>{title}</Subheading>
+        <Subheading style={{ marginTop: title ? "1rem" : "0" }}>
+          {title}
+        </Subheading>
         <form>{invokedChildren}</form>
         {withNavigation && (
           <div className="flex items-center justify-between">
-            <button className="flex items-center gap-2.5 text-sm" type="button">
+            <button
+              className="flex items-center gap-2.5 text-sm"
+              type="button"
+              onClick={setPrevStep}>
               <ArrowBack width={0.75} />
               Previous step
             </button>
@@ -71,7 +94,7 @@ export function AuthForm<T>({
               className="px-4 py-1.5"
               size="md"
               variant="secondary"
-              onClick={handleSubmit(onSubmit)}>
+              onClick={handleSubmit(submitHandler)}>
               Continue
             </Button>
           </div>

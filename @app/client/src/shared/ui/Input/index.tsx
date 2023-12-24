@@ -3,7 +3,7 @@ import {
   forwardRef,
   ComponentPropsWithoutRef,
 } from "react"
-import { PropsWithClassname } from "../../lib/types"
+import { PropsWithClassname } from "../../lib"
 import { Magnifier } from "../../icons/Magnifier"
 
 type InputVariants = "primary" | "secondary"

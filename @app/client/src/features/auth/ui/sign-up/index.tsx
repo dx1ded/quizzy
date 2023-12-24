@@ -4,14 +4,14 @@ import { FullName } from "./FullName"
 import { Username } from "./Username"
 import { DateOfBirth } from "./DateOfBirth"
 import { Interests } from "./Interests"
-import { signUpFormState } from "../../lib"
+import { ParentMultistepControls, signUpFormState } from "../../lib"
 
-export function SignUp() {
+export function SignUp({ parentSetPrev }: ParentMultistepControls) {
   return (
     <Multistep defaultState={signUpFormState}>
       {(props) => (
         <>
-          <Credentials {...props} />
+          <Credentials {...props} parentSetPrev={parentSetPrev} />
           <FullName {...props} />
           <Username {...props} />
           <DateOfBirth {...props} />

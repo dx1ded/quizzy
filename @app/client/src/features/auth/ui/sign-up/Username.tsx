@@ -1,12 +1,24 @@
+import { MultistepProps } from "shared/ui/Multistep"
 import { AuthForm } from "../AuthForm"
 import { AuthLabel } from "../AuthLabel"
 import { AuthInput } from "../AuthInput"
+import { SignUpFormProps, signUpCard } from "../../lib"
 
-export function Username() {
+export function Username({
+  setData,
+  setPrevStep,
+  setNextStep,
+}: MultistepProps<SignUpFormProps>) {
   return (
     <AuthForm
-      cardCaption="Create your account in a few steps, and you will get an access to the platform and personal cabinet"
-      cardTitle="Sign up">
+      cardCaption={signUpCard.caption}
+      cardTitle={signUpCard.title}
+      setNextStep={setNextStep}
+      setPrevStep={setPrevStep}
+      onSubmit={(data, next) => {
+        setData((prevState) => ({ ...prevState, ...data }))
+        next()
+      }}>
       {({ register }) => (
         <>
           <AuthLabel htmlFor="username">Username</AuthLabel>

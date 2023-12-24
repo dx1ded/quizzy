@@ -5,3 +5,7 @@ export type SignInFormProps = SignInReq
 export type SignUpFormProps = SignUpReq & {
   confirmPassword: string
 }
+
+export interface ParentMultistepControls {
+  parentSetPrev(): void
+}

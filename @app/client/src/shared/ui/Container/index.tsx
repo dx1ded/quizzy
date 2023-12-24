@@ -1,5 +1,5 @@
 import { PropsWithChildren } from "react"
-import { PropsWithClassname } from "../../lib/types"
+import { PropsWithClassname } from "../../lib"
 
 interface ContainerProps extends PropsWithClassname {
   /**

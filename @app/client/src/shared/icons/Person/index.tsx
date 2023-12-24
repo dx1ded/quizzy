@@ -1,4 +1,4 @@
-import { IconProps } from "shared/lib/types"
+import { IconProps } from "../../lib"
 
 export function Person({ width, height, color, className }: IconProps) {
   return (

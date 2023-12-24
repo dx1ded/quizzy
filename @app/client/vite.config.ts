@@ -12,4 +12,9 @@ export default defineConfig({
       include: ["./src/**/*.ts", "./src/**/*.tsx"]
     })
   ],
+  resolve: {
+    alias: {
+      "@mui/styled-engine": "@mui/styled-engine-sc"
+    }
+  }
 })
