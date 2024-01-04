@@ -5,11 +5,16 @@ export const AuthInput = forwardRef<
   HTMLInputElement,
   ComponentPropsWithoutRef<"input">
 >(function AuthInput(props: ComponentPropsWithoutRef<"input">, ref) {
-  return (
-    <Input
-      ref={ref}
-      {...props}
-      className="w-full !py-1.5 text-sm [&:not(:last-of-type)]:mb-5"
-    />
-  )
+  const className = `w-full !py-1.5 text-sm ${
+    props.className ? props.className : ""
+  }`
+
+  return <Input ref={ref} {...props} autoComplete="off" className={className} />
+
+  // return (
+  //   <div className="relative [&:not(:last-of-type)]:mb-5">
+  //     <Input ref={ref} {...props} autoComplete="off" className={className} />
+  //     <AuthValidation />
+  //   </div>
+  // )
 })

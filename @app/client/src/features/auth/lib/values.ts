@@ -18,7 +18,7 @@ export const signUpFormState: SignUpFormProps = {
 
 export const authCard = {
   title: "Authentication",
-  caption: "Choose an authentication method to have access to our platform",
+  caption: "Choose an authentication method to have access to our platform!",
 }
 
 export const signInCard = {

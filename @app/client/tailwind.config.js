@@ -18,6 +18,15 @@ export default {
       },
       fontSize: {
         "3xl": "2rem"
+      },
+      keyframes: {
+        fadeIn: {
+          "0%": { transform: "translate(-6rem)", opacity: "0" },
+          "100%": { transform: "translate(0)", opacity: "1" }
+        }
+      },
+      animation: {
+        fadeIn: "fadeIn 0.5s ease-in-out forwards"
       }
     }
   },

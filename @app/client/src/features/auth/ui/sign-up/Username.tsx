@@ -22,11 +22,19 @@ export function Username({
       {({ register }) => (
         <>
           <AuthLabel htmlFor="username">Username</AuthLabel>
-          <AuthInput
-            id="username"
-            placeholder="Enter your username"
-            {...register("username")}
-          />
+          <div className="relative">
+            <span
+              className="absolute left-0 top-1/2 flex h-full w-8 -translate-y-1/2 items-center justify-center rounded-l border border-gray bg-accent"
+              aria-hidden>
+              @
+            </span>
+            <AuthInput
+              className="pl-10"
+              id="username"
+              placeholder="Enter your username"
+              {...register("username")}
+            />
+          </div>
         </>
       )}
     </AuthForm>

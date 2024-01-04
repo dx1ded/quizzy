@@ -49,7 +49,7 @@ function DatePickerField(props: ButtonFieldProps) {
           onClick={() => setOpen?.((prev) => !prev)}
         />
         <Calendar
-          className="absolute right-3 top-1/2 inline-block -translate-y-1/2"
+          className="pointer-events-none absolute right-3 top-1/2 inline-block -translate-y-1/2"
           width={0.85}
         />
       </div>
