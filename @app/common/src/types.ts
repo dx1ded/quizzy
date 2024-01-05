@@ -5,7 +5,7 @@ export interface User {
   username: string
   firstName: string
   lastName: string
-  dateOfBirth: number
+  dateOfBirth: Date
   interests: string[]
 }
 

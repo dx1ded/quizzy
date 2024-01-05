@@ -23,12 +23,16 @@ export default {
         fadeIn: {
           "0%": { transform: "translate(-6rem)", opacity: "0" },
           "100%": { transform: "translate(0)", opacity: "1" }
+        },
+        appear: {
+          "0%": { opacity: "0" },
+          "100%": { opacity: "100%" }
         }
       },
       animation: {
-        fadeIn: "fadeIn 0.5s ease-in-out forwards"
+        fadeIn: "fadeIn 0.5s ease-in-out forwards",
+        appear: "appear 0.5s ease-in-out forwards"
       }
     }
   },
-  plugins: [],
 }

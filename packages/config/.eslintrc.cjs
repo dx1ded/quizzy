@@ -58,7 +58,7 @@ module.exports = {
       }
     ],
     "import/no-extraneous-dependencies": ["error", {"devDependencies": true}],
-    "no-return-assign": "off"
+    "no-return-assign": "off",
   },
   settings: {
     "import/resolver": {

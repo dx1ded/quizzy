@@ -1,20 +1,40 @@
-import { ComponentPropsWithoutRef, forwardRef } from "react"
+import { ComponentPropsWithoutRef } from "react"
 import { Input } from "shared/ui/Input"
+import { Spinner } from "shared/ui/Spinner"
 
-export const AuthInput = forwardRef<
-  HTMLInputElement,
-  ComponentPropsWithoutRef<"input">
->(function AuthInput(props: ComponentPropsWithoutRef<"input">, ref) {
-  const className = `w-full !py-1.5 text-sm ${
-    props.className ? props.className : ""
-  }`
+interface AuthInputProps<T> extends ComponentPropsWithoutRef<"input"> {
+  /**
+   * If true then a specific request will be sent on server to check if the
+   * username is already taken
+   */
+  checkAvailability?: boolean
+  /**
+   *
+   */
+  loadingField?: T
+}
 
-  return <Input ref={ref} {...props} autoComplete="off" className={className} />
+export function AuthInput<T>({
+  className,
+  checkAvailability,
+  loadingField,
+  ...props
+}: AuthInputProps<T>) {
+  const inputClassName = `w-full !py-1.5 text-sm ${className || ""}`
 
-  // return (
-  //   <div className="relative [&:not(:last-of-type)]:mb-5">
-  //     <Input ref={ref} {...props} autoComplete="off" className={className} />
-  //     <AuthValidation />
-  //   </div>
-  // )
-})
+  return (
+    <>
+      <Input
+        {...props}
+        autoComplete="off"
+        className={inputClassName}
+        {...(checkAvailability ? { "data-check": true } : {})}
+      />
+      {loadingField === props.id && (
+        <div className="absolute right-2 top-1/2 -translate-y-1/2">
+          <Spinner size={1} />
+        </div>
+      )}
+    </>
+  )
+}

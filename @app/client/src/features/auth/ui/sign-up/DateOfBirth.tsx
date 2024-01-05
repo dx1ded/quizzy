@@ -15,7 +15,8 @@ import { Calendar } from "shared/icons/Calendar"
 import { AuthForm } from "../AuthForm"
 import { AuthLabel } from "../AuthLabel"
 import { AuthInput } from "../AuthInput"
-import { SignUpFormProps, signUpCard } from "../../lib"
+import { AuthValidation } from "../AuthValidation"
+import { SignUpFormProps, signUpCard, DateOfBirthSchema } from "../../lib"
 
 interface ButtonFieldProps
   extends UseDateFieldProps<Dayjs>,
@@ -38,29 +39,27 @@ function DatePickerField(props: ButtonFieldProps) {
   } = props
 
   return (
-    <div ref={ref}>
-      <AuthLabel htmlFor={id}>Date of birth</AuthLabel>
-      <div className="relative">
-        <AuthInput
-          aria-label={ariaLabel}
-          id={id}
-          value={String(label)}
-          readOnly
-          onClick={() => setOpen?.((prev) => !prev)}
-        />
-        <Calendar
-          className="pointer-events-none absolute right-3 top-1/2 inline-block -translate-y-1/2"
-          width={0.85}
-        />
-      </div>
+    <div ref={ref} className="relative">
+      <AuthInput
+        aria-label={ariaLabel}
+        id={id}
+        value={String(label)}
+        readOnly
+        onClick={() => setOpen?.((prev) => !prev)}
+      />
+      <Calendar
+        className="pointer-events-none absolute right-3 top-1/2 inline-block -translate-y-1/2"
+        width={0.85}
+      />
     </div>
   )
 }
 
 export function DateOfBirth({
+  data: { dateOfBirth },
+  setData,
   setPrevStep,
   setNextStep,
-  setData,
 }: MultistepProps<SignUpFormProps>) {
   const [open, setOpen] = useState(false)
 
@@ -68,30 +67,46 @@ export function DateOfBirth({
     <AuthForm
       cardCaption={signUpCard.caption}
       cardTitle={signUpCard.title}
+      defaultValues={{ dateOfBirth }}
       setNextStep={setNextStep}
       setPrevStep={setPrevStep}
+      validationSchema={DateOfBirthSchema}
       onSubmit={(data, next) => {
         setData((prevState) => ({ ...prevState, ...data }))
         next()
       }}>
-      {({ control }) => (
-        <Controller
-          control={control}
-          name="dateOfBirth"
-          render={({ field }) => (
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <DatePicker
-                label={dayjs(field.value).format("MM/DD/YYYY")}
-                open={open}
-                slotProps={{ field: { setOpen } as never }}
-                slots={{ field: DatePickerField }}
-                onChange={(date) => field.onChange(date)}
-                onClose={() => setOpen(false)}
-                onOpen={() => setOpen(true)}
-              />
-            </LocalizationProvider>
-          )}
-        />
+      {({ control, initialErrors }) => (
+        <>
+          <AuthLabel htmlFor="dateOfBirth">Date of birth</AuthLabel>
+          <Controller
+            control={control}
+            name="dateOfBirth"
+            render={({ field, formState }) => (
+              <>
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <DatePicker
+                    label={dayjs(field.value).format("MM/DD/YYYY")}
+                    open={open}
+                    slotProps={{
+                      field: {
+                        setOpen,
+                        id: "dateOfBirth",
+                      } as never,
+                    }}
+                    slots={{ field: DatePickerField }}
+                    onChange={(date) => field.onChange(date?.toDate())}
+                    onClose={() => setOpen(false)}
+                    onOpen={() => setOpen(true)}
+                  />
+                </LocalizationProvider>
+                <AuthValidation
+                  error={formState.errors.dateOfBirth}
+                  initialErrors={initialErrors.dateOfBirth}
+                />
+              </>
+            )}
+          />
+        </>
       )}
     </AuthForm>
   )

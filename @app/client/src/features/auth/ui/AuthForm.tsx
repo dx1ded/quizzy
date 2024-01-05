@@ -1,21 +1,21 @@
 import { Children, FormEvent, useEffect, useMemo, useState } from "react"
 import {
   useForm,
-  UseFormRegister,
   SubmitHandler,
   FieldValues,
   Control,
-  FieldErrors,
+  DefaultValues,
   Path,
+  UseFormRegister,
 } from "react-hook-form"
 import { z, ZodType } from "zod"
-import { DevTool } from "@hookform/devtools"
+import { useDebouncedCallback } from "use-debounce"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Caption, Subheading } from "shared/ui/Typography"
 import { ArrowBack } from "shared/icons/ArrowBack"
 import { Button } from "shared/ui/Button"
 import { MultistepProps } from "shared/ui/Multistep"
-import { ChildrenAsFunction } from "shared/lib"
+import { capitalize, ChildrenAsFunction } from "shared/lib"
 
 interface AuthFormProps<T>
   extends Partial<Pick<MultistepProps<T>, "setPrevStep" | "setNextStep">> {
@@ -36,6 +36,10 @@ interface AuthFormProps<T>
    */
   withNavigation?: boolean
   /**
+   * Form default values
+   */
+  defaultValues: DefaultValues<T>
+  /**
    * Zod validation schema
    */
   validationSchema?: ZodType<T>
@@ -50,7 +54,8 @@ interface AuthFormProps<T>
 interface AuthFormChildrenProps<T extends FieldValues> {
   register: UseFormRegister<T>
   control: Control<T>
-  errors: FieldErrors<T> & { initialErrors: Record<keyof T, string[]> }
+  initialErrors: Record<keyof T, string[]>
+  loadingField: keyof T | null
 }
 
 export function AuthForm<T extends FieldValues>({
@@ -60,57 +65,75 @@ export function AuthForm<T extends FieldValues>({
   title = "",
   withNavigation = true,
   validationSchema,
+  defaultValues,
   setPrevStep = () => {},
   setNextStep = () => {},
   onSubmit = () => {},
 }: AuthFormProps<T> & ChildrenAsFunction<AuthFormChildrenProps<T>>) {
+  const [loadingField, setLoadingField] = useState<keyof T | null>(null)
   const [initialErrors, setInitialErrors] = useState<Record<keyof T, string[]>>(
     {} as T
   )
-  const {
-    register,
-    control,
-    handleSubmit,
-    getValues,
-    trigger,
-    formState: { errors },
-  } = useForm<T>({
+  const { register, control, handleSubmit, getValues, setError } = useForm<T>({
+    defaultValues,
     resolver: zodResolver(validationSchema || z.object({})),
     criteriaMode: "all",
-    mode: "onTouched",
+    mode: "onChange",
   })
+  const debouncedCheck = useDebouncedCallback(
+    async (_: string, field: string) => {
+      const request = await fetch(
+        "https://jsonplaceholder.typicode.com/todos/1"
+      )
+
+      setLoadingField(null)
+      if (!request.ok) {
+        setError(field as Path<T>, {
+          message: `${capitalize(field)} is already taken`,
+          type: "unavailable",
+        })
+      }
+    },
+    1000
+  )
 
   // Get initial set of errors, so we can display them all
   useEffect(() => {
-    const validation = validationSchema?.safeParse(getValues())
+    if (Object.keys(initialErrors).length) return
+
+    const emptyFields = getValues() as { [key: string]: string }
+
+    // Fields are undefined by default, but we need an empty string
+    Object.keys(emptyFields).forEach((key) => {
+      emptyFields[key] = ""
+    })
+
+    const validation = validationSchema?.safeParse(emptyFields)
 
     if (!validation || validation.success) return
 
-    const basicErrors = validation.error.issues.reduce(
-      (acc, { path, message }) => (
-        acc[path[0]]
-          ? acc[path[0]].push(message)
-          : Object.assign(acc, { [path[0]]: [message] }),
-        acc
-      ),
-      {} as typeof initialErrors
-    )
+    const basicErrors = validation.error.formErrors
+      .fieldErrors as typeof initialErrors
 
     setInitialErrors(basicErrors)
-  }, [getValues, validationSchema])
+  }, [initialErrors, getValues, validationSchema])
 
   const submitHandler: SubmitHandler<T> = (data) => {
     onSubmit(data, setNextStep)
   }
 
+  /* Only to set loading for fields that need to be checked if the value is
+   already used */
   const changeHandler = (e: FormEvent<HTMLFormElement>) => {
-    const { name } = e.target as HTMLInputElement
+    setTimeout(() => {
+      const target = e.target as HTMLInputElement
+      const field = target.id
 
-    // console.log(name)
+      if (control._formState.errors[field] || !target.dataset.check) return
 
-    // console.log(errors)
-
-    // trigger(name)
+      setLoadingField(field as keyof T)
+      debouncedCheck(target.value, field)
+    }, 0)
   }
 
   const invokedChildren = useMemo(
@@ -119,45 +142,43 @@ export function AuthForm<T extends FieldValues>({
         children({
           register,
           control,
-          errors: { ...errors, initialErrors },
+          initialErrors,
+          loadingField,
         })
       ),
-    [children, register, control, errors, initialErrors]
+    [register, children, control, initialErrors, loadingField]
   )
 
   return (
-    <>
-      <div className="mx-auto flex min-h-[26rem] max-w-4xl flex-1 animate-fadeIn gap-2 rounded-lg bg-white">
-        <div className="flex max-w-[24rem] flex-col justify-center rounded-l-lg bg-gradient-to-br from-accent via-white via-70% to-accent p-10">
-          <Subheading className="mb-4">{cardTitle}</Subheading>
-          <Caption>{cardCaption}</Caption>
-        </div>
-        <div className="flex flex-1 flex-col justify-between p-5">
-          <Subheading style={{ marginTop: title ? "1rem" : "0" }}>
-            {title}
-          </Subheading>
-          <form onChange={changeHandler}>{invokedChildren}</form>
-          {withNavigation && (
-            <div className="flex items-center justify-between">
-              <button
-                className="flex items-center gap-2.5 text-sm"
-                type="button"
-                onClick={setPrevStep}>
-                <ArrowBack width={0.75} />
-                Previous step
-              </button>
-              <Button
-                className="px-4 py-1.5"
-                size="md"
-                variant="secondary"
-                onClick={handleSubmit(submitHandler)}>
-                Continue
-              </Button>
-            </div>
-          )}
-        </div>
+    <div className="mx-auto flex min-h-[26rem] max-w-4xl flex-1 animate-fadeIn gap-2 rounded-lg bg-white">
+      <div className="flex max-w-[24rem] flex-col justify-center rounded-l-lg bg-gradient-to-br from-accent via-white via-70% to-accent p-10">
+        <Subheading className="mb-4">{cardTitle}</Subheading>
+        <Caption>{cardCaption}</Caption>
       </div>
-      <DevTool control={control} />
-    </>
+      <div className="flex flex-1 flex-col justify-between p-5">
+        <Subheading style={{ marginTop: title ? "1rem" : "0" }}>
+          {title}
+        </Subheading>
+        <form onChange={changeHandler}>{invokedChildren}</form>
+        {withNavigation && (
+          <div className="flex items-center justify-between">
+            <button
+              className="flex items-center gap-2.5 text-sm"
+              type="button"
+              onClick={setPrevStep}>
+              <ArrowBack width={0.75} />
+              Previous step
+            </button>
+            <Button
+              className="px-4 py-1.5"
+              size="md"
+              variant="secondary"
+              onClick={handleSubmit(submitHandler)}>
+              Continue
+            </Button>
+          </div>
+        )}
+      </div>
+    </div>
   )
 }

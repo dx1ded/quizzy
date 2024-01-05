@@ -18,6 +18,7 @@ import { AuthForm } from "../AuthForm"
 import { SignUpFormProps, signUpCard } from "../../lib"
 
 export function Interests({
+  data: { interests },
   setData,
   setPrevStep,
   setNextStep,
@@ -26,6 +27,7 @@ export function Interests({
     <AuthForm
       cardCaption={signUpCard.caption}
       cardTitle={signUpCard.title}
+      defaultValues={{ interests }}
       setNextStep={setNextStep}
       setPrevStep={setPrevStep}
       title="Choose the topics you like"
