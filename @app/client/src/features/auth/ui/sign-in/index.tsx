@@ -1,14 +1,10 @@
 import { Controller } from "react-hook-form"
+import { SignInSchema } from "@quizzy/common"
 import { AuthForm } from "../AuthForm"
 import { AuthInput } from "../AuthInput"
 import { AuthLabel } from "../AuthLabel"
 import { AuthValidation } from "../AuthValidation"
-import {
-  ParentMultistepControls,
-  signInCard,
-  SignInSchema,
-  signInFormState,
-} from "../../lib"
+import { ParentMultistepControls, signInCard, signInFormState } from "../../lib"
 
 export function SignIn({ parentSetPrev }: ParentMultistepControls) {
   return (

@@ -12,7 +12,7 @@ export const signUpFormState: SignUpFormProps = {
   username: "",
   firstName: "",
   lastName: "",
-  dateOfBirth: 0,
+  dateOfBirth: new Date(),
   interests: [],
 }
 

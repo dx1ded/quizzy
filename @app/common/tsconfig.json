@@ -2,7 +2,9 @@
   "extends": "@quizzy/eslint-config-default/tsconfig.json",
   "compilerOptions": {
     "sourceMap": true,
-    "outDir": "./dist"
+    "outDir": "./dist",
+    "moduleResolution": "node",
+    "declaration": true
   },
   "include": ["src/**/*"]
 }

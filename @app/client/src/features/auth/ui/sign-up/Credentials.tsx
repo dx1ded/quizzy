@@ -1,15 +1,11 @@
 import { Controller } from "react-hook-form"
+import { CredentialsSchema } from "@quizzy/common"
 import { MultistepProps } from "shared/ui/Multistep"
 import { AuthForm } from "../AuthForm"
 import { AuthLabel } from "../AuthLabel"
 import { AuthInput } from "../AuthInput"
 import { AuthValidation } from "../AuthValidation"
-import {
-  ParentMultistepControls,
-  SignUpFormProps,
-  signUpCard,
-  CredentialsSchema,
-} from "../../lib"
+import { ParentMultistepControls, SignUpFormProps, signUpCard } from "../../lib"
 
 export function Credentials({
   data: { email, password, confirmPassword },

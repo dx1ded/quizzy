@@ -56,3 +56,7 @@ export const SignInSchema = z.object({
       message: "At least one special letter (@,!,#,%,&, ...)",
     }),
 })
+
+export const SignUpSchema = CredentialsSchema.and(FullNameSchema)
+  .and(UsernameSchema)
+  .and(DateOfBirthSchema)
