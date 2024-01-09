@@ -2,7 +2,7 @@ const prettierConfig = require("./.prettierrc.cjs")
 
 module.exports = {
   root: true,
-  env: { browser: true, es2021: true, node: true },
+  env: { browser: true, es2021: true, node: true, commonjs: true },
   extends: [
     "airbnb",
     "airbnb-typescript",
@@ -25,8 +25,8 @@ module.exports = {
     project: "./tsconfig.json"
   },
   plugins: [
-    "prettier",
-    "import"
+    "import",
+    "prettier"
   ],
   rules: {
     "prettier/prettier": ["error", prettierConfig],
@@ -57,8 +57,9 @@ module.exports = {
         ]
       }
     ],
-    "import/no-extraneous-dependencies": ["error", {"devDependencies": true}],
+    "import/no-extraneous-dependencies": "off",
     "no-return-assign": "off",
+    "@typescript-eslint/naming-convention": "off"
   },
   settings: {
     "import/resolver": {

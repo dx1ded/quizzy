@@ -1,4 +1,16 @@
-export * from "@quizzy/common"
+import {
+  FastifyReply,
+  FastifyRequest,
+  RawReplyDefaultExpression,
+  RawRequestDefaultExpression,
+  RawServerDefault,
+} from "fastify"
 
-export * from "./types"
-export * from "./schemas"
+export type FastifyHandler<RequestBody, ResponseBody> = (
+  req: FastifyRequest<{ Body: RequestBody }>,
+  res: FastifyReply<
+    RawServerDefault,
+    RawRequestDefaultExpression,
+    RawReplyDefaultExpression
+  >
+) => ResponseBody | void | Promise<ResponseBody | void>
