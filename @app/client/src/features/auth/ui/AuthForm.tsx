@@ -1,22 +1,19 @@
-import { Children, FormEvent, useEffect, useMemo, useState } from "react"
+import { Children, useEffect, useMemo, useState } from "react"
 import {
   useForm,
   SubmitHandler,
   FieldValues,
   Control,
   DefaultValues,
-  Path,
   UseFormRegister,
 } from "react-hook-form"
 import { z, ZodType } from "zod"
-import { useDebouncedCallback } from "use-debounce"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { FieldAvailability } from "@quizzy/common"
 import { Caption, Subheading } from "shared/ui/Typography"
 import { ArrowBack } from "shared/icons/ArrowBack"
 import { Button } from "shared/ui/Button"
 import { MultistepProps } from "shared/ui/Multistep"
-import { capitalize, ChildrenAsFunction } from "shared/lib"
+import { ChildrenAsFunction } from "shared/lib"
 
 interface AuthFormProps<T>
   extends Partial<Pick<MultistepProps<T>, "setPrevStep" | "setNextStep">> {
@@ -75,39 +72,12 @@ export function AuthForm<T extends FieldValues>({
   const [initialErrors, setInitialErrors] = useState<Record<keyof T, string[]>>(
     {} as T
   )
-  const { register, control, handleSubmit, getValues, setError } = useForm<T>({
+  const { register, control, handleSubmit, getValues } = useForm<T>({
     defaultValues,
     resolver: zodResolver(validationSchema || z.object({})),
     criteriaMode: "all",
     mode: "onChange",
   })
-
-  const checkAvailability = async (data: string, field: string) => {
-    console.log(data, field)
-    const request = await fetch(`/api/auth/check-${field}`, {
-      method: "POST",
-      body: JSON.stringify({ [field]: data }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-
-    const { isAvailable } = (await request.json()) as Awaited<
-      Promise<FieldAvailability>
-    >
-
-    setLoadingField(null)
-    if (!isAvailable) {
-      setError(field as Path<T>, {
-        message: `${capitalize(field)} is already taken`,
-        type: "too_big",
-      })
-    }
-
-    return isAvailable
-  }
-
-  const debouncedCheck = useDebouncedCallback(checkAvailability, 1000)
 
   // Get initial set of errors, so we can display them all
   useEffect(() => {
@@ -131,22 +101,7 @@ export function AuthForm<T extends FieldValues>({
   }, [initialErrors, getValues, validationSchema])
 
   const submitHandler: SubmitHandler<T> = async (data) => {
-    const isAvailable = await checkAvailability(data.email, "email")
-    if (isAvailable) onSubmit(data, setNextStep)
-  }
-
-  /* Only to set loading for fields that need to be checked if the value is
-   already used */
-  const changeHandler = (e: FormEvent<HTMLFormElement>) => {
-    setTimeout(() => {
-      const target = e.target as HTMLInputElement
-      const field = target.id
-
-      if (control._formState.errors[field] || !target.dataset.check) return
-
-      setLoadingField(field as keyof T)
-      debouncedCheck(target.value, field)
-    }, 0)
+    onSubmit(data, setNextStep)
   }
 
   const invokedChildren = useMemo(
@@ -172,7 +127,7 @@ export function AuthForm<T extends FieldValues>({
         <Subheading style={{ marginTop: title ? "1rem" : "0" }}>
           {title}
         </Subheading>
-        <form onChange={changeHandler}>{invokedChildren}</form>
+        <form>{invokedChildren}</form>
         {withNavigation && (
           <div className="flex items-center justify-between">
             <button

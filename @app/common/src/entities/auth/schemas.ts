@@ -1,4 +1,5 @@
 import { z } from "zod"
+import { FieldAvailability } from "./types"
 
 export const Credentials = z.object({
   email: z.string().email("E-mail should be valid"),
@@ -21,7 +22,21 @@ export const CredentialsSchema = Credentials.refine(
     message: "Passwords must match",
     path: ["confirmPassword"],
   }
-)
+).refine(async (data) => {
+  const request = await fetch("/api/auth/check-email", {
+    method: "POST",
+    body: JSON.stringify({ email: data.email }),
+    headers: {
+      "Content-Type": "application/json",
+    },
+  })
+
+  const { isAvailable } = (await request.json()) as Awaited<
+    Promise<FieldAvailability>
+  >
+
+  return isAvailable
+}, "E-mail is already used")
 
 export const FullNameSchema = z.object({
   firstName: z.string().min(1, "First name is required"),
