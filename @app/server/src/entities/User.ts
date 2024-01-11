@@ -24,4 +24,7 @@ export class User implements z.infer<typeof SignUpSchema> {
 
   @Column("date")
   dateOfBirth!: Date
+
+  @Column("text", { array: true, default: [] })
+  interests!: string[]
 }

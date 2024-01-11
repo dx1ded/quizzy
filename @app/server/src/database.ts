@@ -21,4 +21,4 @@ export const userRepository = AppDataSource.getRepository(User)
 
 AppDataSource.initialize()
   .then(() => console.log("Connected to the DB!"))
-  .catch(() => console.log("Error connecting to the DB!"))
+  .catch((e) => console.log("Error connecting to the DB!", e))

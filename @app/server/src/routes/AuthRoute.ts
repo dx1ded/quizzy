@@ -30,7 +30,7 @@ export const AuthRoute = async (f: FastifyInstance) => {
   )
 
   f.withTypeProvider<ZodTypeProvider>().post(
-    "/checkEmail",
+    "/check-email",
     {
       schema: {
         body: Credentials.pick({ email: true }),
@@ -40,7 +40,7 @@ export const AuthRoute = async (f: FastifyInstance) => {
   )
 
   f.withTypeProvider<ZodTypeProvider>().post(
-    "/checkUsername",
+    "/check-username",
     {
       schema: {
         body: UsernameSchema,

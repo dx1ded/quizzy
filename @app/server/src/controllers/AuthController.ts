@@ -105,7 +105,7 @@ const checkEmailAvailability: FastifyHandler<
 
   const user = await userRepository.findOne({ where: { email } })
 
-  if (!user) {
+  if (user) {
     isAvailable = false
   }
 
@@ -121,7 +121,7 @@ const checkUsernameAvailability: FastifyHandler<
 
   const user = await userRepository.findOne({ where: { username } })
 
-  if (!user) {
+  if (user) {
     isAvailable = false
   }
 

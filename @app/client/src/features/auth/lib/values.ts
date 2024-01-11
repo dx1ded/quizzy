@@ -8,7 +8,6 @@ export const signInFormState: SignInFormProps = {
 export const signUpFormState: SignUpFormProps = {
   email: "",
   password: "",
-  confirmPassword: "",
   username: "",
   firstName: "",
   lastName: "",

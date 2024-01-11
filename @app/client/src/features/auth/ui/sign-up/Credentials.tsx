@@ -8,7 +8,7 @@ import { AuthValidation } from "../AuthValidation"
 import { ParentMultistepControls, SignUpFormProps, signUpCard } from "../../lib"
 
 export function Credentials({
-  data: { email, password, confirmPassword },
+  data: { email, password },
   setData,
   setNextStep,
   parentSetPrev,
@@ -17,12 +17,15 @@ export function Credentials({
     <AuthForm
       cardCaption={signUpCard.caption}
       cardTitle={signUpCard.title}
-      defaultValues={{ email, password, confirmPassword }}
+      defaultValues={{ email, password, confirmPassword: "" }}
       setNextStep={setNextStep}
       setPrevStep={parentSetPrev}
       validationSchema={CredentialsSchema}
       onSubmit={(formData, next) => {
-        setData((prevState) => ({ ...prevState, ...formData }))
+        const withoutConfirm = { ...formData }
+        delete withoutConfirm.confirmPassword
+
+        setData((prevState) => ({ ...prevState, ...withoutConfirm }))
         next()
       }}>
       {({ control, initialErrors, loadingField }) => (

@@ -11,6 +11,7 @@ import {
 import { z, ZodType } from "zod"
 import { useDebouncedCallback } from "use-debounce"
 import { zodResolver } from "@hookform/resolvers/zod"
+import { FieldAvailability } from "@quizzy/common"
 import { Caption, Subheading } from "shared/ui/Typography"
 import { ArrowBack } from "shared/icons/ArrowBack"
 import { Button } from "shared/ui/Button"
@@ -80,22 +81,33 @@ export function AuthForm<T extends FieldValues>({
     criteriaMode: "all",
     mode: "onChange",
   })
-  const debouncedCheck = useDebouncedCallback(
-    async (_: string, field: string) => {
-      const request = await fetch(
-        "https://jsonplaceholder.typicode.com/todos/1"
-      )
 
-      setLoadingField(null)
-      if (!request.ok) {
-        setError(field as Path<T>, {
-          message: `${capitalize(field)} is already taken`,
-          type: "unavailable",
-        })
-      }
-    },
-    1000
-  )
+  const checkAvailability = async (data: string, field: string) => {
+    console.log(data, field)
+    const request = await fetch(`/api/auth/check-${field}`, {
+      method: "POST",
+      body: JSON.stringify({ [field]: data }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+
+    const { isAvailable } = (await request.json()) as Awaited<
+      Promise<FieldAvailability>
+    >
+
+    setLoadingField(null)
+    if (!isAvailable) {
+      setError(field as Path<T>, {
+        message: `${capitalize(field)} is already taken`,
+        type: "too_big",
+      })
+    }
+
+    return isAvailable
+  }
+
+  const debouncedCheck = useDebouncedCallback(checkAvailability, 1000)
 
   // Get initial set of errors, so we can display them all
   useEffect(() => {
@@ -118,8 +130,9 @@ export function AuthForm<T extends FieldValues>({
     setInitialErrors(basicErrors)
   }, [initialErrors, getValues, validationSchema])
 
-  const submitHandler: SubmitHandler<T> = (data) => {
-    onSubmit(data, setNextStep)
+  const submitHandler: SubmitHandler<T> = async (data) => {
+    const isAvailable = await checkAvailability(data.email, "email")
+    if (isAvailable) onSubmit(data, setNextStep)
   }
 
   /* Only to set loading for fields that need to be checked if the value is

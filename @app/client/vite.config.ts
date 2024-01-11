@@ -16,5 +16,14 @@ export default defineConfig({
     alias: {
       "@mui/styled-engine": "@mui/styled-engine-sc"
     }
-  }
+  },
+  server: {
+    proxy: {
+      "/api": {
+        target: "http://localhost:5000",
+        changeOrigin: false,
+        secure: false
+      }
+    }
+  },
 })

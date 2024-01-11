@@ -11,7 +11,7 @@ export const Credentials = z.object({
     .regex(/[*@!#%&()^~{}]+/, {
       message: "At least one special letter (@,!,#,%,&, ...)",
     }),
-  confirmPassword: z.string(),
+  confirmPassword: z.string().optional(),
 })
 
 export const CredentialsSchema = Credentials.refine(
@@ -44,6 +44,10 @@ export const DateOfBirthSchema = z.object({
     ),
 })
 
+const InterestsSchema = z.object({
+  interests: z.string().array(),
+})
+
 export const SignInSchema = z.object({
   login: z.string().min(1, "Login is required"),
   password: z
@@ -61,3 +65,4 @@ export const SignUpSchema = Credentials.omit({ confirmPassword: true })
   .and(FullNameSchema)
   .and(UsernameSchema)
   .and(DateOfBirthSchema)
+  .and(InterestsSchema)

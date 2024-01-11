@@ -1,10 +1,9 @@
-import { SignInReq, SignUpReq } from "@quizzy/common"
+import { SignInSchema, SignUpSchema } from "@quizzy/common"
+import { z } from "zod"
 
-export type SignInFormProps = SignInReq
+export type SignInFormProps = z.infer<typeof SignInSchema>
 
-export type SignUpFormProps = SignUpReq & {
-  confirmPassword: string
-}
+export type SignUpFormProps = z.infer<typeof SignUpSchema>
 
 export interface ParentMultistepControls {
   parentSetPrev(): void
