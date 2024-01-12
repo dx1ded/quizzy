@@ -16,7 +16,7 @@ export function AuthValidation({ error, initialErrors }: AuthValidationProps) {
         {initialErrors.map((initialError, i) =>
           error.message === initialError ||
           (error.types?.invalid_string as string[])?.includes(initialError) ||
-          error.type === "unavailable" ||
+          error.type === "custom" ||
           error.type === "too_big" ? (
             <li
               key={i}
@@ -24,7 +24,7 @@ export function AuthValidation({ error, initialErrors }: AuthValidationProps) {
               <span className="flex h-4 w-4 items-center justify-center rounded-full border border-current text-[#FF2D00]">
                 <Cross width={0.5} />
               </span>
-              {error.type === "unavailable" || error.type === "too_big"
+              {error.type === "custom" || error.type === "too_big"
                 ? error.message
                 : initialError}
             </li>

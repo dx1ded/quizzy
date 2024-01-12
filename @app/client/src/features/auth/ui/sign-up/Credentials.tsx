@@ -42,7 +42,6 @@ export function Credentials({
                     loadingField={loadingField}
                     placeholder="Enter your e-mail"
                     type="email"
-                    checkAvailability
                     onBlur={field.onBlur}
                     onChange={field.onChange}
                   />

@@ -9,11 +9,13 @@ import {
 } from "react-hook-form"
 import { z, ZodType } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
+import AwesomeDebouncePromise from "awesome-debounce-promise"
+import { FieldAvailability } from "@quizzy/common"
 import { Caption, Subheading } from "shared/ui/Typography"
 import { ArrowBack } from "shared/icons/ArrowBack"
 import { Button } from "shared/ui/Button"
 import { MultistepProps } from "shared/ui/Multistep"
-import { ChildrenAsFunction } from "shared/lib"
+import { capitalize, ChildrenAsFunction } from "shared/lib"
 
 interface AuthFormProps<T>
   extends Partial<Pick<MultistepProps<T>, "setPrevStep" | "setNextStep">> {
@@ -72,11 +74,57 @@ export function AuthForm<T extends FieldValues>({
   const [initialErrors, setInitialErrors] = useState<Record<keyof T, string[]>>(
     {} as T
   )
-  const { register, control, handleSubmit, getValues } = useForm<T>({
+  const {
+    register,
+    control,
+    handleSubmit,
+    getValues,
+    formState: { errors },
+  } = useForm<T>({
     defaultValues,
-    resolver: zodResolver(validationSchema || z.object({})),
-    criteriaMode: "all",
+    resolver: zodResolver(
+      validationSchema?.superRefine(
+        AwesomeDebouncePromise(async (data, context) => {
+          const field = data.email ? "email" : data.username ? "username" : ""
+
+          console.log(errors)
+
+          if (!field || (errors[field] && errors[field]?.type !== "custom"))
+            return
+
+          setLoadingField(field)
+
+          const request = await fetch(`/api/auth/check-${field}`, {
+            method: "POST",
+            body: JSON.stringify({ [field]: data[field] }),
+            headers: {
+              "Content-Type": "application/json",
+            },
+          })
+
+          if (!request.ok) {
+            setLoadingField(null)
+            return
+          }
+
+          const { isAvailable } = (await request.json()) as Awaited<
+            Promise<FieldAvailability>
+          >
+
+          if (!isAvailable) {
+            context.addIssue({
+              message: `${capitalize(field)} is already used!`,
+              path: [field],
+              code: z.ZodIssueCode.custom,
+            })
+          }
+
+          setLoadingField(null)
+        }, 80)
+      ) || z.object({})
+    ),
     mode: "onChange",
+    criteriaMode: "all",
   })
 
   // Get initial set of errors, so we can display them all
@@ -139,6 +187,7 @@ export function AuthForm<T extends FieldValues>({
             </button>
             <Button
               className="px-4 py-1.5"
+              disabled={Boolean(loadingField)}
               size="md"
               variant="secondary"
               onClick={handleSubmit(submitHandler)}>

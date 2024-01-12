@@ -52,7 +52,9 @@ export function Button<T extends ElementType = "button">({
 }: ButtonProps<T> & Omit<ComponentPropsWithoutRef<T>, keyof ButtonProps<T>>) {
   const className = `${variants[variant]} ${
     sizes[size]
-  } rounded font-semibold px-2 py-1 ${props.className || ""}`
+  } rounded font-semibold px-2 py-1 disabled:opacity-75 ${
+    props.className || ""
+  }`
   const Component = as || "button"
 
   return (
