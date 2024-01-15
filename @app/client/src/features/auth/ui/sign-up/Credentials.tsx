@@ -1,5 +1,5 @@
-import { Controller } from "react-hook-form"
 import { CredentialsSchema } from "@quizzy/common"
+import { Controller } from "react-hook-form"
 import { SignUpFormProps } from "shared/lib"
 import { MultistepProps } from "shared/ui/Multistep"
 import { AuthForm } from "../AuthForm"
