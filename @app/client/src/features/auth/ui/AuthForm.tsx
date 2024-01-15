@@ -1,4 +1,11 @@
-import { Children, useEffect, useMemo, useState } from "react"
+import {
+  Dispatch,
+  SetStateAction,
+  Children,
+  useEffect,
+  useMemo,
+  useState,
+} from "react"
 import {
   useForm,
   SubmitHandler,
@@ -6,6 +13,7 @@ import {
   Control,
   DefaultValues,
   UseFormRegister,
+  UseFormSetError,
 } from "react-hook-form"
 import { z, ZodType } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -17,7 +25,7 @@ import { Button } from "shared/ui/Button"
 import { MultistepProps } from "shared/ui/Multistep"
 import { capitalize, ChildrenAsFunction } from "shared/lib"
 
-interface AuthFormProps<T>
+interface AuthFormProps<T extends FieldValues>
   extends Partial<Pick<MultistepProps<T>, "setPrevStep" | "setNextStep">> {
   /**
    * the title is used for the left side (card)
@@ -48,7 +56,7 @@ interface AuthFormProps<T>
    * Has a middleware function next() which should be called to get into the
    * next stage
    */
-  onSubmit?(data: T, next: () => void): void
+  onSubmit?(data: T, next: () => void, setError: UseFormSetError<T>): void
 }
 
 interface AuthFormChildrenProps<T extends FieldValues> {
@@ -56,6 +64,7 @@ interface AuthFormChildrenProps<T extends FieldValues> {
   control: Control<T>
   initialErrors: Record<keyof T, string[]>
   loadingField: keyof T | null
+  setFocusedField: Dispatch<SetStateAction<string | null>>
 }
 
 export function AuthForm<T extends FieldValues>({
@@ -71,6 +80,9 @@ export function AuthForm<T extends FieldValues>({
   onSubmit = () => {},
 }: AuthFormProps<T> & ChildrenAsFunction<AuthFormChildrenProps<T>>) {
   const [loadingField, setLoadingField] = useState<keyof T | null>(null)
+  /* This state is used for inputs that are supposed to be checked by its
+   availability */
+  const [focusedField, setFocusedField] = useState<string | null>(null)
   const [initialErrors, setInitialErrors] = useState<Record<keyof T, string[]>>(
     {} as T
   )
@@ -80,19 +92,25 @@ export function AuthForm<T extends FieldValues>({
     handleSubmit,
     getValues,
     formState: { errors },
+    setError,
   } = useForm<T>({
     defaultValues,
     resolver: zodResolver(
       validationSchema?.superRefine(
         AwesomeDebouncePromise(async (data, context) => {
+          const { isSubmitting } = control._formState
           const field = data.email ? "email" : data.username ? "username" : ""
 
-          console.log(errors)
-
-          if (!field || (errors[field] && errors[field]?.type !== "custom"))
+          if (
+            !field ||
+            (!focusedField && !isSubmitting) ||
+            (errors[field] &&
+              (errors[field]?.type !== "custom" || !isSubmitting))
+          ) {
             return
+          }
 
-          setLoadingField(field)
+          setLoadingField(focusedField)
 
           const request = await fetch(`/api/auth/check-${field}`, {
             method: "POST",
@@ -148,8 +166,8 @@ export function AuthForm<T extends FieldValues>({
     setInitialErrors(basicErrors)
   }, [initialErrors, getValues, validationSchema])
 
-  const submitHandler: SubmitHandler<T> = async (data) => {
-    onSubmit(data, setNextStep)
+  const submitHandler: SubmitHandler<T> = () => {
+    onSubmit(getValues(), setNextStep, setError)
   }
 
   const invokedChildren = useMemo(
@@ -160,6 +178,7 @@ export function AuthForm<T extends FieldValues>({
           control,
           initialErrors,
           loadingField,
+          setFocusedField,
         })
       ),
     [register, children, control, initialErrors, loadingField]

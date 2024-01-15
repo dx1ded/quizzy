@@ -1,11 +1,12 @@
 import { Controller } from "react-hook-form"
 import { UsernameSchema } from "@quizzy/common"
+import { SignUpFormProps } from "shared/lib"
 import { MultistepProps } from "shared/ui/Multistep"
 import { AuthForm } from "../AuthForm"
 import { AuthLabel } from "../AuthLabel"
 import { AuthInput } from "../AuthInput"
 import { AuthValidation } from "../AuthValidation"
-import { SignUpFormProps, signUpCard } from "../../lib"
+import { signUpCard } from "../../lib"
 
 export function Username({
   data: { username },
@@ -25,7 +26,7 @@ export function Username({
         setData((prevState) => ({ ...prevState, ...data }))
         next()
       }}>
-      {({ control, initialErrors, loadingField }) => (
+      {({ control, initialErrors, loadingField, setFocusedField }) => (
         <>
           <AuthLabel htmlFor="username">Username</AuthLabel>
           <div className="relative [&:not(:last-of-type)]:mb-5">
@@ -44,9 +45,9 @@ export function Username({
                     id="username"
                     loadingField={loadingField}
                     placeholder="Enter your username"
-                    checkAvailability
-                    onBlur={field.onBlur}
+                    onBlur={() => setFocusedField(null)}
                     onChange={field.onChange}
+                    onFocus={(e) => setFocusedField(e.target.id)}
                   />
                   <AuthValidation
                     error={formState.errors.username}

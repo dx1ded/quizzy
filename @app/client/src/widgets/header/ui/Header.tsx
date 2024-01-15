@@ -17,7 +17,7 @@ export function Header() {
             </NavLink>
           </li>
           <li>
-            <Button as={NavLink} className="px-7 py-2" to="/auth">
+            <Button as="a" className="px-7 py-2" href="/auth">
               Sign up
             </Button>
           </li>

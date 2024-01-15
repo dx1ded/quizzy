@@ -11,13 +11,14 @@ import {
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs"
 import dayjs, { Dayjs } from "dayjs"
 import { DateOfBirthSchema } from "@quizzy/common"
+import { SignUpFormProps } from "shared/lib"
 import { MultistepProps } from "shared/ui/Multistep"
 import { Calendar } from "shared/icons/Calendar"
 import { AuthForm } from "../AuthForm"
 import { AuthLabel } from "../AuthLabel"
 import { AuthInput } from "../AuthInput"
 import { AuthValidation } from "../AuthValidation"
-import { SignUpFormProps, signUpCard } from "../../lib"
+import { signUpCard } from "../../lib"
 
 interface ButtonFieldProps
   extends UseDateFieldProps<Dayjs>,

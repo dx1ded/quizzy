@@ -1,20 +1,3 @@
-import { SignInFormProps, SignUpFormProps } from "./types"
-
-export const signInFormState: SignInFormProps = {
-  login: "",
-  password: "",
-}
-
-export const signUpFormState: SignUpFormProps = {
-  email: "",
-  password: "",
-  username: "",
-  firstName: "",
-  lastName: "",
-  dateOfBirth: new Date(),
-  interests: [],
-}
-
 export const authCard = {
   title: "Authentication",
   caption: "Choose an authentication method to have access to our platform!",

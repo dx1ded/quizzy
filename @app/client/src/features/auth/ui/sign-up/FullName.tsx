@@ -1,11 +1,12 @@
 import { Controller } from "react-hook-form"
 import { FullNameSchema } from "@quizzy/common"
+import { SignUpFormProps } from "shared/lib"
 import { MultistepProps } from "shared/ui/Multistep"
 import { AuthForm } from "../AuthForm"
 import { AuthLabel } from "../AuthLabel"
 import { AuthInput } from "../AuthInput"
 import { AuthValidation } from "../AuthValidation"
-import { SignUpFormProps, signUpCard } from "../../lib"
+import { signUpCard } from "../../lib"
 
 export function FullName({
   data: { firstName, lastName },

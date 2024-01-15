@@ -15,16 +15,15 @@ export function AuthValidation({ error, initialErrors }: AuthValidationProps) {
       <ul>
         {initialErrors.map((initialError, i) =>
           error.message === initialError ||
-          (error.types?.invalid_string as string[])?.includes(initialError) ||
-          error.type === "custom" ||
-          error.type === "too_big" ? (
+          Object.values(error.types || []).includes(initialError) ||
+          ["custom", "too_big"].includes(error.type) ? (
             <li
               key={i}
               className="flex animate-appear items-center gap-1.5 text-xs [&:not(:last-child)]:mb-2">
               <span className="flex h-4 w-4 items-center justify-center rounded-full border border-current text-[#FF2D00]">
                 <Cross width={0.5} />
               </span>
-              {error.type === "custom" || error.type === "too_big"
+              {["custom", "too_big"].includes(error.type)
                 ? error.message
                 : initialError}
             </li>

@@ -15,11 +15,10 @@ export const AuthCheckbox = forwardRef<HTMLInputElement, AuthCheckboxProps>(
     return (
       <div className="relative">
         <input
-          {...props}
           ref={ref}
+          {...props}
           className="visually-hidden peer"
           id={id}
-          name="interests"
           type="checkbox"
           value={value}
         />

@@ -1,12 +1,18 @@
-import { Controller } from "react-hook-form"
 import { SignInSchema } from "@quizzy/common"
+import { useDispatch } from "react-redux"
+import { ThunkDispatch } from "redux-thunk"
+import { Controller } from "react-hook-form"
+import { AccountAction, signIn } from "entites/account"
+import { signInFormState } from "shared/lib"
 import { AuthForm } from "../AuthForm"
 import { AuthInput } from "../AuthInput"
 import { AuthLabel } from "../AuthLabel"
 import { AuthValidation } from "../AuthValidation"
-import { ParentMultistepControls, signInCard, signInFormState } from "../../lib"
+import { ParentMultistepControls, signInCard } from "../../lib"
 
 export function SignIn({ parentSetPrev }: ParentMultistepControls) {
+  const dispatch = useDispatch<ThunkDispatch<unknown, unknown, AccountAction>>()
+
   return (
     <AuthForm
       cardCaption={signInCard.caption}
@@ -14,8 +20,13 @@ export function SignIn({ parentSetPrev }: ParentMultistepControls) {
       defaultValues={signInFormState}
       setPrevStep={parentSetPrev}
       validationSchema={SignInSchema}
-      onSubmit={(data) => {
-        console.log(data)
+      onSubmit={(credentials, _, setError) => {
+        dispatch(signIn(credentials)).catch(() =>
+          setError("login", {
+            type: "custom",
+            message: "User was not found!",
+          })
+        )
       }}>
       {({ control, initialErrors }) => (
         <>

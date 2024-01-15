@@ -30,6 +30,7 @@ export function AuthSection() {
           <AuthForm
             cardCaption={authCard.caption}
             cardTitle={authCard.title}
+            defaultValues={defaultState}
             withNavigation={false}
             {...props}>
             {() => (

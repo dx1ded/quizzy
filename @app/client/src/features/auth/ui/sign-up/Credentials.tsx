@@ -1,11 +1,12 @@
 import { Controller } from "react-hook-form"
 import { CredentialsSchema } from "@quizzy/common"
+import { SignUpFormProps } from "shared/lib"
 import { MultistepProps } from "shared/ui/Multistep"
 import { AuthForm } from "../AuthForm"
 import { AuthLabel } from "../AuthLabel"
 import { AuthInput } from "../AuthInput"
 import { AuthValidation } from "../AuthValidation"
-import { ParentMultistepControls, SignUpFormProps, signUpCard } from "../../lib"
+import { ParentMultistepControls, signUpCard } from "../../lib"
 
 export function Credentials({
   data: { email, password },
@@ -28,7 +29,7 @@ export function Credentials({
         setData((prevState) => ({ ...prevState, ...withoutConfirm }))
         next()
       }}>
-      {({ control, initialErrors, loadingField }) => (
+      {({ control, initialErrors, loadingField, setFocusedField }) => (
         <>
           <AuthLabel htmlFor="email">E-mail</AuthLabel>
           <div className="relative [&:not(:last-of-type)]:mb-5">
@@ -42,8 +43,9 @@ export function Credentials({
                     loadingField={loadingField}
                     placeholder="Enter your e-mail"
                     type="email"
-                    onBlur={field.onBlur}
+                    onBlur={() => setFocusedField(null)}
                     onChange={field.onChange}
+                    onFocus={(e) => setFocusedField(e.target.id)}
                   />
                   <AuthValidation
                     error={formState.errors.email}

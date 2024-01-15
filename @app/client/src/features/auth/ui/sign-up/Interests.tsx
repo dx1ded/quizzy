@@ -1,3 +1,7 @@
+import { useDispatch } from "react-redux"
+import { ThunkDispatch } from "redux-thunk"
+import { AccountAction, signUp } from "entites/account"
+import { SignUpFormProps } from "shared/lib"
 import { MultistepProps } from "shared/ui/Multistep"
 
 import { Language } from "shared/icons/Language"
@@ -15,31 +19,33 @@ import { Interests as InterestsIcon } from "shared/icons/Interests"
 
 import { AuthCheckbox } from "../AuthCheckbox"
 import { AuthForm } from "../AuthForm"
-import { SignUpFormProps, signUpCard } from "../../lib"
+import { signUpCard } from "../../lib"
 
 export function Interests({
-  data: { interests },
-  setData,
+  data,
   setPrevStep,
   setNextStep,
 }: MultistepProps<SignUpFormProps>) {
+  const dispatch = useDispatch<ThunkDispatch<unknown, unknown, AccountAction>>()
+
   return (
     <AuthForm
       cardCaption={signUpCard.caption}
       cardTitle={signUpCard.title}
-      defaultValues={{ interests }}
+      defaultValues={{ interests: [] as string[] }}
       setNextStep={setNextStep}
       setPrevStep={setPrevStep}
       title="Choose the topics you like"
-      onSubmit={(data, next) => {
-        setData((prevState) => ({ ...prevState, ...data }))
-        next()
+      onSubmit={async (newData) => {
+        const user = { ...data, ...newData }
+
+        await dispatch(signUp(user))
       }}>
       {({ register }) => (
         <div className="-m-2 grid max-h-56 grid-cols-2 gap-4 overflow-y-auto p-2">
           <AuthCheckbox
             Icon={Language}
-            value="Geography"
+            value="Languages"
             {...register("interests")}
           />
           <AuthCheckbox
