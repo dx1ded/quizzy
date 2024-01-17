@@ -5,17 +5,16 @@ import {
   ComponentPropsWithoutRef,
 } from "react"
 
-type ButtonVariants = "primary" | "secondary" | "white"
-
-const variants: Record<ButtonVariants, string> = {
+const variants = {
   primary: "bg-primary text-white",
   secondary: "bg-secondary text-white",
+  third: "bg-white text-secondary border border-secondary",
   white: "bg-white text-black border border-gray",
 }
 
-type ButtonSizes = "lg" | "md" | "sm" | "xs"
+type ButtonVariants = keyof typeof variants
 
-const sizes: Record<ButtonSizes, string> = {
+const sizes = {
   // 16 px
   lg: "text-base",
   // 14 px
@@ -25,6 +24,8 @@ const sizes: Record<ButtonSizes, string> = {
   // 10 px
   xs: "text-[0.625rem]",
 }
+
+type ButtonSizes = keyof typeof sizes
 
 interface ButtonProps<T>
   extends PropsWithChildren<ButtonHTMLAttributes<HTMLButtonElement>> {
