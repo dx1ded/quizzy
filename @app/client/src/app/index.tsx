@@ -6,6 +6,7 @@ import { Auth } from "pages/auth"
 import { Play } from "pages/play"
 import { Home } from "pages/home"
 
+import { Discover } from "pages/discover"
 import { PrivateRoutes, PublicRoutes, store } from "./model"
 
 export function App() {
@@ -22,6 +23,7 @@ export function App() {
           {/* Private Routes */}
           <Route element={<PrivateRoutes />}>
             <Route element={<Home />} path="/app" />
+            <Route element={<Discover />} path="/app/discover" />
           </Route>
         </Routes>
       </BrowserRouter>

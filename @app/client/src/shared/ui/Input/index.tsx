@@ -33,8 +33,8 @@ export function Input({
   variant = "primary",
   withMagnifier = false,
   isCentered = false,
-  magnifierWidth,
-  magnifierHeight,
+  magnifierWidth = 1,
+  magnifierHeight = 1,
   magnifierClassName,
   ...attrs
 }: InputProps) {
@@ -46,14 +46,14 @@ export function Input({
 
   if (withMagnifier) {
     return (
-      <div className="relative">
+      <div className="relative inline-block">
         <Magnifier
           className={`absolute left-3.5 top-1/2 translate-y-[-50%] ${
             magnifierClassName || ""
           }`}
           color="#FFB800"
-          height={magnifierHeight || 1}
-          width={magnifierWidth || 1}
+          height={magnifierHeight}
+          width={magnifierWidth}
         />
         <input {...attrs} className={`${className} pl-10`} />
       </div>
