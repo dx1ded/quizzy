@@ -30,7 +30,8 @@ module.exports = {
       "shorthandLast": true,
       "reservedFirst": true
     }],
-    "react/no-unescaped-entities": "off"
+    "react/no-unescaped-entities": "off",
+    "jsx-a11y/control-has-associated-label": "off"
   },
   overrides: [
     {
