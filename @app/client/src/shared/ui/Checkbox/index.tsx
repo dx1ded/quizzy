@@ -39,9 +39,9 @@ export function Checkbox({
         name={name}
         type="checkbox"
       />
-      <div className="h-4 w-4 cursor-pointer rounded border border-secondary bg-white text-white peer-checked:bg-secondary">
+      <span className="h-4 w-4 cursor-pointer rounded border border-secondary bg-white text-white peer-checked:bg-secondary">
         <Tick className="text-current" />
-      </div>
+      </span>
       {children}
     </label>
   )
