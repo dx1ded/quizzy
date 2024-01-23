@@ -8,7 +8,7 @@ import { Play } from "pages/play"
 import { Home } from "pages/home"
 import { Discover } from "pages/discover"
 import { Info } from "pages/info"
-import { QuizCreate } from "pages/quiz-create"
+import { QuizEdit } from "pages/quiz-edit"
 
 import { PrivateRoutes, PublicRoutes, store } from "./model"
 
@@ -28,7 +28,7 @@ export function App() {
             <Route element={<Home />} path="/app" />
             <Route element={<Discover />} path="/app/discover" />
             <Route element={<Info />} path="/quiz/:id" />
-            <Route element={<QuizCreate />} path="/quiz/create" />
+            <Route element={<QuizEdit />} path="/quiz/edit/:id" />
           </Route>
         </Routes>
       </BrowserRouter>

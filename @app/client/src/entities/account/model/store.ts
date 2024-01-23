@@ -5,7 +5,7 @@ export interface AccountState {
 }
 
 const initialState = {
-  token: localStorage.getItem("secret_token"),
+  token: JSON.parse(localStorage.getItem("secret_token") || null!),
 }
 
 export const accountReducer = (

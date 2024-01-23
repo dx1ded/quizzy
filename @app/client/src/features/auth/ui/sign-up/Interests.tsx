@@ -1,6 +1,6 @@
 import { useDispatch } from "react-redux"
 import { ThunkDispatch } from "redux-thunk"
-import { AccountAction, signUp } from "entites/account"
+import { AccountAction, signUp } from "entities/account"
 import { SignUpFormProps } from "shared/lib"
 import { MultistepProps } from "shared/ui/Multistep"
 

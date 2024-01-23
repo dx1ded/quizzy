@@ -14,3 +14,5 @@ export type FastifyHandler<RequestBody, ResponseBody> = (
     RawReplyDefaultExpression
   >
 ) => ResponseBody | void | Promise<ResponseBody | void>
+
+export type WithUserId<T> = T & { userId: number }

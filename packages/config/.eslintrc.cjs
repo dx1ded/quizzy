@@ -60,7 +60,8 @@ module.exports = {
     "import/no-extraneous-dependencies": "off",
     "no-return-assign": "off",
     "@typescript-eslint/naming-convention": "off",
-    "@typescript-eslint/default-param-last": "off"
+    "@typescript-eslint/default-param-last": "off",
+    "@typescript-eslint/no-throw-literal": "off"
   },
   settings: {
     "import/resolver": {

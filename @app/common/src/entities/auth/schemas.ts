@@ -66,3 +66,7 @@ export const SignUpSchema = Credentials.omit({ confirmPassword: true })
   .and(UsernameSchema)
   .and(DateOfBirthSchema)
   .and(InterestsSchema)
+
+export const AuthToken = z.object({
+  token: z.string(),
+})

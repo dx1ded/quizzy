@@ -1,7 +1,7 @@
 import { NavLink } from "react-router-dom"
+import { CreateQuiz } from "features/create-quiz"
 import { Container } from "shared/ui/Container"
 import { Logo } from "shared/ui/Logo"
-import { Button } from "shared/ui/Button"
 import { Person } from "shared/icons/Person"
 import { Input } from "shared/ui/Input"
 
@@ -19,13 +19,7 @@ export function AppHeader() {
       <nav className="basis-36">
         <ul className="flex list-none items-center gap-x-6">
           <li>
-            <Button
-              as={NavLink}
-              className="px-5"
-              to="/app/create"
-              variant="secondary">
-              Create
-            </Button>
+            <CreateQuiz />
           </li>
           <li>
             <NavLink to="/app/account">

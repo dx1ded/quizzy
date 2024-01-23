@@ -14,10 +14,10 @@ import { userRepository } from "../database"
 import { FastifyHandler } from "../types"
 import { emailRegexp } from "../utils"
 
-const signIn: FastifyHandler<z.infer<typeof SignInSchema>, AuthToken> = async (
-  req,
-  res
-) => {
+const signIn: FastifyHandler<
+  z.infer<typeof SignInSchema>,
+  z.infer<typeof AuthToken>
+> = async (req, res) => {
   try {
     const { login, password } = req.body
 
@@ -38,7 +38,7 @@ const signIn: FastifyHandler<z.infer<typeof SignInSchema>, AuthToken> = async (
     const token = jwt.sign(
       {
         exp: Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 7, // 7 days
-        data: user!.email,
+        data: user.id,
       },
       process.env.SECRET_TOKEN!
     )
@@ -50,10 +50,10 @@ const signIn: FastifyHandler<z.infer<typeof SignInSchema>, AuthToken> = async (
   }
 }
 
-const signUp: FastifyHandler<z.infer<typeof SignUpSchema>, AuthToken> = async (
-  req,
-  res
-) => {
+const signUp: FastifyHandler<
+  z.infer<typeof SignUpSchema>,
+  z.infer<typeof AuthToken>
+> = async (req, res) => {
   try {
     const hashedPassword = await bcrypt.hash(
       req.body.password,
@@ -82,7 +82,7 @@ const signUp: FastifyHandler<z.infer<typeof SignUpSchema>, AuthToken> = async (
     const token = jwt.sign(
       {
         exp: Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 7, // 7 days
-        data: user.email,
+        data: user.id,
       },
       process.env.SECRET_TOKEN!
     )

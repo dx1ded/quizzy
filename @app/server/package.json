@@ -26,6 +26,7 @@
     "fastify": "^4.25.2",
     "fastify-type-provider-zod": "^1.1.9",
     "jsonwebtoken": "^9.0.2",
+    "nanoid": "^5.0.4",
     "pg": "^8.11.3",
     "reflect-metadata": "^0.2.1",
     "typeorm": "^0.3.19",

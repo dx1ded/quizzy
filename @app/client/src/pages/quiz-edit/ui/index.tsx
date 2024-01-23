@@ -3,7 +3,7 @@ import { Preview } from "./Preview"
 import { Question } from "./Question"
 import { Settings } from "./Settings"
 
-export function QuizCreate() {
+export function QuizEdit() {
   return (
     <div>
       <Header />

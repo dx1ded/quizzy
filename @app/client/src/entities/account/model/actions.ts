@@ -1,8 +1,9 @@
 import { Dispatch } from "react"
+import { z } from "zod"
 import { AuthToken } from "@quizzy/common"
 import { SignInFormProps, SignUpFormProps } from "shared/lib"
 
-type TokenType = AuthToken["token"]
+type TokenType = z.infer<typeof AuthToken>["token"]
 
 export type AccountAction =
   | { type: "LOG_IN"; payload: TokenType }
@@ -30,7 +31,9 @@ export function signUp(user: SignUpFormProps) {
       body: JSON.stringify(user),
     })
 
-    const { token } = (await request.json()) as Awaited<Promise<AuthToken>>
+    const { token } = (await request.json()) as Awaited<
+      Promise<z.infer<typeof AuthToken>>
+    >
 
     dispatch(login(token))
   }
@@ -46,7 +49,9 @@ export function signIn(credentials: SignInFormProps) {
       body: JSON.stringify(credentials),
     })
 
-    const { token } = (await request.json()) as Awaited<Promise<AuthToken>>
+    const { token } = (await request.json()) as Awaited<
+      Promise<z.infer<typeof AuthToken>>
+    >
 
     dispatch(login(token))
   }

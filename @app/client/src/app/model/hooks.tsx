@@ -1,7 +1,7 @@
 import { useSelector } from "react-redux"
 import { Outlet, Navigate } from "react-router-dom"
-import { AccountState } from "entites/account"
-import { AppStore } from "./store"
+import { AppStore } from "entities"
+import { AccountState } from "entities/account"
 
 export function PrivateRoutes() {
   const { token } = useSelector<AppStore, AccountState>(
