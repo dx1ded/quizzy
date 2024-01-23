@@ -13,9 +13,12 @@ const createNewQuiz: FastifyHandler<
   const newQuiz: QuizType = {
     id: nanoid(5),
     name: "New Quiz",
+    description: "Quiz Description",
     userRef: req.body.userId,
     picture: "",
     questions: [],
+    rating: 0,
+    plays: 0,
   }
 
   await quizRepository.save(newQuiz)

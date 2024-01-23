@@ -14,6 +14,9 @@ export const QuizSchema = z.object({
   id: z.string(),
   userRef: z.number(),
   name: z.string().min(1, "Quiz name is required"),
+  description: z.string().min(1, "Quiz description is required"),
   picture: z.string(),
   questions: QuestionSchema.array(),
+  rating: z.number(),
+  plays: z.number(),
 })
