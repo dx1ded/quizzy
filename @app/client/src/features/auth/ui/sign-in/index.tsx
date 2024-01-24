@@ -1,8 +1,8 @@
 import { SignInSchema } from "@quizzy/common"
 import { useDispatch } from "react-redux"
-import { ThunkDispatch } from "redux-thunk"
 import { Controller } from "react-hook-form"
-import { AccountAction, signIn } from "entities/account"
+import { AppThunkDispatch } from "entities"
+import { signIn } from "entities/account"
 import { signInFormState } from "shared/lib"
 import { AuthForm } from "../AuthForm"
 import { AuthInput } from "../AuthInput"
@@ -11,7 +11,7 @@ import { AuthValidation } from "../AuthValidation"
 import { ParentMultistepControls, signInCard } from "../../lib"
 
 export function SignIn({ parentSetPrev }: ParentMultistepControls) {
-  const dispatch = useDispatch<ThunkDispatch<unknown, unknown, AccountAction>>()
+  const dispatch = useDispatch<AppThunkDispatch>()
 
   return (
     <AuthForm

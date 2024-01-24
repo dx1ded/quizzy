@@ -38,7 +38,7 @@ const signIn: FastifyHandler<
     const token = jwt.sign(
       {
         exp: Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 7, // 7 days
-        data: user.id,
+        data: String(user.id),
       },
       process.env.SECRET_TOKEN!
     )
@@ -82,7 +82,7 @@ const signUp: FastifyHandler<
     const token = jwt.sign(
       {
         exp: Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 7, // 7 days
-        data: user.id,
+        data: String(user.id),
       },
       process.env.SECRET_TOKEN!
     )

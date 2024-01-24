@@ -16,7 +16,7 @@ export const validateToken = (
         return res.code(401).send({ message: "Secret token is invalid" })
       }
 
-      req.body.userId = (decoded as JwtPayload).data
+      req.body.userId = Number((decoded as JwtPayload).data)
       next()
     }
   )

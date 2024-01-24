@@ -78,4 +78,26 @@ export const QuizRoute = async (f: FastifyInstance) => {
     },
     QuizController.getOwnQuizzes
   )
+
+  f.withTypeProvider<ZodTypeProvider>().post(
+    "/getViral",
+    {
+      preHandler: [validateToken],
+      schema: {
+        body: AuthToken,
+      },
+    },
+    QuizController.getViralQuizzes
+  )
+
+  f.withTypeProvider<ZodTypeProvider>().post(
+    "/getNewest",
+    {
+      preHandler: [validateToken],
+      schema: {
+        body: AuthToken,
+      },
+    },
+    QuizController.getNewestQuizzes
+  )
 }

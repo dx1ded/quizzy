@@ -1,15 +1,17 @@
+import { NavLink } from "react-router-dom"
 import { QuizzyImage } from "shared/ui/QuizzyImage"
 import { Button } from "shared/ui/Button"
 
 interface QuizCardProps {
-  image?: string
+  id: string
+  picture: string
 }
 
-export function QuizCard({ image }: QuizCardProps) {
+export function QuizCard({ id, picture }: QuizCardProps) {
   return (
     <div className="group h-[9.75rem]">
-      {image ? (
-        <img alt="Quiz" src={image} />
+      {picture ? (
+        <img alt="Quiz" src={picture} />
       ) : (
         <QuizzyImage
           className="rounded-lg"
@@ -19,8 +21,10 @@ export function QuizCard({ image }: QuizCardProps) {
         />
       )}
       <Button
+        as={NavLink}
         className="absolute bottom-4 left-1/2 -translate-x-1/2 translate-y-20 px-20 opacity-0 transition-all group-hover:translate-y-0 group-hover:opacity-100"
         size="md"
+        to={`/quiz/${id}`}
         variant="secondary">
         Practice
       </Button>

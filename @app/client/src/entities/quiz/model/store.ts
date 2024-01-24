@@ -1,4 +1,4 @@
-import { FindQuizType, QuestionType, QuizType } from "@quizzy/common"
+import { FindQuizType, emptyQuestion, QuizType } from "@quizzy/common"
 import { QuizAction } from "./actions"
 
 export interface QuizState {
@@ -9,15 +9,6 @@ export interface QuizState {
   activeQuestion: number
   isCreator: boolean
   creatorInfo: FindQuizType["creatorInfo"]
-}
-
-const emptyQuestion: QuestionType = {
-  name: "",
-  picture: "",
-  answers: ["Answer 1", "Answer 2", "Answer 3", "Answer 4"],
-  correctAnswers: [],
-  timeLimit: 10,
-  points: 1,
 }
 
 const initialState: QuizState = {

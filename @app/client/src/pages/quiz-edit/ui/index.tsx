@@ -2,12 +2,11 @@ import _ from "lodash"
 import { useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { useParams } from "react-router-dom"
-import { ThunkDispatch } from "redux-thunk"
 import { FormProvider, useForm, useWatch } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { QuizSchema, QuizType } from "@quizzy/common"
 import { useDebouncedCallback } from "use-debounce"
-import { AppActions, AppStore } from "entities"
+import { AppStore, AppThunkDispatch } from "entities"
 import {
   loadQuizForEdit,
   QuizState,
@@ -33,7 +32,7 @@ export function QuizEdit() {
     AppStore,
     QuizState
   >((state) => state.quiz)
-  const dispatch = useDispatch<ThunkDispatch<AppStore, unknown, AppActions>>()
+  const dispatch = useDispatch<AppThunkDispatch>()
   const methods = useForm({
     values: data,
     resolver: zodResolver(QuizSchema),

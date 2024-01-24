@@ -1,6 +1,6 @@
 import { useDispatch } from "react-redux"
-import { ThunkDispatch } from "redux-thunk"
-import { AccountAction, signUp } from "entities/account"
+import { AppThunkDispatch } from "entities"
+import { signUp } from "entities/account"
 import { SignUpFormProps } from "shared/lib"
 import { MultistepProps } from "shared/ui/Multistep"
 
@@ -26,7 +26,7 @@ export function Interests({
   setPrevStep,
   setNextStep,
 }: MultistepProps<SignUpFormProps>) {
-  const dispatch = useDispatch<ThunkDispatch<unknown, unknown, AccountAction>>()
+  const dispatch = useDispatch<AppThunkDispatch>()
 
   return (
     <AuthForm

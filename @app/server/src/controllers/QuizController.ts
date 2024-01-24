@@ -1,5 +1,10 @@
 import { nanoid } from "nanoid"
-import { AuthTokenType, FindQuizType, QuizType } from "@quizzy/common"
+import {
+  AuthTokenType,
+  emptyQuestion,
+  FindQuizType,
+  QuizType,
+} from "@quizzy/common"
 import { FastifyHandler, WithUserId } from "../types"
 import { quizRepository, userRepository } from "../database"
 
@@ -14,16 +19,7 @@ const createNewQuiz: FastifyHandler<
     userRef: req.body.userId,
     picture: "",
     background: "",
-    questions: [
-      {
-        name: "",
-        picture: "",
-        answers: ["Answer 1", "Answer 2", "Answer 3", "Answer 4"],
-        correctAnswers: [],
-        timeLimit: 10,
-        points: 1,
-      },
-    ],
+    questions: [emptyQuestion],
     rating: 0,
     plays: 0,
   }
@@ -124,6 +120,35 @@ const getOwnQuizzes: FastifyHandler<
   return quizzes
 }
 
+const getNewestQuizzes: FastifyHandler<unknown, QuizType[]> = async (
+  _,
+  res
+) => {
+  const quizzes = await quizRepository.find({
+    order: { id: "DESC" },
+    take: 4,
+  })
+
+  if (!quizzes) {
+    return res.code(404).send({ message: "Not found" })
+  }
+
+  return quizzes
+}
+
+const getViralQuizzes: FastifyHandler<unknown, QuizType[]> = async (_, res) => {
+  const quizzes = await quizRepository.find({
+    order: { plays: "DESC" },
+    take: 4,
+  })
+
+  if (!quizzes) {
+    return res.code(404).send({ message: "Not found" })
+  }
+
+  return quizzes
+}
+
 export const QuizController = {
   createNewQuiz,
   findQuiz,
@@ -131,4 +156,6 @@ export const QuizController = {
   saveQuiz,
   getQuizzes,
   getOwnQuizzes,
+  getNewestQuizzes,
+  getViralQuizzes,
 }

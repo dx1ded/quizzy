@@ -1,12 +1,11 @@
 import { useDispatch } from "react-redux"
 import { useNavigate } from "react-router-dom"
-import { ThunkDispatch } from "redux-thunk"
-import { AppActions, AppStore } from "entities"
+import { AppThunkDispatch } from "entities"
 import { createNewQuiz } from "entities/quiz"
 import { Button } from "shared/ui/Button"
 
 export function CreateQuiz() {
-  const dispatch = useDispatch<ThunkDispatch<AppStore, unknown, AppActions>>()
+  const dispatch = useDispatch<AppThunkDispatch>()
   const navigate = useNavigate()
 
   const clickHandler = async () => {

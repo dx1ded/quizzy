@@ -1,7 +1,6 @@
 import { useDispatch } from "react-redux"
-import { ThunkDispatch } from "redux-thunk"
 import { NavLink, useNavigate } from "react-router-dom"
-import { AppActions, AppStore } from "entities"
+import { AppThunkDispatch } from "entities"
 import { createNewQuiz } from "entities/quiz"
 import { QuizzyImage } from "shared/ui/QuizzyImage"
 import { Button } from "shared/ui/Button"
@@ -28,7 +27,7 @@ export function QuizBox({ id, name, description, picture }: QuizBoxProps) {
           as={NavLink}
           className="w-full text-center"
           size="sm"
-          to={`/play/${id}`}
+          to={`/quiz/${id}`}
           variant="white">
           Practice
         </Button>
@@ -39,7 +38,7 @@ export function QuizBox({ id, name, description, picture }: QuizBoxProps) {
 
 export function AddQuizBox() {
   const navigate = useNavigate()
-  const dispatch = useDispatch<ThunkDispatch<AppStore, unknown, AppActions>>()
+  const dispatch = useDispatch<AppThunkDispatch>()
 
   const clickHandler = async () => {
     const { id } = await dispatch(createNewQuiz())
