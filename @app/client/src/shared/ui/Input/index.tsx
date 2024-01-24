@@ -1,4 +1,4 @@
-import { ComponentPropsWithoutRef } from "react"
+import { ComponentPropsWithoutRef, forwardRef } from "react"
 import { Magnifier } from "../../icons/Magnifier"
 import { PropsWithClassname } from "../../lib"
 
@@ -29,15 +29,18 @@ interface InputProps
   isCentered?: boolean
 }
 
-export function Input({
-  variant = "primary",
-  withMagnifier = false,
-  isCentered = false,
-  magnifierWidth = 1,
-  magnifierHeight = 1,
-  magnifierClassName,
-  ...attrs
-}: InputProps) {
+export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
+  {
+    variant = "primary",
+    withMagnifier = false,
+    isCentered = false,
+    magnifierWidth = 1,
+    magnifierHeight = 1,
+    magnifierClassName,
+    ...attrs
+  }: InputProps,
+  ref
+) {
   const className = `${
     variants[variant]
   } rounded text-base bg-white py-1 px-2.5 outline-none placeholder:text-current ${
@@ -55,10 +58,10 @@ export function Input({
           height={magnifierHeight}
           width={magnifierWidth}
         />
-        <input {...attrs} className={`${className} pl-10`} />
+        <input ref={ref} {...attrs} className={`${className} pl-10`} />
       </div>
     )
   }
 
-  return <input {...attrs} className={className} />
-}
+  return <input ref={ref} {...attrs} className={className} />
+})

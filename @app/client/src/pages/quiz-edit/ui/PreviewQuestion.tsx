@@ -1,3 +1,4 @@
+import { useDispatch } from "react-redux"
 import { Trash } from "shared/icons/Trash"
 import { Copy } from "shared/icons/Copy"
 import {
@@ -6,6 +7,11 @@ import {
   SmallSquareAnswer,
   SmallTriangleAnswer,
 } from "shared/ui/Answer"
+import {
+  changeActiveQuestion,
+  duplicateQuestion,
+  removeQuestion,
+} from "entities/quiz"
 
 interface PreviewQuestionProps {
   n: number
@@ -13,10 +19,7 @@ interface PreviewQuestionProps {
   name: string
   image?: string
   answers: string[]
-  /**
-   * Contains indexes: 0, 1, 2, 3
-   */
-  checked: number[]
+  checked: boolean[]
   isActive?: boolean
 }
 
@@ -29,22 +32,32 @@ export function PreviewQuestion({
   checked,
   isActive = false,
 }: PreviewQuestionProps) {
+  const dispatch = useDispatch()
+
   return (
     <div
-      className="flex h-24 rounded p-1"
+      className="flex h-24 flex-shrink-0 rounded p-1"
       style={{
         backgroundColor: isActive ? "rgba(200, 200, 200, 0.3)" : "#fff",
       }}>
       <div className="mr-2 flex flex-col py-0.5 text-center">
-        <p className="text-sm font-bold">{n}</p>
-        <button className="mb-2 mt-auto block" type="button">
+        <p className="text-sm font-bold">{n + 1}</p>
+        <button
+          className="mb-2 mt-auto block"
+          type="button"
+          onClick={() => dispatch(removeQuestion(n))}>
           <Trash color="#FF0000" width={0.8} />
         </button>
-        <button className="block" type="button">
+        <button
+          className="block"
+          type="button"
+          onClick={() => dispatch(duplicateQuestion(n))}>
           <Copy width={0.8} />
         </button>
       </div>
-      <div className="relative flex-1 cursor-pointer">
+      <div
+        className="relative flex-1 cursor-pointer"
+        onClick={() => dispatch(changeActiveQuestion(n))}>
         <img
           alt="Quiz"
           className="absolute left-0 top-0 h-full w-full rounded object-cover"
@@ -62,16 +75,16 @@ export function PreviewQuestion({
             />
           )}
           <div className="grid h-4 w-full grid-cols-2 gap-0.5">
-            <SmallTriangleAnswer isChecked={checked.includes(0)}>
+            <SmallTriangleAnswer isChecked={checked[0]}>
               {answers[0]}
             </SmallTriangleAnswer>
-            <SmallRhombusAnswer isChecked={checked.includes(1)}>
+            <SmallRhombusAnswer isChecked={checked[1]}>
               {answers[1]}
             </SmallRhombusAnswer>
-            <SmallCircleAnswer isChecked={checked.includes(2)}>
+            <SmallCircleAnswer isChecked={checked[2]}>
               {answers[2]}
             </SmallCircleAnswer>
-            <SmallSquareAnswer isChecked={checked.includes(3)}>
+            <SmallSquareAnswer isChecked={checked[3]}>
               {answers[3]}
             </SmallSquareAnswer>
           </div>

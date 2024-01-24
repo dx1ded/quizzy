@@ -4,7 +4,7 @@ import jwt from "jsonwebtoken"
 import {
   SignInSchema,
   SignUpSchema,
-  AuthToken,
+  AuthTokenType,
   CredentialsSchema,
   UsernameSchema,
   FieldAvailability,
@@ -16,7 +16,7 @@ import { emailRegexp } from "../utils"
 
 const signIn: FastifyHandler<
   z.infer<typeof SignInSchema>,
-  z.infer<typeof AuthToken>
+  AuthTokenType
 > = async (req, res) => {
   try {
     const { login, password } = req.body
@@ -52,7 +52,7 @@ const signIn: FastifyHandler<
 
 const signUp: FastifyHandler<
   z.infer<typeof SignUpSchema>,
-  z.infer<typeof AuthToken>
+  AuthTokenType
 > = async (req, res) => {
   try {
     const hashedPassword = await bcrypt.hash(

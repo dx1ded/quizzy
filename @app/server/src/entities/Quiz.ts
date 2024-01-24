@@ -1,9 +1,8 @@
 import { Entity, Column, PrimaryColumn } from "typeorm"
-import { z } from "zod"
-import { QuizSchema, QuestionSchema } from "@quizzy/common"
+import { QuizType, QuestionType } from "@quizzy/common"
 
 @Entity({ name: "quizzes" })
-export class Quiz implements z.infer<typeof QuizSchema> {
+export class Quiz implements QuizType {
   @PrimaryColumn("text")
   id!: string
 
@@ -19,8 +18,11 @@ export class Quiz implements z.infer<typeof QuizSchema> {
   @Column("text")
   picture!: string
 
-  @Column("text", { array: true, default: [] })
-  questions!: z.infer<typeof QuestionSchema>[]
+  @Column("text")
+  background!: string
+
+  @Column({ type: "jsonb", array: false, default: () => "'[]'" })
+  questions!: QuestionType[]
 
   @Column("int")
   rating!: number

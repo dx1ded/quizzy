@@ -1,22 +1,29 @@
 import { NavLink } from "react-router-dom"
+import { useFormContext } from "react-hook-form"
+import { QuizType } from "@quizzy/common"
 import { Logo } from "shared/ui/Logo"
 import { Input } from "shared/ui/Input"
-import { AddPhoto } from "shared/icons/AddPhoto"
 import { Button } from "shared/ui/Button"
+import { QuizParams } from "./index"
 
-export function Header() {
+export function Header({ activeQuestion }: QuizParams) {
+  const { register, watch } = useFormContext<QuizType>()
+  const question = watch("questions")[activeQuestion]
+
   return (
     <header className="flex items-center bg-white px-6 py-2 shadow">
       <Logo as={NavLink} className="mr-6" size={2.75} to="/app" />
-      <Input className="mr-4 w-60" placeholder="Enter quiz name..." />
-      <button type="button">
-        <AddPhoto width={1.25} />
-      </button>
+      <Input
+        className="w-60"
+        defaultValue={question.name}
+        placeholder="Enter quiz name..."
+        {...register("name")}
+      />
       <Button className="ml-auto mr-4 px-8" variant="white">
         Delete
       </Button>
       <Button className="px-8" variant="secondary">
-        Create
+        Settings
       </Button>
     </header>
   )

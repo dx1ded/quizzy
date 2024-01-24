@@ -1,80 +1,129 @@
 import { PropsWithChildren } from "react"
+import { useFormContext } from "react-hook-form"
+import { QuizType } from "@quizzy/common"
+import { QuizState } from "entities/quiz"
 import { Tick } from "../../icons/Tick"
 
-export function TriangleAnswer({ children }: PropsWithChildren) {
+interface AnswerType {
+  value: string
+  isChecked: boolean
+  activeQuestion: QuizState["activeQuestion"]
+}
+
+export function TriangleAnswer({
+  activeQuestion,
+  isChecked,
+  value,
+}: AnswerType) {
+  const { register } = useFormContext<QuizType>()
+
   return (
     <label
       className="flex w-full cursor-pointer items-center rounded bg-[#E01D3B] p-4 text-lg text-white shadow-lg"
       htmlFor="triangle-answer">
       <input
+        checked={isChecked}
         className="visually-hidden peer"
         id="triangle-answer"
-        name="quiz-answers"
         type="checkbox"
+        {...register(`questions.${activeQuestion}.correctAnswers.0`)}
       />
       <span className="mr-4 border-x-[0.85rem] border-b-[1.5rem] border-transparent border-b-white" />
-      {children}
-      <span className="ml-auto flex h-7 w-7 items-center justify-center rounded-full border-2 border-white bg-transparent text-transparent peer-checked:border-secondary peer-checked:bg-secondary peer-checked:text-white">
+      <input
+        className="flex-1 bg-transparent outline-none"
+        type="text"
+        value={value}
+        {...register(`questions.${activeQuestion}.answers.0`)}
+      />
+      <span className="ml-4 flex h-7 w-7 items-center justify-center rounded-full border-2 border-white bg-transparent text-transparent peer-checked:border-secondary peer-checked:bg-secondary peer-checked:text-white">
         <Tick width={1.3} />
       </span>
     </label>
   )
 }
 
-export function RhombusAnswer({ children }: PropsWithChildren) {
+export function RhombusAnswer({
+  activeQuestion,
+  isChecked,
+  value,
+}: AnswerType) {
+  const { register } = useFormContext<QuizType>()
+
   return (
     <label
       className="flex w-full cursor-pointer items-center rounded bg-[#1368CF] p-4 text-lg text-white shadow-lg"
       htmlFor="rhombus-answer">
       <input
+        checked={isChecked}
         className="visually-hidden peer"
         id="rhombus-answer"
-        name="quiz-answers"
         type="checkbox"
+        {...register(`questions.${activeQuestion}.correctAnswers.1`)}
       />
       <span className="mr-4 h-[1.125rem] w-[1.125rem] rotate-45 bg-white" />
-      {children}
-      <span className="ml-auto flex h-7 w-7 items-center justify-center rounded-full border-2 border-white bg-transparent text-transparent peer-checked:border-secondary peer-checked:bg-secondary peer-checked:text-white">
+      <input
+        className="flex-1 bg-transparent outline-none"
+        type="text"
+        value={value}
+        {...register(`questions.${activeQuestion}.answers.1`)}
+      />
+      <span className="ml-4 flex h-7 w-7 items-center justify-center rounded-full border-2 border-white bg-transparent text-transparent peer-checked:border-secondary peer-checked:bg-secondary peer-checked:text-white">
         <Tick width={1.3} />
       </span>
     </label>
   )
 }
 
-export function CircleAnswer({ children }: PropsWithChildren) {
+export function CircleAnswer({ activeQuestion, isChecked, value }: AnswerType) {
+  const { register } = useFormContext<QuizType>()
+
   return (
     <label
       className="flex w-full cursor-pointer items-center rounded bg-[#FFB800] p-4 text-lg text-white shadow-lg"
       htmlFor="circle-answer">
       <input
+        checked={isChecked}
         className="visually-hidden peer"
         id="circle-answer"
-        name="quiz-answers"
         type="checkbox"
+        {...register(`questions.${activeQuestion}.correctAnswers.2`)}
       />
       <span className="mr-4 h-6 w-6 rounded-full bg-white" />
-      {children}
-      <span className="ml-auto flex h-7 w-7 items-center justify-center rounded-full border-2 border-white bg-transparent text-transparent peer-checked:border-secondary peer-checked:bg-secondary peer-checked:text-white">
+      <input
+        className="flex-1 bg-transparent outline-none"
+        type="text"
+        value={value}
+        {...register(`questions.${activeQuestion}.answers.2`)}
+      />
+      <span className="ml-4 flex h-7 w-7 items-center justify-center rounded-full border-2 border-white bg-transparent text-transparent peer-checked:border-secondary peer-checked:bg-secondary peer-checked:text-white">
         <Tick width={1.3} />
       </span>
     </label>
   )
 }
 
-export function SquareAnswer({ children }: PropsWithChildren) {
+export function SquareAnswer({ activeQuestion, isChecked, value }: AnswerType) {
+  const { register } = useFormContext<QuizType>()
+
   return (
     <label
       className="flex w-full cursor-pointer items-center rounded bg-[#28BC01] p-4 text-lg text-white shadow-lg"
       htmlFor="square-answer">
       <input
+        checked={isChecked}
         className="visually-hidden peer"
         id="square-answer"
-        name="quiz-answers"
         type="checkbox"
+        {...register(`questions.${activeQuestion}.correctAnswers.3`)}
       />
       <span className="mr-4 h-5 w-5 bg-white" />
-      {children}
-      <span className="ml-auto flex h-7 w-7 items-center justify-center rounded-full border-2 border-white bg-transparent text-transparent peer-checked:border-secondary peer-checked:bg-secondary peer-checked:text-white">
+      <input
+        className="flex-1 bg-transparent outline-none"
+        type="text"
+        value={value}
+        {...register(`questions.${activeQuestion}.answers.3`)}
+      />
+      <span className="ml-4 flex h-7 w-7 items-center justify-center rounded-full border-2 border-white bg-transparent text-transparent peer-checked:border-secondary peer-checked:bg-secondary peer-checked:text-white">
         <Tick width={1.3} />
       </span>
     </label>

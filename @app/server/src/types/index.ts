@@ -6,7 +6,7 @@ import {
   RawServerDefault,
 } from "fastify"
 
-export type FastifyHandler<RequestBody, ResponseBody> = (
+export type FastifyHandler<RequestBody, ResponseBody = { message: string }> = (
   req: FastifyRequest<{ Body: RequestBody }>,
   res: FastifyReply<
     RawServerDefault,
@@ -15,4 +15,4 @@ export type FastifyHandler<RequestBody, ResponseBody> = (
   >
 ) => ResponseBody | void | Promise<ResponseBody | void>
 
-export type WithUserId<T> = T & { userId: number }
+export type WithUserId<T = unknown> = T & { userId: number }

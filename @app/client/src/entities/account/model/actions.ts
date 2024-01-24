@@ -1,17 +1,14 @@
 import { Dispatch } from "react"
-import { z } from "zod"
-import { AuthToken } from "@quizzy/common"
+import { AuthTokenType } from "@quizzy/common"
 import { SignInFormProps, SignUpFormProps } from "shared/lib"
 
-type TokenType = z.infer<typeof AuthToken>["token"]
-
 export type AccountAction =
-  | { type: "LOG_IN"; payload: TokenType }
+  | { type: "LOG_IN"; payload: AuthTokenType["token"] }
   | { type: "LOG_OUT" }
   | { type: "SIGN_IN"; payload: SignInFormProps }
   | { type: "SIGN_UP"; payload: SignUpFormProps }
 
-export function login(token: TokenType): AccountAction {
+export function login(token: AuthTokenType["token"]): AccountAction {
   localStorage.setItem("secret_token", JSON.stringify(token))
   return { type: "LOG_IN", payload: token }
 }
@@ -31,9 +28,7 @@ export function signUp(user: SignUpFormProps) {
       body: JSON.stringify(user),
     })
 
-    const { token } = (await request.json()) as Awaited<
-      Promise<z.infer<typeof AuthToken>>
-    >
+    const { token } = (await request.json()) as Awaited<Promise<AuthTokenType>>
 
     dispatch(login(token))
   }
@@ -49,9 +44,7 @@ export function signIn(credentials: SignInFormProps) {
       body: JSON.stringify(credentials),
     })
 
-    const { token } = (await request.json()) as Awaited<
-      Promise<z.infer<typeof AuthToken>>
-    >
+    const { token } = (await request.json()) as Awaited<Promise<AuthTokenType>>
 
     dispatch(login(token))
   }

@@ -1,12 +1,10 @@
 import jwt, { JwtPayload } from "jsonwebtoken"
-
-import { z } from "zod"
-import { AuthToken } from "@quizzy/common"
+import { AuthTokenType } from "@quizzy/common"
 import { FastifyReply, FastifyRequest, HookHandlerDoneFunction } from "fastify"
 import { WithUserId } from "../types"
 
 export const validateToken = (
-  req: FastifyRequest<{ Body: WithUserId<z.infer<typeof AuthToken>> }>,
+  req: FastifyRequest<{ Body: WithUserId<AuthTokenType> }>,
   res: FastifyReply,
   next: HookHandlerDoneFunction
 ) => {

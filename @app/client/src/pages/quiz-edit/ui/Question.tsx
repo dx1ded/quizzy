@@ -1,3 +1,5 @@
+import { useFormContext } from "react-hook-form"
+import { QuizType } from "@quizzy/common"
 import QuizBackground from "assets/quiz-background.png"
 import { Input } from "shared/ui/Input"
 import { Button } from "shared/ui/Button"
@@ -8,10 +10,15 @@ import {
   SquareAnswer,
   TriangleAnswer,
 } from "shared/ui/Answer"
+import { QuizParams } from "./index"
 
-export function Question() {
+export function Question({ activeQuestion }: QuizParams) {
+  const { register, watch } = useFormContext<QuizType>()
+  const quiz = watch()
+  const question = quiz.questions[activeQuestion]
+
   return (
-    <main className="relative h-[48rem] flex-1">
+    <main className="relative flex-1">
       <img
         alt="Quiz"
         className="absolute left-0 top-0 -z-10 h-full w-full object-cover"
@@ -21,9 +28,16 @@ export function Question() {
         <Input
           className="w-[28.75rem] py-2 text-xl shadow-lg"
           placeholder="Start typing your question..."
+          value={question.name}
           isCentered
+          {...register(`questions.${activeQuestion}.name`)}
         />
-        <div className="flex h-80 w-96 flex-col items-center justify-center rounded bg-white shadow-lg">
+        <div className="relative flex h-80 w-96 flex-col items-center justify-center rounded bg-white shadow-lg">
+          <img
+            alt="Quiz question"
+            className="absolute left-0 top-0 -z-10 h-full w-full rounded"
+            src={question.picture}
+          />
           <Button
             aria-label="Add picture"
             className="mb-5 h-16 w-16 text-xl"
@@ -33,10 +47,26 @@ export function Question() {
           <Text className="font-bold">Find or insert media</Text>
         </div>
         <div className="grid w-full grid-cols-2 gap-4">
-          <TriangleAnswer>Math</TriangleAnswer>
-          <RhombusAnswer>Chemistry</RhombusAnswer>
-          <CircleAnswer>Pre-calc</CircleAnswer>
-          <SquareAnswer>Something else</SquareAnswer>
+          <TriangleAnswer
+            activeQuestion={activeQuestion}
+            isChecked={question.correctAnswers[0]}
+            value={question.answers[0]}
+          />
+          <RhombusAnswer
+            activeQuestion={activeQuestion}
+            isChecked={question.correctAnswers[1]}
+            value={question.answers[1]}
+          />
+          <CircleAnswer
+            activeQuestion={activeQuestion}
+            isChecked={question.correctAnswers[2]}
+            value={question.answers[2]}
+          />
+          <SquareAnswer
+            activeQuestion={activeQuestion}
+            isChecked={question.correctAnswers[3]}
+            value={question.answers[3]}
+          />
         </div>
       </div>
     </main>
