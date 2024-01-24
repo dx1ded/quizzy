@@ -22,7 +22,7 @@ export function QuizzyImage({
   height = "3.5rem",
   size = 1,
 }: QuizzyImageProps) {
-  const quizzyImageClassName = `mr-2.5 flex items-center justify-center bg-primary ${
+  const quizzyImageClassName = `flex items-center justify-center bg-primary ${
     className || ""
   }`
 

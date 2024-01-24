@@ -1,11 +1,14 @@
-import { QuestionType, QuizType } from "@quizzy/common"
+import { FindQuizType, QuestionType, QuizType } from "@quizzy/common"
 import { QuizAction } from "./actions"
 
 export interface QuizState {
   isLoading: boolean
   isSaving: boolean
+  hasError: boolean
   data: QuizType
   activeQuestion: number
+  isCreator: boolean
+  creatorInfo: FindQuizType["creatorInfo"]
 }
 
 const emptyQuestion: QuestionType = {
@@ -20,6 +23,7 @@ const emptyQuestion: QuestionType = {
 const initialState: QuizState = {
   isLoading: true,
   isSaving: false,
+  hasError: false,
   data: {
     id: "",
     name: "",
@@ -32,6 +36,8 @@ const initialState: QuizState = {
     plays: 0,
   },
   activeQuestion: 0,
+  isCreator: false,
+  creatorInfo: { username: "" },
 }
 
 export const quizReducer = (
@@ -43,6 +49,12 @@ export const quizReducer = (
       return { ...state, isLoading: action.payload }
     case "SET_IS_SAVING":
       return { ...state, isSaving: action.payload }
+    case "SET_ERROR":
+      return { ...state, hasError: action.payload }
+    case "SET_IS_CREATOR":
+      return { ...state, isCreator: action.payload }
+    case "SET_CREATOR_INFO":
+      return { ...state, creatorInfo: action.payload }
     case "SET_QUIZ":
       return { ...state, data: action.payload }
     case "ADD_QUESTION":

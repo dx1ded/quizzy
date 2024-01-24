@@ -8,7 +8,15 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { QuizSchema, QuizType } from "@quizzy/common"
 import { useDebouncedCallback } from "use-debounce"
 import { AppActions, AppStore } from "entities"
-import { loadQuiz, QuizState, saveQuiz, setQuiz } from "entities/quiz"
+import {
+  loadQuizForEdit,
+  QuizState,
+  saveQuiz,
+  setError,
+  setQuiz,
+} from "entities/quiz"
+import { Loader } from "shared/ui/Loader"
+import { NotFound } from "shared/ui/NotFound"
 
 import { Header } from "./Header"
 import { Preview } from "./Preview"
@@ -21,9 +29,10 @@ export interface QuizParams {
 
 export function QuizEdit() {
   const { id } = useParams()
-  const { isLoading, data, activeQuestion } = useSelector<AppStore, QuizState>(
-    (state) => state.quiz
-  )
+  const { isLoading, hasError, data, activeQuestion } = useSelector<
+    AppStore,
+    QuizState
+  >((state) => state.quiz)
   const dispatch = useDispatch<ThunkDispatch<AppStore, unknown, AppActions>>()
   const methods = useForm({
     values: data,
@@ -45,7 +54,11 @@ export function QuizEdit() {
 
   // Loading quiz
   useEffect(() => {
-    dispatch(loadQuiz(id!))
+    dispatch(loadQuizForEdit(id!))
+
+    return () => {
+      dispatch(setError(false))
+    }
   }, [dispatch, id])
 
   // Debounced saving to the store
@@ -58,7 +71,8 @@ export function QuizEdit() {
     debouncedSave()
   }, [debouncedSave, data])
 
-  if (isLoading) return <div>Loading</div>
+  if (isLoading) return <Loader />
+  else if (hasError) return <NotFound />
 
   return (
     <div>

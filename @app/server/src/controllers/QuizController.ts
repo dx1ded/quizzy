@@ -1,7 +1,7 @@
 import { nanoid } from "nanoid"
-import { AuthTokenType, QuizType } from "@quizzy/common"
+import { AuthTokenType, FindQuizType, QuizType } from "@quizzy/common"
 import { FastifyHandler, WithUserId } from "../types"
-import { quizRepository } from "../database"
+import { quizRepository, userRepository } from "../database"
 
 const createNewQuiz: FastifyHandler<
   WithUserId<AuthTokenType>,
@@ -33,7 +33,7 @@ const createNewQuiz: FastifyHandler<
   return newQuiz
 }
 
-const findQuiz: FastifyHandler<WithUserId, QuizType> = async (req, res) => {
+const findQuiz: FastifyHandler<WithUserId, FindQuizType> = async (req, res) => {
   const { id } = req.params as { id: string }
 
   const quiz = await quizRepository.findOne({ where: { id } })
@@ -42,7 +42,17 @@ const findQuiz: FastifyHandler<WithUserId, QuizType> = async (req, res) => {
     return res.code(400).send({ message: "Quiz not found" })
   }
 
-  return quiz
+  const isCreator = req.body.userId === quiz.userRef
+  const creatorInfo = await userRepository.findOne({
+    where: { id: quiz.userRef },
+    select: ["username"],
+  })
+
+  if (!creatorInfo) {
+    return res.code(400).send({ message: "Quiz not found" })
+  }
+
+  return { quiz, isCreator, creatorInfo }
 }
 
 const findQuizForEdit: FastifyHandler<WithUserId, QuizType> = async (
@@ -54,7 +64,7 @@ const findQuizForEdit: FastifyHandler<WithUserId, QuizType> = async (
   const quiz = await quizRepository.findOne({ where: { id } })
 
   if (!quiz) {
-    return res.code(400).send({ message: "Quiz not found" })
+    return res.code(404).send({ message: "Quiz not found" })
   }
 
   if (quiz.userRef !== req.body.userId) {
@@ -76,7 +86,42 @@ const saveQuiz: FastifyHandler<WithUserId<{ quiz: QuizType }>> = async (
 
   await quizRepository.update({ id: quiz.id }, quiz)
 
-  return { message: "success" }
+  return { message: "Success" }
+}
+
+const getQuizzes: FastifyHandler<
+  WithUserId<{ page: number }>,
+  QuizType[]
+> = async (req) => {
+  const { page } = req.body
+
+  const perPage = 5
+  const skip = perPage * page - perPage
+
+  const quizzes = await quizRepository.find({
+    take: perPage,
+    skip,
+  })
+
+  return quizzes
+}
+
+const getOwnQuizzes: FastifyHandler<
+  WithUserId<{ page: number }>,
+  QuizType[]
+> = async (req) => {
+  const { page, userId } = req.body
+
+  const perPage = 3
+  const skip = perPage * page - perPage
+
+  const quizzes = await quizRepository.find({
+    where: { userRef: userId },
+    take: perPage,
+    skip,
+  })
+
+  return quizzes
 }
 
 export const QuizController = {
@@ -84,4 +129,6 @@ export const QuizController = {
   findQuiz,
   findQuizForEdit,
   saveQuiz,
+  getQuizzes,
+  getOwnQuizzes,
 }

@@ -29,6 +29,6 @@ export function sendSecuredRequest<T>(
         dispatch(logout())
       }
 
-      throw new Error("Secret token is expired")
+      throw errorStatus
     })
 }

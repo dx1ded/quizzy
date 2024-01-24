@@ -9,8 +9,8 @@ export function Sidebar() {
         <li className="[&:not(:last-child)]:mb-2.5">
           <Button
             as={NavLink}
-            className="block pl-6 [&.active]:border-primary [&.active]:bg-primary [&.active]:text-white"
-            size="lg"
+            className="block pl-4 [&.active]:border-primary [&.active]:bg-primary [&.active]:text-white"
+            size="md"
             to="/app"
             variant="white"
             end>
@@ -20,8 +20,8 @@ export function Sidebar() {
         <li className="[&:not(:last-child)]:mb-2.5">
           <Button
             as={NavLink}
-            className="block pl-6 [&.active]:border-primary [&.active]:bg-primary [&.active]:text-white"
-            size="lg"
+            className="block pl-4 [&.active]:border-primary [&.active]:bg-primary [&.active]:text-white"
+            size="md"
             to="/app/discover"
             variant="white"
             end>
@@ -31,8 +31,8 @@ export function Sidebar() {
         <li className="[&:not(:last-child)]:mb-2.5">
           <Button
             as={NavLink}
-            className="block pl-6 [&.active]:border-primary [&.active]:bg-primary [&.active]:text-white"
-            size="lg"
+            className="block pl-4 [&.active]:border-primary [&.active]:bg-primary [&.active]:text-white"
+            size="md"
             to="/app/library"
             variant="white"
             end>
@@ -42,8 +42,8 @@ export function Sidebar() {
         <li className="[&:not(:last-child)]:mb-2.5">
           <Button
             as={NavLink}
-            className="block pl-6 [&.active]:border-primary [&.active]:bg-primary [&.active]:text-white"
-            size="lg"
+            className="block pl-4 [&.active]:border-primary [&.active]:bg-primary [&.active]:text-white"
+            size="md"
             to="/app/reports"
             variant="white"
             end>
@@ -55,7 +55,7 @@ export function Sidebar() {
         <Button
           as={NavLink}
           className="mb-2.5 block [&.active]:border-primary [&.active]:bg-primary [&.active]:text-white"
-          size="lg"
+          size="md"
           to="/app/about"
           variant="white"
           end>

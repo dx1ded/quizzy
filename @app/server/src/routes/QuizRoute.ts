@@ -52,4 +52,30 @@ export const QuizRoute = async (f: FastifyInstance) => {
     },
     QuizController.saveQuiz
   )
+
+  f.withTypeProvider<ZodTypeProvider>().post<{
+    Body: WithUserId<AuthTokenType> & { page: number }
+  }>(
+    "/get",
+    {
+      preHandler: [validateToken],
+      schema: {
+        body: z.object({ page: z.number() }).and(AuthToken),
+      },
+    },
+    QuizController.getQuizzes
+  )
+
+  f.withTypeProvider<ZodTypeProvider>().post<{
+    Body: WithUserId<AuthTokenType> & { page: number }
+  }>(
+    "/getOwn",
+    {
+      preHandler: [validateToken],
+      schema: {
+        body: z.object({ page: z.number() }).and(AuthToken),
+      },
+    },
+    QuizController.getOwnQuizzes
+  )
 }

@@ -1,11 +1,14 @@
 import { Dispatch } from "react"
-import { QuizType } from "@quizzy/common"
+import { FindQuizType, QuizType } from "@quizzy/common"
 import { AppActions, AppStore } from "../../index"
 import { sendSecuredRequest } from "../../account"
 
 export type QuizAction =
   | { type: "SET_IS_LOADING"; payload: boolean }
   | { type: "SET_IS_SAVING"; payload: boolean }
+  | { type: "SET_ERROR"; payload: boolean }
+  | { type: "SET_IS_CREATOR"; payload: boolean }
+  | { type: "SET_CREATOR_INFO"; payload: FindQuizType["creatorInfo"] }
   | { type: "SET_QUIZ"; payload: QuizType }
   | { type: "SAVE_QUIZ"; payload: QuizType }
   | { type: "ADD_QUESTION" }
@@ -19,6 +22,20 @@ export function setIsLoading(value: boolean): QuizAction {
 
 export function setIsSaving(value: boolean): QuizAction {
   return { type: "SET_IS_SAVING", payload: value }
+}
+
+export function setError(value: boolean): QuizAction {
+  return { type: "SET_ERROR", payload: value }
+}
+
+export function setIsCreator(value: boolean): QuizAction {
+  return { type: "SET_IS_CREATOR", payload: value }
+}
+
+export function setCreatorInfo(
+  creator: FindQuizType["creatorInfo"]
+): QuizAction {
+  return { type: "SET_CREATOR_INFO", payload: creator }
 }
 
 export function setQuiz(quiz: QuizType): QuizAction {
@@ -59,11 +76,36 @@ export function loadQuiz(id: string) {
   return async (dispatch: Dispatch<AppActions>, getState: () => AppStore) => {
     dispatch(setIsLoading(true))
 
-    const quiz = (await sendSecuredRequest(`/api/quiz/edit/${id}`, dispatch, {
-      token: getState().account.token,
-    })) as Awaited<Promise<QuizType>>
+    try {
+      const data = (await sendSecuredRequest(`/api/quiz/${id}`, dispatch, {
+        token: getState().account.token,
+      })) as Awaited<Promise<FindQuizType>>
 
-    dispatch(setQuiz(quiz))
+      dispatch(setQuiz(data.quiz))
+      dispatch(setIsCreator(data.isCreator))
+      dispatch(setCreatorInfo(data.creatorInfo))
+    } catch (_) {
+      dispatch(setError(true))
+    }
+
+    dispatch(setIsLoading(false))
+  }
+}
+
+export function loadQuizForEdit(id: string) {
+  return async (dispatch: Dispatch<AppActions>, getState: () => AppStore) => {
+    dispatch(setIsLoading(true))
+
+    try {
+      const quiz = (await sendSecuredRequest(`/api/quiz/edit/${id}`, dispatch, {
+        token: getState().account.token,
+      })) as Awaited<Promise<QuizType>>
+
+      dispatch(setQuiz(quiz))
+    } catch (_) {
+      dispatch(setError(true))
+    }
+
     dispatch(setIsLoading(false))
   }
 }
