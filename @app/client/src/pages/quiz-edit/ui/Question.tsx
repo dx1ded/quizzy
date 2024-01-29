@@ -1,6 +1,8 @@
+import { useSelector } from "react-redux"
 import { useFormContext } from "react-hook-form"
 import { QuizType } from "@quizzy/common"
 import QuizBackground from "assets/quiz-background.png"
+import { QuizState } from "entities/quiz"
 import { Input } from "shared/ui/Input"
 import { Button } from "shared/ui/Button"
 import { Text } from "shared/ui/Typography"
@@ -10,12 +12,14 @@ import {
   SquareAnswer,
   TriangleAnswer,
 } from "shared/ui/Answer"
-import { QuizParams } from "./index"
+import type { AppStore } from "app/model"
 
-export function Question({ activeQuestion }: QuizParams) {
+export function Question() {
+  const { activeQuestion } = useSelector<AppStore, QuizState>(
+    (state) => state.quiz
+  )
   const { register, watch } = useFormContext<QuizType>()
-  const quiz = watch()
-  const question = quiz.questions[activeQuestion]
+  const question = watch("questions")[activeQuestion]
 
   return (
     <main className="relative flex-1">

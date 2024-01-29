@@ -1,22 +1,31 @@
-import { useDispatch } from "react-redux"
 import { useNavigate } from "react-router-dom"
-import { AppThunkDispatch } from "entities"
-import { createNewQuiz } from "entities/quiz"
+import { QuizType } from "@quizzy/common"
+import { ComponentPropsWithoutRef } from "react"
 import { Button } from "shared/ui/Button"
+import { useSecuredRequest } from "entities/account"
 
-export function CreateQuiz() {
-  const dispatch = useDispatch<AppThunkDispatch>()
+export function CreateQuiz({
+  children,
+  className,
+  ...props
+}: ComponentPropsWithoutRef<"button">) {
+  const request = useSecuredRequest()
   const navigate = useNavigate()
+  const buttonClassName = `px-5 ${className || ""}`
 
   const clickHandler = async () => {
-    const { id } = await dispatch(createNewQuiz())
+    const { id } = await request<QuizType>("/api/quiz/create")
 
     navigate(`/quiz/edit/${id}`)
   }
 
   return (
-    <Button className="px-5" variant="secondary" onClick={clickHandler}>
-      Create
+    <Button
+      className={buttonClassName}
+      variant="secondary"
+      onClick={clickHandler}
+      {...props}>
+      {children}
     </Button>
   )
 }

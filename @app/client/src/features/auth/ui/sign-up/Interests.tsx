@@ -1,6 +1,6 @@
 import { useDispatch } from "react-redux"
-import { AppThunkDispatch } from "entities"
-import { signUp } from "entities/account"
+import { AuthTokenType } from "@quizzy/common"
+import { login } from "entities/account"
 import { SignUpFormProps } from "shared/lib"
 import { MultistepProps } from "shared/ui/Multistep"
 
@@ -26,20 +26,28 @@ export function Interests({
   setPrevStep,
   setNextStep,
 }: MultistepProps<SignUpFormProps>) {
-  const dispatch = useDispatch<AppThunkDispatch>()
+  const dispatch = useDispatch()
 
   return (
     <AuthForm
       cardCaption={signUpCard.caption}
       cardTitle={signUpCard.title}
-      defaultValues={{ interests: [] as string[] }}
+      defaultValues={{ interests: [] }}
       setNextStep={setNextStep}
       setPrevStep={setPrevStep}
       title="Choose the topics you like"
-      onSubmit={async (newData) => {
+      onSubmit={(newData) => {
         const user = { ...data, ...newData }
 
-        await dispatch(signUp(user))
+        fetch("/api/auth/sign-up", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(user),
+        })
+          .then((res) => res.json())
+          .then(({ token }: AuthTokenType) => dispatch(login(token)))
       }}>
       {({ register }) => (
         <div className="-m-2 grid max-h-56 grid-cols-2 gap-4 overflow-y-auto p-2">

@@ -1,35 +1,22 @@
-import { useDispatch, useSelector } from "react-redux"
 import { useEffect, useState } from "react"
 import Skeleton from "react-loading-skeleton"
 import { QuizType } from "@quizzy/common"
-import { AppStore } from "entities"
-import { AccountState, sendSecuredRequest } from "entities/account"
+import { useQuery } from "@tanstack/react-query"
+import { useSecuredRequest } from "entities/account"
 import { Box } from "shared/ui/Box"
 import { Subheading } from "shared/ui/Typography"
 import { Button } from "shared/ui/Button"
-import { Quiz } from "./Quiz"
+import { MiniQuiz } from "./MiniQuiz"
 
 export function MyQuizzes() {
-  const { token } = useSelector<AppStore, AccountState>(
-    (state) => state.account
-  )
-  const dispatch = useDispatch()
+  const request = useSecuredRequest()
   const [noMore, setNoMore] = useState(false)
-  const [isLoading, setIsLoading] = useState(false)
   const [page, setPage] = useState(1)
-  const [quizzes, setQuizzes] = useState<QuizType[]>([])
-
-  useEffect(() => {
-    setIsLoading(true)
-    sendSecuredRequest("/api/quiz/getOwn", dispatch, {
-      token,
-      page,
-    }).then((data) => {
-      if (!data.length) setNoMore(true)
-      setQuizzes((prev) => [...prev, ...data])
-      setIsLoading(false)
-    })
-  }, [dispatch, page, token])
+  const { data, isLoading } = useQuery({
+    queryKey: ["ownQuizzes", page],
+    queryFn: () => request<QuizType[]>("/api/quiz/list/own", { page }),
+    refetchOnWindowFocus: false,
+  })
 
   return (
     <Box className="basis-80">
@@ -42,12 +29,12 @@ export function MyQuizzes() {
             <Skeleton height={50} />
           </>
         ) : (
-          quizzes.map((quiz) => (
-            <Quiz
+          data?.map((quiz) => (
+            <MiniQuiz
               key={quiz.id}
+              cover={quiz.cover}
               id={quiz.id}
               name={quiz.name}
-              picture={quiz.picture}
               plays={quiz.plays}
             />
           ))

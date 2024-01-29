@@ -1,13 +1,16 @@
-import { MenuItem, Select } from "@mui/material"
+import { useDispatch, useSelector } from "react-redux"
 import { Controller, useFormContext } from "react-hook-form"
+import { MenuItem, Select } from "@mui/material"
 import { QuizType } from "@quizzy/common"
-import { useDispatch } from "react-redux"
 import { Button } from "shared/ui/Button"
-import { duplicateQuestion, removeQuestion } from "entities/quiz"
-import { QuizParams } from "./index"
+import { duplicateQuestion, QuizState, removeQuestion } from "entities/quiz"
+import type { AppStore } from "app/model"
 
-export function Settings({ activeQuestion }: QuizParams) {
+export function Settings() {
   const dispatch = useDispatch()
+  const { activeQuestion } = useSelector<AppStore, QuizState>(
+    (state) => state.quiz
+  )
   const { control, getValues } = useFormContext<QuizType>()
   const question = getValues().questions[activeQuestion]
 

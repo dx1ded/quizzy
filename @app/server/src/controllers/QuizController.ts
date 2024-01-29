@@ -15,7 +15,7 @@ const createNewQuiz: FastifyHandler<
   const newQuiz: QuizType = {
     id: nanoid(5),
     name: "New Quiz",
-    description: "Quiz Description",
+    description: "MiniQuiz Description",
     userRef: req.body.userId,
     cover: "",
     questions: [emptyQuestion],
@@ -84,7 +84,7 @@ const saveQuiz: FastifyHandler<WithUserId<{ quiz: QuizType }>> = async (
   return { message: "Success" }
 }
 
-const getQuizzes: FastifyHandler<
+const listQuizzes: FastifyHandler<
   WithUserId<{ page: number }>,
   QuizType[]
 > = async (req) => {
@@ -101,7 +101,7 @@ const getQuizzes: FastifyHandler<
   return quizzes
 }
 
-const getOwnQuizzes: FastifyHandler<
+const listOwnQuizzes: FastifyHandler<
   WithUserId<{ page: number }>,
   QuizType[]
 > = async (req) => {
@@ -119,7 +119,7 @@ const getOwnQuizzes: FastifyHandler<
   return quizzes
 }
 
-const getNewestQuizzes: FastifyHandler<unknown, QuizType[]> = async (
+const listNewestQuizzes: FastifyHandler<unknown, QuizType[]> = async (
   _,
   res
 ) => {
@@ -129,20 +129,23 @@ const getNewestQuizzes: FastifyHandler<unknown, QuizType[]> = async (
   })
 
   if (!quizzes) {
-    return res.code(404).send({ message: "Not found" })
+    return res.code(404).send({ message: "Quizzes not found" })
   }
 
   return quizzes
 }
 
-const getViralQuizzes: FastifyHandler<unknown, QuizType[]> = async (_, res) => {
+const listViralQuizzes: FastifyHandler<unknown, QuizType[]> = async (
+  _,
+  res
+) => {
   const quizzes = await quizRepository.find({
     order: { plays: "DESC" },
     take: 4,
   })
 
   if (!quizzes) {
-    return res.code(404).send({ message: "Not found" })
+    return res.code(404).send({ message: "Quizzes not found" })
   }
 
   return quizzes
@@ -153,8 +156,8 @@ export const QuizController = {
   findQuiz,
   findQuizForEdit,
   saveQuiz,
-  getQuizzes,
-  getOwnQuizzes,
-  getNewestQuizzes,
-  getViralQuizzes,
+  listQuizzes,
+  listOwnQuizzes,
+  listNewestQuizzes,
+  listViralQuizzes,
 }

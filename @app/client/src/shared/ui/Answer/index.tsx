@@ -1,13 +1,12 @@
 import { PropsWithChildren } from "react"
 import { useFormContext } from "react-hook-form"
 import { QuizType } from "@quizzy/common"
-import { QuizState } from "entities/quiz"
 import { Tick } from "../../icons/Tick"
 
 interface AnswerType {
   value: string
   isChecked: boolean
-  activeQuestion: QuizState["activeQuestion"]
+  activeQuestion: number
 }
 
 export function TriangleAnswer({

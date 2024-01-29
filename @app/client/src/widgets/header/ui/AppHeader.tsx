@@ -19,7 +19,7 @@ export function AppHeader() {
       <nav className="basis-36">
         <ul className="flex list-none items-center gap-x-6">
           <li>
-            <CreateQuiz />
+            <CreateQuiz>Create</CreateQuiz>
           </li>
           <li>
             <NavLink to="/app/account">

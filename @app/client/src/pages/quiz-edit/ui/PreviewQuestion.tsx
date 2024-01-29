@@ -1,4 +1,9 @@
 import { useDispatch } from "react-redux"
+import {
+  changeActiveQuestion,
+  duplicateQuestion,
+  removeQuestion,
+} from "entities/quiz"
 import { Trash } from "shared/icons/Trash"
 import { Copy } from "shared/icons/Copy"
 import {
@@ -7,11 +12,6 @@ import {
   SmallSquareAnswer,
   SmallTriangleAnswer,
 } from "shared/ui/Answer"
-import {
-  changeActiveQuestion,
-  duplicateQuestion,
-  removeQuestion,
-} from "entities/quiz"
 
 interface PreviewQuestionProps {
   n: number
@@ -20,7 +20,7 @@ interface PreviewQuestionProps {
   background: string
   answers: string[]
   checked: boolean[]
-  isActive?: boolean
+  isActive: boolean
 }
 
 export function PreviewQuestion({
@@ -30,7 +30,7 @@ export function PreviewQuestion({
   background,
   answers,
   checked,
-  isActive = false,
+  isActive,
 }: PreviewQuestionProps) {
   const dispatch = useDispatch()
 

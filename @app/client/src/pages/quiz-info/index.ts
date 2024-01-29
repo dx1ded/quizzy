@@ -1,0 +1,1 @@
+export { QuizInfo } from "./ui"

@@ -2,26 +2,21 @@ import { FindQuizType, emptyQuestion, QuizType } from "@quizzy/common"
 import { QuizAction } from "./actions"
 
 export interface QuizState {
-  isLoading: boolean
-  isSaving: boolean
-  hasError: boolean
   data: QuizType
   activeQuestion: number
   isCreator: boolean
+  isSaving: boolean
   creatorInfo: FindQuizType["creatorInfo"]
 }
 
 const initialState: QuizState = {
-  isLoading: true,
   isSaving: false,
-  hasError: false,
   data: {
     id: "",
     name: "",
     description: "",
     userRef: 0,
-    picture: "",
-    background: "",
+    cover: "",
     questions: [emptyQuestion],
     rating: 0,
     plays: 0,
@@ -36,12 +31,8 @@ export const quizReducer = (
   action: QuizAction
 ) => {
   switch (action.type) {
-    case "SET_IS_LOADING":
-      return { ...state, isLoading: action.payload }
     case "SET_IS_SAVING":
       return { ...state, isSaving: action.payload }
-    case "SET_ERROR":
-      return { ...state, hasError: action.payload }
     case "SET_IS_CREATOR":
       return { ...state, isCreator: action.payload }
     case "SET_CREATOR_INFO":

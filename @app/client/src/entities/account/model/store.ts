@@ -1,11 +1,12 @@
+import { AuthTokenType } from "@quizzy/common"
 import { AccountAction } from "./actions"
 
-export interface AccountState {
-  token: string | null
+export type AccountState = {
+  token: AuthTokenType["token"] | null
 }
 
-const initialState = {
-  token: JSON.parse(localStorage.getItem("secret_token") || null!),
+const initialState: AccountState = {
+  token: JSON.parse(localStorage.getItem("secret_token")!),
 }
 
 export const accountReducer = (

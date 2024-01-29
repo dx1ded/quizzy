@@ -1,14 +1,17 @@
+import { useDispatch, useSelector } from "react-redux"
 import { useFormContext } from "react-hook-form"
 import { QuizType } from "@quizzy/common"
-import { useDispatch } from "react-redux"
 import QuizBackground from "assets/quiz-background.png"
+import { addQuestion, QuizState } from "entities/quiz"
 import { Button } from "shared/ui/Button"
-import { addQuestion } from "entities/quiz"
+import type { AppStore } from "app/model"
 import { PreviewQuestion } from "./PreviewQuestion"
-import { QuizParams } from "./index"
 
-export function Preview({ activeQuestion }: QuizParams) {
+export function Preview() {
   const dispatch = useDispatch()
+  const { activeQuestion } = useSelector<AppStore, QuizState>(
+    (state) => state.quiz
+  )
   const { watch } = useFormContext<QuizType>()
   const quiz = watch()
 

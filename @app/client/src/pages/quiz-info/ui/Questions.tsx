@@ -1,16 +1,14 @@
 import { useSelector } from "react-redux"
 import Skeleton from "react-loading-skeleton"
+import QuizBackground from "assets/quiz-background.png"
+import { QuizState } from "entities/quiz"
 import { Box } from "shared/ui/Box"
 import { Subheading } from "shared/ui/Typography"
-import QuizBackground from "assets/quiz-background.png"
-import { AppStore } from "entities"
-import { QuizState } from "entities/quiz"
+import type { AppStore } from "app/model"
 import { Question } from "./Question"
 
-export function Questions() {
-  const { data, isLoading } = useSelector<AppStore, QuizState>(
-    (state) => state.quiz
-  )
+export function Questions({ isLoading }: { isLoading: boolean }) {
+  const { data } = useSelector<AppStore, QuizState>((state) => state.quiz)
 
   return (
     <Box className="h-full flex-1">

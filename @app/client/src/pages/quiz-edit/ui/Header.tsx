@@ -1,12 +1,17 @@
+import { useSelector } from "react-redux"
 import { NavLink } from "react-router-dom"
 import { useFormContext } from "react-hook-form"
 import { QuizType } from "@quizzy/common"
+import { QuizState } from "entities/quiz"
 import { Logo } from "shared/ui/Logo"
 import { Input } from "shared/ui/Input"
 import { Button } from "shared/ui/Button"
-import { QuizParams } from "./index"
+import type { AppStore } from "app/model"
 
-export function Header({ activeQuestion }: QuizParams) {
+export function Header() {
+  const { activeQuestion } = useSelector<AppStore, QuizState>(
+    (state) => state.quiz
+  )
   const { register, watch } = useFormContext<QuizType>()
   const question = watch("questions")[activeQuestion]
 

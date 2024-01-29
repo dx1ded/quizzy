@@ -4,14 +4,14 @@ import { Button } from "shared/ui/Button"
 
 interface QuizCardProps {
   id: string
-  picture: string
+  cover: string
 }
 
-export function QuizCard({ id, picture }: QuizCardProps) {
+export function QuizCard({ id, cover }: QuizCardProps) {
   return (
     <div className="group h-[9.75rem]">
-      {picture ? (
-        <img alt="Quiz" src={picture} />
+      {cover ? (
+        <img alt="Quiz" src={cover} />
       ) : (
         <QuizzyImage
           className="rounded-lg"

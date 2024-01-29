@@ -5,17 +5,17 @@ import { QuizzyImage } from "shared/ui/QuizzyImage"
 interface QuizProps {
   id: string
   name: string
-  picture: string
+  cover: string
   plays: number
 }
 
-export function Quiz({ id, name, picture, plays }: QuizProps) {
+export function MiniQuiz({ id, name, cover, plays }: QuizProps) {
   return (
     <NavLink
       className="flex cursor-pointer items-center rounded-lg duration-200 hover:bg-[#f6f6f6]"
       to={`/quiz/${id}`}>
-      {picture ? (
-        <img alt="Quiz" src={picture} />
+      {cover ? (
+        <img alt="Quiz" src={cover} />
       ) : (
         <QuizzyImage className="mr-2.5 rounded-l-lg" />
       )}

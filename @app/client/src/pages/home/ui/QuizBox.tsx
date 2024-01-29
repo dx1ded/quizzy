@@ -1,22 +1,20 @@
-import { useDispatch } from "react-redux"
-import { NavLink, useNavigate } from "react-router-dom"
-import { AppThunkDispatch } from "entities"
-import { createNewQuiz } from "entities/quiz"
+import { NavLink } from "react-router-dom"
+import { CreateQuiz } from "features/create-quiz"
 import { QuizzyImage } from "shared/ui/QuizzyImage"
 import { Button } from "shared/ui/Button"
 
 interface QuizBoxProps {
   id: string
   name: string
+  cover: string
   description: string
-  picture: string
 }
 
-export function QuizBox({ id, name, description, picture }: QuizBoxProps) {
+export function QuizBox({ id, name, description, cover }: QuizBoxProps) {
   return (
     <div className="rounded-lg shadow-md">
-      {picture ? (
-        <img alt="Quiz" src={picture} />
+      {cover ? (
+        <img alt="Quiz" src={cover} />
       ) : (
         <QuizzyImage className="rounded-t-lg" height="4.5rem" width="100%" />
       )}
@@ -37,26 +35,11 @@ export function QuizBox({ id, name, description, picture }: QuizBoxProps) {
 }
 
 export function AddQuizBox() {
-  const navigate = useNavigate()
-  const dispatch = useDispatch<AppThunkDispatch>()
-
-  const clickHandler = async () => {
-    const { id } = await dispatch(createNewQuiz())
-
-    navigate(`/quiz/edit/${id}`)
-  }
-
   return (
     <div className="flex flex-col rounded-lg shadow-md">
       <QuizzyImage className="rounded-t-lg" height="4.5rem" width="100%" />
       <div className="flex flex-1 flex-col items-center justify-center px-3.5 pb-4 pt-2">
-        <Button
-          aria-label="Create a new quiz"
-          className="mb-3 h-12 w-12"
-          variant="secondary"
-          onClick={clickHandler}>
-          +
-        </Button>
+        <CreateQuiz className="mb-3 h-12 w-12">+</CreateQuiz>
         <p className="text-sm">Create a new quiz</p>
       </div>
     </div>

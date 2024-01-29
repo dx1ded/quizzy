@@ -1,33 +1,21 @@
-import { useEffect, useState } from "react"
-import { useDispatch, useSelector } from "react-redux"
+import { useState } from "react"
 import Skeleton from "react-loading-skeleton"
 import { QuizType } from "@quizzy/common"
-import { AppStore } from "entities"
-import { AccountState, sendSecuredRequest } from "entities/account"
+import { useQuery } from "@tanstack/react-query"
+import { useSecuredRequest } from "entities/account"
 import { Box } from "shared/ui/Box"
 import { Subheading, Text } from "shared/ui/Typography"
 import { Button } from "shared/ui/Button"
 import { AddQuizBox, QuizBox } from "./QuizBox"
 
 export function GetStarted() {
-  const { token } = useSelector<AppStore, AccountState>(
-    (state) => state.account
-  )
-  const dispatch = useDispatch()
-  const [isLoading, setIsLoading] = useState(false)
+  const request = useSecuredRequest()
   const [page, setPage] = useState(1)
-  const [quizzes, setQuizzes] = useState<QuizType[]>([])
-
-  useEffect(() => {
-    setIsLoading(true)
-    sendSecuredRequest("/api/quiz/get", dispatch, {
-      token,
-      page,
-    }).then((data) => {
-      setQuizzes((prev) => [...prev, ...data])
-      setIsLoading(false)
-    })
-  }, [dispatch, page, token])
+  const { data, isLoading } = useQuery({
+    queryKey: ["quizzesList"],
+    queryFn: () => request<QuizType[]>("/api/quiz/list", { page }),
+    refetchOnWindowFocus: false,
+  })
 
   return (
     <Box className="flex-1">
@@ -47,13 +35,13 @@ export function GetStarted() {
             <Skeleton height={200} />
           </>
         ) : (
-          quizzes.map((quiz) => (
+          data?.map((quiz) => (
             <QuizBox
               key={quiz.id}
+              cover={quiz.cover}
               description={quiz.description}
               id={quiz.id}
               name={quiz.name}
-              picture={quiz.picture}
             />
           ))
         )}

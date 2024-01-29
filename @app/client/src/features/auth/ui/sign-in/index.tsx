@@ -1,8 +1,7 @@
-import { SignInSchema } from "@quizzy/common"
 import { useDispatch } from "react-redux"
 import { Controller } from "react-hook-form"
-import { AppThunkDispatch } from "entities"
-import { signIn } from "entities/account"
+import { AuthTokenType, SignInSchema } from "@quizzy/common"
+import { login } from "entities/account"
 import { signInFormState } from "shared/lib"
 import { AuthForm } from "../AuthForm"
 import { AuthInput } from "../AuthInput"
@@ -11,7 +10,7 @@ import { AuthValidation } from "../AuthValidation"
 import { ParentMultistepControls, signInCard } from "../../lib"
 
 export function SignIn({ parentSetPrev }: ParentMultistepControls) {
-  const dispatch = useDispatch<AppThunkDispatch>()
+  const dispatch = useDispatch()
 
   return (
     <AuthForm
@@ -21,12 +20,21 @@ export function SignIn({ parentSetPrev }: ParentMultistepControls) {
       setPrevStep={parentSetPrev}
       validationSchema={SignInSchema}
       onSubmit={(credentials, _, setError) => {
-        dispatch(signIn(credentials)).catch(() =>
-          setError("login", {
-            type: "custom",
-            message: "User was not found!",
-          })
-        )
+        fetch("/api/auth/sign-in", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(credentials),
+        })
+          .then((res) => res.json())
+          .then(({ token }: AuthTokenType) => dispatch(login(token)))
+          .catch(() =>
+            setError("login", {
+              type: "custom",
+              message: "User was not found!",
+            })
+          )
       }}>
       {({ control, initialErrors }) => (
         <>

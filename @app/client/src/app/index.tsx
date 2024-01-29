@@ -8,7 +8,7 @@ import { Auth } from "pages/auth"
 import { Play } from "pages/play"
 import { Home } from "pages/home"
 import { Discover } from "pages/discover"
-import { Info } from "pages/info"
+import { QuizInfo } from "pages/quiz-info"
 import { QuizEdit } from "pages/quiz-edit"
 import { About } from "pages/about"
 import { Library } from "pages/library"
@@ -32,12 +32,12 @@ export function App() {
             </Route>
             {/* Private Routes */}
             <Route element={<PrivateRoutes />}>
-              <Route element={<Home />} path="/app" />
+              <Route element={<Home />} path="/app" index />
               <Route element={<Discover />} path="/app/discover" />
               <Route element={<Library />} path="/app/library" />
               <Route element={<Reports />} path="/app/reports" />
               <Route element={<About />} path="/app/about" />
-              <Route element={<Info />} path="/quiz/:id" />
+              <Route element={<QuizInfo />} path="/quiz/:id" />
               <Route element={<QuizEdit />} path="/quiz/edit/:id" />
             </Route>
           </Routes>

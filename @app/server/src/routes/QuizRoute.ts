@@ -8,7 +8,7 @@ import { WithUserId } from "../types"
 
 export const QuizRoute = async (f: FastifyInstance) => {
   f.withTypeProvider<ZodTypeProvider>().post(
-    "/create/new",
+    "/create",
     {
       preHandler: [validateToken],
       schema: {
@@ -56,48 +56,48 @@ export const QuizRoute = async (f: FastifyInstance) => {
   f.withTypeProvider<ZodTypeProvider>().post<{
     Body: WithUserId<AuthTokenType> & { page: number }
   }>(
-    "/get",
+    "/list",
     {
       preHandler: [validateToken],
       schema: {
         body: z.object({ page: z.number() }).and(AuthToken),
       },
     },
-    QuizController.getQuizzes
+    QuizController.listQuizzes
   )
 
   f.withTypeProvider<ZodTypeProvider>().post<{
     Body: WithUserId<AuthTokenType> & { page: number }
   }>(
-    "/getOwn",
+    "/list/own",
     {
       preHandler: [validateToken],
       schema: {
         body: z.object({ page: z.number() }).and(AuthToken),
       },
     },
-    QuizController.getOwnQuizzes
+    QuizController.listOwnQuizzes
   )
 
   f.withTypeProvider<ZodTypeProvider>().post(
-    "/getViral",
+    "/list/viral",
     {
       preHandler: [validateToken],
       schema: {
         body: AuthToken,
       },
     },
-    QuizController.getViralQuizzes
+    QuizController.listViralQuizzes
   )
 
   f.withTypeProvider<ZodTypeProvider>().post(
-    "/getNewest",
+    "/list/newest",
     {
       preHandler: [validateToken],
       schema: {
         body: AuthToken,
       },
     },
-    QuizController.getNewestQuizzes
+    QuizController.listNewestQuizzes
   )
 }

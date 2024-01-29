@@ -1,27 +1,26 @@
 import { useSelector } from "react-redux"
 import { NavLink } from "react-router-dom"
 import Skeleton from "react-loading-skeleton"
+import { QuizState } from "entities/quiz"
 import { Box } from "shared/ui/Box"
 import { QuizzyImage } from "shared/ui/QuizzyImage"
 import { Caption, Subheading } from "shared/ui/Typography"
-// import { Star } from "shared/icons/Star"
+import { Star } from "shared/icons/Star"
 import { Button } from "shared/ui/Button"
-import { AppStore } from "entities"
-import { QuizState } from "entities/quiz"
 import { Edit } from "shared/icons/Edit"
+import type { AppStore } from "app/model"
 
-export function Quiz() {
-  const { data, creatorInfo, isCreator, isLoading } = useSelector<
-    AppStore,
-    QuizState
-  >((state) => state.quiz)
+export function Quiz({ isLoading }: { isLoading: boolean }) {
+  const { data, creatorInfo, isCreator } = useSelector<AppStore, QuizState>(
+    (state) => state.quiz
+  )
 
   return isLoading ? (
     <Skeleton containerClassName="h-full" height="100%" width={320} />
   ) : (
     <Box className="h-full basis-80 !px-0 pt-0">
-      {data.picture ? (
-        <img alt="Quiz" src={data.picture} />
+      {data.cover ? (
+        <img alt="Quiz" src={data.cover} />
       ) : (
         <QuizzyImage
           className="mb-3 rounded-t-md"
@@ -33,9 +32,9 @@ export function Quiz() {
       <div className="px-4">
         <div className="mb-2 flex items-center justify-between">
           <Subheading>{data.name}</Subheading>
-          {/* <button type="button"> */}
-          {/*  <Star color="#FFB800" width={1.25} /> */}
-          {/* </button> */}
+          <button type="button">
+            <Star color="#FFB800" width={1.25} />
+          </button>
         </div>
         <Caption className="mb-5 block">{data.plays} plays</Caption>
         <div className="mb-6 flex items-center justify-between">
