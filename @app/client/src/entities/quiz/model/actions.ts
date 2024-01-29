@@ -102,6 +102,8 @@ export function loadQuizForEdit(id: string) {
       })) as Awaited<Promise<QuizType>>
 
       dispatch(setQuiz(quiz))
+
+      return quiz
     } catch (_) {
       dispatch(setError(true))
     }

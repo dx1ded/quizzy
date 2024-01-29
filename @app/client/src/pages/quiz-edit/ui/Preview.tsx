@@ -18,12 +18,12 @@ export function Preview({ activeQuestion }: QuizParams) {
         <PreviewQuestion
           key={i}
           answers={question.answers}
-          bg={quiz.background || QuizBackground}
+          background={question.background || QuizBackground}
           checked={question.correctAnswers}
-          image={question.picture}
           isActive={i === activeQuestion}
           n={i}
           name={question.name}
+          picture={question.picture}
         />
       ))}
       <Button size="md" variant="white" onClick={() => dispatch(addQuestion())}>

@@ -22,7 +22,7 @@ export function Question({ activeQuestion }: QuizParams) {
       <img
         alt="Quiz"
         className="absolute left-0 top-0 -z-10 h-full w-full object-cover"
-        src={QuizBackground}
+        src={question.background || QuizBackground}
       />
       <div className="flex h-full flex-col items-center justify-between px-5 py-10">
         <Input

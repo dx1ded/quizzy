@@ -3,6 +3,7 @@ import { z } from "zod"
 export const QuestionSchema = z.object({
   name: z.string(),
   picture: z.string(),
+  background: z.string(),
   answers: z.string().array(),
   correctAnswers: z.boolean().array(),
   timeLimit: z.number(),
@@ -14,8 +15,7 @@ export const QuizSchema = z.object({
   userRef: z.number(),
   name: z.string(),
   description: z.string(),
-  picture: z.string(),
-  background: z.string(),
+  cover: z.string(),
   questions: QuestionSchema.array(),
   rating: z.number(),
   plays: z.number(),

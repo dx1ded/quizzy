@@ -21,7 +21,7 @@ module.exports = {
     "react/prop-types": "off",
     "react/no-array-index-key": "off",
     "react/jsx-props-no-spreading": "off",
-    "@conarti/feature-sliced/layers-slices": "off",
+    "@conarti/feature-sliced/layers-slices": "error",
     "@conarti/feature-sliced/absolute-relative": "error",
     "@conarti/feature-sliced/public-api": "off",
     "import/no-cycle": "off",

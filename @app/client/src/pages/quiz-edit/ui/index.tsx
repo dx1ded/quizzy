@@ -6,6 +6,7 @@ import { FormProvider, useForm, useWatch } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { QuizSchema, QuizType } from "@quizzy/common"
 import { useDebouncedCallback } from "use-debounce"
+import { useQuery } from "@tanstack/react-query"
 import { AppStore, AppThunkDispatch } from "entities"
 import {
   loadQuizForEdit,
@@ -28,11 +29,15 @@ export interface QuizParams {
 
 export function QuizEdit() {
   const { id } = useParams()
-  const { isLoading, hasError, data, activeQuestion } = useSelector<
-    AppStore,
-    QuizState
-  >((state) => state.quiz)
+  const { activeQuestion } = useSelector<AppStore, QuizState>(
+    (state) => state.quiz
+  )
   const dispatch = useDispatch<AppThunkDispatch>()
+  const { data, isLoading, isError } = useQuery({
+    queryKey: [""],
+    queryFn: () => dispatch(loadQuizForEdit(id!)),
+  })
+
   const methods = useForm({
     values: data,
     resolver: zodResolver(QuizSchema),

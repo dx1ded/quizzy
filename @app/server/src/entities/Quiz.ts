@@ -16,12 +16,9 @@ export class Quiz implements QuizType {
   description!: string
 
   @Column("text")
-  picture!: string
+  cover!: string
 
-  @Column("text")
-  background!: string
-
-  @Column({ type: "jsonb", array: false, default: () => "'[]'" })
+  @Column({ type: "jsonb" })
   questions!: QuestionType[]
 
   @Column("int")
