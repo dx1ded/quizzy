@@ -1,20 +1,18 @@
-import { useEffect, useState } from "react"
 import Skeleton from "react-loading-skeleton"
-import { QuizType } from "@quizzy/common"
+import { ListQuizzesType } from "@quizzy/common"
 import { useQuery } from "@tanstack/react-query"
+import { NavLink } from "react-router-dom"
 import { useSecuredRequest } from "entities/account"
 import { Box } from "shared/ui/Box"
 import { Subheading } from "shared/ui/Typography"
-import { Button } from "shared/ui/Button"
 import { MiniQuiz } from "./MiniQuiz"
 
 export function MyQuizzes() {
   const request = useSecuredRequest()
-  const [noMore, setNoMore] = useState(false)
-  const [page, setPage] = useState(1)
   const { data, isLoading } = useQuery({
-    queryKey: ["ownQuizzes", page],
-    queryFn: () => request<QuizType[]>("/api/quiz/list/own", { page }),
+    queryKey: ["ownQuizzes"],
+    queryFn: () =>
+      request<ListQuizzesType>("/api/quiz/list/own", { perPage: 3, page: 1 }),
     refetchOnWindowFocus: false,
   })
 
@@ -29,7 +27,7 @@ export function MyQuizzes() {
             <Skeleton height={50} />
           </>
         ) : (
-          data?.map((quiz) => (
+          data?.quizzes.map((quiz) => (
             <MiniQuiz
               key={quiz.id}
               cover={quiz.cover}
@@ -40,16 +38,17 @@ export function MyQuizzes() {
           ))
         )}
       </div>
-      {!noMore && (
-        <Button
-          className="mx-auto mt-5 block px-5"
-          size="sm"
-          type="button"
-          variant="white"
-          onClick={() => setPage((prev) => prev + 1)}>
-          See more
-        </Button>
-      )}
+      <div className="mt-6 flex justify-center">
+        <NavLink className="flex text-sm font-semibold" to="/app/library">
+          See more (
+          {isLoading ? (
+            <Skeleton width={20} />
+          ) : (
+            <span className="text-secondary">{data?.count}</span>
+          )}
+          )
+        </NavLink>
+      </div>
     </Box>
   )
 }

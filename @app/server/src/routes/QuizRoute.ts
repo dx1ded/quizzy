@@ -67,13 +67,15 @@ export const QuizRoute = async (f: FastifyInstance) => {
   )
 
   f.withTypeProvider<ZodTypeProvider>().post<{
-    Body: WithUserId<AuthTokenType> & { page: number }
+    Body: WithUserId<AuthTokenType> & { perPage: number; page: number }
   }>(
     "/list/own",
     {
       preHandler: [validateToken],
       schema: {
-        body: z.object({ page: z.number() }).and(AuthToken),
+        body: z
+          .object({ page: z.number(), perPage: z.number() })
+          .and(AuthToken),
       },
     },
     QuizController.listOwnQuizzes

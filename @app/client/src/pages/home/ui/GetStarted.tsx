@@ -1,7 +1,6 @@
-import { useState } from "react"
 import Skeleton from "react-loading-skeleton"
 import { QuizType } from "@quizzy/common"
-import { useQuery } from "@tanstack/react-query"
+import { useInfiniteQuery } from "@tanstack/react-query"
 import { useSecuredRequest } from "entities/account"
 import { Box } from "shared/ui/Box"
 import { Subheading, Text } from "shared/ui/Typography"
@@ -10,11 +9,13 @@ import { AddQuizBox, QuizBox } from "./QuizBox"
 
 export function GetStarted() {
   const request = useSecuredRequest()
-  const [page, setPage] = useState(1)
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, fetchNextPage } = useInfiniteQuery({
     queryKey: ["quizzesList"],
-    queryFn: () => request<QuizType[]>("/api/quiz/list", { page }),
-    refetchOnWindowFocus: false,
+    queryFn: ({ pageParam = 1 }) =>
+      request<QuizType[]>("/api/quiz/list", { page: pageParam }),
+    getNextPageParam: (lastPage, allPages) =>
+      lastPage.length < 5 ? undefined : allPages.length + 1,
+    initialPageParam: 1,
   })
 
   return (
@@ -35,22 +36,24 @@ export function GetStarted() {
             <Skeleton height={200} />
           </>
         ) : (
-          data?.map((quiz) => (
-            <QuizBox
-              key={quiz.id}
-              cover={quiz.cover}
-              description={quiz.description}
-              id={quiz.id}
-              name={quiz.name}
-            />
-          ))
+          data?.pages
+            .flat()
+            .map((quiz) => (
+              <QuizBox
+                key={quiz.id}
+                cover={quiz.cover}
+                description={quiz.description}
+                id={quiz.id}
+                name={quiz.name}
+              />
+            ))
         )}
       </div>
       <Button
         className="mx-auto mt-6 block px-6"
         size="md"
         variant="white"
-        onClick={() => setPage((prev) => prev + 1)}>
+        onClick={() => fetchNextPage()}>
         Load more
       </Button>
     </Box>

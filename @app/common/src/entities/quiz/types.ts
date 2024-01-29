@@ -9,3 +9,8 @@ export type FindQuizType = {
   creatorInfo: { username: string }
   isCreator: boolean
 }
+
+export type ListQuizzesType = {
+  quizzes: QuizType[]
+  count: number
+}

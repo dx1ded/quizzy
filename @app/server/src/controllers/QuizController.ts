@@ -3,6 +3,7 @@ import {
   AuthTokenType,
   emptyQuestion,
   FindQuizType,
+  ListQuizzesType,
   QuizType,
 } from "@quizzy/common"
 import { FastifyHandler, WithUserId } from "../types"
@@ -102,21 +103,20 @@ const listQuizzes: FastifyHandler<
 }
 
 const listOwnQuizzes: FastifyHandler<
-  WithUserId<{ page: number }>,
-  QuizType[]
+  WithUserId<{ perPage: number; page: number }>,
+  ListQuizzesType
 > = async (req) => {
-  const { page, userId } = req.body
+  const { perPage, page, userId } = req.body
 
-  const perPage = 3
   const skip = perPage * page - perPage
 
-  const quizzes = await quizRepository.find({
+  const [quizzes, count] = await quizRepository.findAndCount({
     where: { userRef: userId },
     take: perPage,
     skip,
   })
 
-  return quizzes
+  return { quizzes, count }
 }
 
 const listNewestQuizzes: FastifyHandler<unknown, QuizType[]> = async (
