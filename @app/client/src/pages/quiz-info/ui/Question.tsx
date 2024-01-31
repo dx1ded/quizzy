@@ -4,11 +4,11 @@ import { Caption } from "shared/ui/Typography"
 interface QuestionProps {
   n: number
   name: string
-  background: string
+  cover: string
   time: number
 }
 
-export function Question({ n, name, background, time }: QuestionProps) {
+export function Question({ n, name, cover, time }: QuestionProps) {
   return (
     <div className="flex items-center justify-between rounded border border-gray">
       <div className="p-2">
@@ -19,7 +19,7 @@ export function Question({ n, name, background, time }: QuestionProps) {
         <img
           alt="Quiz classroom"
           className="h-16 w-full"
-          src={background || QuizBackground}
+          src={cover || QuizBackground}
         />
         <p className="absolute bottom-1.5 right-1.5 rounded-xl bg-secondary px-2 py-1 text-[0.725rem] font-bold text-white">
           {time} sec

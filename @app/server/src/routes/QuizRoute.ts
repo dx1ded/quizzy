@@ -54,6 +54,19 @@ export const QuizRoute = async (f: FastifyInstance) => {
   )
 
   f.withTypeProvider<ZodTypeProvider>().post<{
+    Body: WithUserId<AuthTokenType> & { id: string }
+  }>(
+    "/delete",
+    {
+      preHandler: [validateToken],
+      schema: {
+        body: z.object({ id: z.string() }).and(AuthToken),
+      },
+    },
+    QuizController.deleteQuiz
+  )
+
+  f.withTypeProvider<ZodTypeProvider>().post<{
     Body: WithUserId<AuthTokenType> & { page: number }
   }>(
     "/list",

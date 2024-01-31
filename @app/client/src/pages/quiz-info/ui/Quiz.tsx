@@ -20,7 +20,11 @@ export function Quiz({ isLoading }: { isLoading: boolean }) {
   ) : (
     <Box className="h-full basis-80 !px-0 pt-0">
       {data.cover ? (
-        <img alt="Quiz" src={data.cover} />
+        <img
+          alt="Quiz"
+          className="mb-3 h-[7.25rem] w-full rounded-t-md object-cover"
+          src={data.cover}
+        />
       ) : (
         <QuizzyImage
           className="mb-3 rounded-t-md"

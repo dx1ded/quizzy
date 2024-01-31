@@ -62,9 +62,7 @@ export function PreviewQuestion({
         <img
           alt="Quiz"
           className="absolute left-0 top-0 h-full w-full rounded object-cover"
-          src={
-            background ? `data:image/png;base64, ${background}` : QuizBackground
-          }
+          src={background || QuizBackground}
         />
         <div className="relative z-10 flex h-full flex-col items-center justify-between px-1 py-2">
           <p className="inline-block rounded-sm bg-white px-1 py-0.5 text-[0.3rem]">
@@ -74,7 +72,7 @@ export function PreviewQuestion({
             <img
               alt="Quiz"
               className="h-6 w-12 rounded-sm bg-white object-cover"
-              src={`data:image/png;base64, ${picture}`}
+              src={picture}
             />
           )}
           <div className="grid h-4 w-full grid-cols-2 gap-0.5">

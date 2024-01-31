@@ -12,12 +12,16 @@ interface QuizProps {
 export function MiniQuiz({ id, name, cover, plays }: QuizProps) {
   return (
     <NavLink
-      className="flex cursor-pointer items-center rounded-lg duration-200 hover:bg-[#f6f6f6]"
+      className="flex cursor-pointer items-center gap-2.5 rounded-lg duration-200 hover:bg-[#f6f6f6]"
       to={`/quiz/${id}`}>
       {cover ? (
-        <img alt="Quiz" src={cover} />
+        <img
+          alt="Quiz"
+          className="h-[3.5rem] w-[6rem] rounded-l-lg object-cover"
+          src={cover}
+        />
       ) : (
-        <QuizzyImage className="mr-2.5 rounded-l-lg" />
+        <QuizzyImage className="rounded-l-lg" />
       )}
       <div>
         <Caption className="mb-2 block leading-[0.5rem]">{name}</Caption>

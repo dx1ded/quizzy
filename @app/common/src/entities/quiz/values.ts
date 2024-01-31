@@ -1,7 +1,7 @@
 import { QuestionType } from "./types"
 
 export const emptyQuestion: QuestionType = {
-  name: "",
+  name: "New question",
   picture: "",
   background: "",
   correctAnswers: [false, false, false, false],

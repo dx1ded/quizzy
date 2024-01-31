@@ -1,10 +1,11 @@
 import { ChangeEvent, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
-import { NavLink } from "react-router-dom"
+import { NavLink, useNavigate } from "react-router-dom"
 import { Controller, useFormContext } from "react-hook-form"
 import { QuizType } from "@quizzy/common"
-import { Modal, Snackbar } from "@mui/material"
+import { Dialog, Modal, Snackbar } from "@mui/material"
 import { changeCover, QuizState } from "entities/quiz"
+import { useSecuredRequest } from "entities/account"
 import { Logo } from "shared/ui/Logo"
 import { Input } from "shared/ui/Input"
 import { Button } from "shared/ui/Button"
@@ -12,13 +13,17 @@ import type { AppStore } from "app/model"
 import { QuizzyImage } from "shared/ui/QuizzyImage"
 import { Edit } from "shared/icons/Edit"
 import { Cross } from "shared/icons/Cross"
+import { Caption, Text } from "shared/ui/Typography"
 import { convertToBase64 } from "../model"
 
 export function Header() {
   const dispatch = useDispatch()
+  const request = useSecuredRequest()
+  const navigate = useNavigate()
   const { data } = useSelector<AppStore, QuizState>((state) => state.quiz)
   const [modalOpen, setModalOpen] = useState(false)
   const [messageOpen, setMessageOpen] = useState(false)
+  const [dialogOpen, setDialogOpen] = useState(false)
 
   const { register, control } = useFormContext<QuizType>()
 
@@ -35,14 +40,21 @@ export function Header() {
     dispatch(changeCover(base64))
   }
 
+  const deleteHandler = async () => {
+    await request("/api/quiz/delete", { id: data.id })
+    navigate("/app")
+  }
+
   return (
     <header className="flex items-center bg-white px-6 py-2 shadow">
+      {/* Message says file should be less than 2 mb */}
       <Snackbar
         autoHideDuration={5000}
         message="File should be less than 2MB"
         open={messageOpen}
         onClose={() => setModalOpen(false)}
       />
+      {/* Settings Modal */}
       <Modal
         className="flex items-center justify-center"
         open={modalOpen}
@@ -53,7 +65,7 @@ export function Header() {
               <img
                 alt="Quiz"
                 className="h-[7rem] w-full rounded-t object-cover"
-                src={`data:image/png;base64, ${data.cover}`}
+                src={data.cover}
               />
             ) : (
               <QuizzyImage
@@ -103,13 +115,44 @@ export function Header() {
           </div>
         </div>
       </Modal>
+      {/* Delete dialog */}
+      <Dialog open={dialogOpen} onClose={() => setDialogOpen(false)}>
+        <div className="max-w-md p-3">
+          <Text className="mb-2 font-bold">
+            Do you want to delete the quiz?
+          </Text>
+          <Caption className="mb-3 inline-block leading-6">
+            Deleting the quiz you will not be able to restore it. Are you sure
+            you want to delete the quiz?
+          </Caption>
+          <div className="flex items-center gap-2.5 border-t border-gray pt-2">
+            <Button
+              className="px-4"
+              size="md"
+              variant="white"
+              onClick={() => setDialogOpen(false)}>
+              Close
+            </Button>
+            <Button
+              className="px-4"
+              size="md"
+              variant="secondary"
+              onClick={deleteHandler}>
+              Delete
+            </Button>
+          </div>
+        </div>
+      </Dialog>
       <Logo as={NavLink} className="mr-6" size={2.75} to="/app" />
       <Input
         className="w-60"
         placeholder="Enter quiz name"
         {...register("name")}
       />
-      <Button className="ml-auto mr-4 px-8" variant="white">
+      <Button
+        className="ml-auto mr-4 px-8"
+        variant="white"
+        onClick={() => setDialogOpen(true)}>
         Delete
       </Button>
       <Button

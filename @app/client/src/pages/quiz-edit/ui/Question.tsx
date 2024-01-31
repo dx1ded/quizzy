@@ -60,11 +60,7 @@ export function Question() {
       <img
         alt="Quiz"
         className="absolute left-0 top-0 -z-10 h-full w-full object-cover"
-        src={
-          question.background
-            ? `data:image/png;base64, ${question.background}`
-            : QuizBackground
-        }
+        src={question.background || QuizBackground}
       />
       <label
         className="absolute right-4 top-4 flex h-8 w-8 cursor-pointer items-center justify-center rounded bg-white shadow"
@@ -82,7 +78,6 @@ export function Question() {
         <Input
           className="w-[28.75rem] py-2 text-xl shadow-lg"
           placeholder="Start typing your question..."
-          value={question.name}
           isCentered
           {...register(`questions.${activeQuestion}.name`)}
         />
@@ -91,7 +86,7 @@ export function Question() {
             <img
               alt="Quiz question"
               className="absolute left-0 top-0 z-0 h-full w-full rounded object-cover"
-              src={`data:image/png;base64, ${question.picture}`}
+              src={question.picture}
             />
           )}
           <label className="relative z-10" htmlFor="question-picture">

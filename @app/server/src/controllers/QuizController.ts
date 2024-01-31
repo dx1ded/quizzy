@@ -16,7 +16,7 @@ const createNewQuiz: FastifyHandler<
   const newQuiz: QuizType = {
     id: nanoid(5),
     name: "New Quiz",
-    description: "MiniQuiz Description",
+    description: "Quiz description",
     userRef: req.body.userId,
     cover: "",
     questions: [emptyQuestion],
@@ -81,6 +81,23 @@ const saveQuiz: FastifyHandler<WithUserId<{ quiz: QuizType }>> = async (
   }
 
   await quizRepository.update({ id: quiz.id }, quiz)
+
+  return { message: "Success" }
+}
+
+const deleteQuiz: FastifyHandler<WithUserId<{ id: QuizType["id"] }>> = async (
+  req,
+  res
+) => {
+  const { id, userId } = req.body
+
+  const quiz = await quizRepository.findOne({ where: { id } })
+
+  if (!quiz || quiz.userRef !== userId) {
+    return res.code(403).send("You are not the quiz creator")
+  }
+
+  await quizRepository.remove(quiz)
 
   return { message: "Success" }
 }
@@ -156,6 +173,7 @@ export const QuizController = {
   findQuiz,
   findQuizForEdit,
   saveQuiz,
+  deleteQuiz,
   listQuizzes,
   listOwnQuizzes,
   listNewestQuizzes,

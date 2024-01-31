@@ -14,7 +14,11 @@ export function QuizBox({ id, name, description, cover }: QuizBoxProps) {
   return (
     <div className="rounded-lg shadow-md">
       {cover ? (
-        <img alt="Quiz" src={cover} />
+        <img
+          alt="Quiz"
+          className="h-[4.5rem] w-full rounded-t-lg object-cover"
+          src={cover}
+        />
       ) : (
         <QuizzyImage className="rounded-t-lg" height="4.5rem" width="100%" />
       )}

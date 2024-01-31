@@ -1,6 +1,5 @@
 import { useSelector } from "react-redux"
 import Skeleton from "react-loading-skeleton"
-import QuizBackground from "assets/quiz-background.png"
 import { QuizState } from "entities/quiz"
 import { Box } from "shared/ui/Box"
 import { Subheading } from "shared/ui/Typography"
@@ -35,7 +34,7 @@ export function Questions({ isLoading }: { isLoading: boolean }) {
           data.questions.map((question, i) => (
             <Question
               key={i}
-              background={QuizBackground}
+              cover={question.background}
               n={i + 1}
               name={question.name}
               time={question.timeLimit}
