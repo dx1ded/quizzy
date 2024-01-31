@@ -7,7 +7,10 @@ import {
 import { AuthRoute } from "./routes/AuthRoute"
 import { QuizRoute } from "./routes/QuizRoute"
 
-const server = fastify()
+const server = fastify({
+  // 200mb
+  bodyLimit: 209715200,
+})
 
 server.setValidatorCompiler(validatorCompiler)
 server.setSerializerCompiler(serializerCompiler)

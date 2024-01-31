@@ -9,6 +9,9 @@ export type QuizAction =
   | { type: "DUPLICATE_QUESTION"; payload: number }
   | { type: "REMOVE_QUESTION"; payload: number }
   | { type: "CHANGE_ACTIVE_QUESTION"; payload: number }
+  | { type: "CHANGE_QUESTION_PICTURE"; payload: string }
+  | { type: "CHANGE_QUESTION_BACKGROUND"; payload: string }
+  | { type: "CHANGE_COVER"; payload: string }
 
 export function setIsSaving(value: boolean): QuizAction {
   return { type: "SET_IS_SAVING", payload: value }
@@ -42,4 +45,16 @@ export function removeQuestion(index: number): QuizAction {
 
 export function changeActiveQuestion(index: number): QuizAction {
   return { type: "CHANGE_ACTIVE_QUESTION", payload: index }
+}
+
+export function changeQuestionPicture(base64: string): QuizAction {
+  return { type: "CHANGE_QUESTION_PICTURE", payload: base64 }
+}
+
+export function changeQuestionBackground(base64: string): QuizAction {
+  return { type: "CHANGE_QUESTION_BACKGROUND", payload: base64 }
+}
+
+export function changeCover(base64: string): QuizAction {
+  return { type: "CHANGE_COVER", payload: base64 }
 }

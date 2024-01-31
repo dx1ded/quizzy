@@ -1,7 +1,6 @@
 import { useDispatch, useSelector } from "react-redux"
 import { useFormContext } from "react-hook-form"
 import { QuizType } from "@quizzy/common"
-import QuizBackground from "assets/quiz-background.png"
 import { addQuestion, QuizState } from "entities/quiz"
 import { Button } from "shared/ui/Button"
 import type { AppStore } from "app/model"
@@ -21,7 +20,7 @@ export function Preview() {
         <PreviewQuestion
           key={i}
           answers={question.answers}
-          background={question.background || QuizBackground}
+          background={question.background}
           checked={question.correctAnswers}
           isActive={i === activeQuestion}
           n={i}

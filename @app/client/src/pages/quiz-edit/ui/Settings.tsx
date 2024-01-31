@@ -30,7 +30,7 @@ export function Settings() {
               }}
               value={question.timeLimit}
               fullWidth
-              onChange={(value) => field.onChange(value)}>
+              onChange={(e) => field.onChange(e.target.value)}>
               <MenuItem value={10}>10 sec</MenuItem>
               <MenuItem value={20}>20 sec</MenuItem>
               <MenuItem value={30}>30 sec</MenuItem>
@@ -50,9 +50,10 @@ export function Settings() {
                   padding: "0.5rem 1rem",
                 },
               }}
+              type="select"
               value={question.points}
               fullWidth
-              onChange={(value) => field.onChange(value)}>
+              onChange={(e) => field.onChange(e.target.value)}>
               <MenuItem value={1}>Standard</MenuItem>
               <MenuItem value={2}>More (+1)</MenuItem>
               <MenuItem value={3}>More (+2)</MenuItem>

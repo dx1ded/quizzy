@@ -79,6 +79,38 @@ export const quizReducer = (
         ...state,
         activeQuestion: action.payload,
       }
+    case "CHANGE_QUESTION_PICTURE":
+      return {
+        ...state,
+        data: {
+          ...state.data,
+          questions: state.data.questions.map((question, i) =>
+            i === state.activeQuestion
+              ? { ...question, picture: action.payload }
+              : question
+          ),
+        },
+      }
+    case "CHANGE_QUESTION_BACKGROUND":
+      return {
+        ...state,
+        data: {
+          ...state.data,
+          questions: state.data.questions.map((question, i) =>
+            i === state.activeQuestion
+              ? { ...question, background: action.payload }
+              : question
+          ),
+        },
+      }
+    case "CHANGE_COVER":
+      return {
+        ...state,
+        data: {
+          ...state.data,
+          cover: action.payload,
+        },
+      }
     default:
       return state
   }
