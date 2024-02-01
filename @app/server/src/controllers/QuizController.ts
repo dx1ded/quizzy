@@ -1,7 +1,7 @@
 import { nanoid } from "nanoid"
 import {
   AuthTokenType,
-  emptyQuestion,
+  defaultQuiz,
   FindQuizType,
   ListQuizzesType,
   QuizType,
@@ -13,16 +13,7 @@ const createNewQuiz: FastifyHandler<
   WithUserId<AuthTokenType>,
   QuizType
 > = async (req) => {
-  const newQuiz: QuizType = {
-    id: nanoid(5),
-    name: "New Quiz",
-    description: "Quiz description",
-    userRef: req.body.userId,
-    cover: "",
-    questions: [emptyQuestion],
-    rating: 0,
-    plays: 0,
-  }
+  const newQuiz = defaultQuiz(nanoid(5), req.body.userId)
 
   await quizRepository.save(newQuiz)
 

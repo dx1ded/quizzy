@@ -6,7 +6,11 @@ import { Button } from "shared/ui/Button"
 import { duplicateQuestion, QuizState, removeQuestion } from "entities/quiz"
 import type { AppStore } from "app/model"
 
-export function Settings() {
+interface SettingsProps {
+  submit: () => void
+}
+
+export function Settings({ submit }: SettingsProps) {
   const dispatch = useDispatch()
   const { activeQuestion } = useSelector<AppStore, QuizState>(
     (state) => state.quiz
@@ -22,19 +26,24 @@ export function Settings() {
           control={control}
           name={`questions.${activeQuestion}.timeLimit`}
           render={({ field }) => (
-            <Select
-              sx={{
-                "& .MuiSelect-select": {
-                  padding: "0.5rem 1rem",
-                },
-              }}
-              value={question.timeLimit}
-              fullWidth
-              onChange={(e) => field.onChange(e.target.value)}>
-              <MenuItem value={10}>10 sec</MenuItem>
-              <MenuItem value={20}>20 sec</MenuItem>
-              <MenuItem value={30}>30 sec</MenuItem>
-            </Select>
+            <fieldset>
+              <Select
+                sx={{
+                  "& .MuiSelect-select": {
+                    padding: "0.5rem 1rem",
+                  },
+                }}
+                value={question.timeLimit}
+                fullWidth
+                onChange={(e) => {
+                  field.onChange(e.target.value)
+                  submit()
+                }}>
+                <MenuItem value={10}>10 sec</MenuItem>
+                <MenuItem value={20}>20 sec</MenuItem>
+                <MenuItem value={30}>30 sec</MenuItem>
+              </Select>
+            </fieldset>
           )}
         />
       </div>
@@ -53,7 +62,10 @@ export function Settings() {
               type="select"
               value={question.points}
               fullWidth
-              onChange={(e) => field.onChange(e.target.value)}>
+              onChange={(e) => {
+                field.onChange(e.target.value)
+                submit()
+              }}>
               <MenuItem value={1}>Standard</MenuItem>
               <MenuItem value={2}>More (+1)</MenuItem>
               <MenuItem value={3}>More (+2)</MenuItem>

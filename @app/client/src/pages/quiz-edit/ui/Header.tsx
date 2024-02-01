@@ -132,24 +132,24 @@ export function Header({ modalOpen, setModalOpen }: HeaderProps) {
       </Modal>
       {/* Delete dialog */}
       <Dialog open={dialogOpen} onClose={() => setDialogOpen(false)}>
-        <div className="max-w-md p-3">
-          <Text className="mb-2 font-bold">
+        <div className="max-w-md p-4">
+          <Text className="mb-3 !font-semibold">
             Do you want to delete the quiz?
           </Text>
-          <Caption className="mb-3 inline-block leading-6">
-            Deleting the quiz you will not be able to restore it. Are you sure
-            you want to delete the quiz?
+          <Caption className="mb-5 inline-block leading-5">
+            Deleting the quiz you will not be able to restore it anymore. Are
+            you sure you want to delete the quiz?
           </Caption>
-          <div className="flex items-center gap-2.5 border-t border-gray pt-2">
+          <div className="flex items-center gap-2.5 border-t border-gray pt-3">
             <Button
-              className="px-4"
+              className="px-5"
               size="md"
               variant="white"
               onClick={() => setDialogOpen(false)}>
               Close
             </Button>
             <Button
-              className="px-4"
+              className="px-5"
               size="md"
               variant="secondary"
               onClick={deleteHandler}>

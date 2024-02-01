@@ -4,7 +4,8 @@ export type QuizAction =
   | { type: "SET_IS_SAVING"; payload: boolean }
   | { type: "SET_IS_CREATOR"; payload: boolean }
   | { type: "SET_CREATOR_INFO"; payload: FindQuizType["creatorInfo"] }
-  | { type: "SET_QUIZ"; payload: QuizType }
+  | { type: "SET_QUIZ"; payload: { quiz: QuizType; isTouched: boolean } }
+  | { type: "RESET_QUIZ" }
   | { type: "ADD_QUESTION" }
   | { type: "DUPLICATE_QUESTION"; payload: number }
   | { type: "REMOVE_QUESTION"; payload: number }
@@ -27,8 +28,12 @@ export function setCreatorInfo(
   return { type: "SET_CREATOR_INFO", payload: creator }
 }
 
-export function setQuiz(quiz: QuizType): QuizAction {
-  return { type: "SET_QUIZ", payload: quiz }
+export function setQuiz(quiz: QuizType, isTouched: boolean): QuizAction {
+  return { type: "SET_QUIZ", payload: { quiz, isTouched } }
+}
+
+export function resetQuiz(): QuizAction {
+  return { type: "RESET_QUIZ" }
 }
 
 export function addQuestion(): QuizAction {

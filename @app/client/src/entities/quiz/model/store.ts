@@ -1,4 +1,9 @@
-import { FindQuizType, emptyQuestion, QuizType } from "@quizzy/common"
+import {
+  FindQuizType,
+  emptyQuestion,
+  QuizType,
+  defaultQuiz,
+} from "@quizzy/common"
 import { QuizAction } from "./actions"
 
 export interface QuizState {
@@ -6,23 +11,16 @@ export interface QuizState {
   activeQuestion: number
   isCreator: boolean
   isSaving: boolean
+  isTouched: boolean
   creatorInfo: FindQuizType["creatorInfo"]
 }
 
 const initialState: QuizState = {
-  isSaving: false,
-  data: {
-    id: "",
-    name: "",
-    description: "",
-    userRef: 0,
-    cover: "",
-    questions: [emptyQuestion],
-    rating: 0,
-    plays: 0,
-  },
+  data: defaultQuiz("", -1),
   activeQuestion: 0,
   isCreator: false,
+  isSaving: false,
+  isTouched: false,
   creatorInfo: { username: "" },
 }
 
@@ -38,7 +36,13 @@ export const quizReducer = (
     case "SET_CREATOR_INFO":
       return { ...state, creatorInfo: action.payload }
     case "SET_QUIZ":
-      return { ...state, data: action.payload }
+      return {
+        ...state,
+        data: action.payload.quiz,
+        isTouched: action.payload.isTouched,
+      }
+    case "RESET_QUIZ":
+      return initialState
     case "ADD_QUESTION":
       return {
         ...state,
@@ -46,6 +50,7 @@ export const quizReducer = (
           ...state.data,
           questions: [...state.data.questions, emptyQuestion],
         },
+        isTouched: true,
       }
     case "DUPLICATE_QUESTION":
       return {
@@ -58,6 +63,7 @@ export const quizReducer = (
             ...state.data.questions.slice(action.payload),
           ],
         },
+        isTouched: true,
       }
     case "REMOVE_QUESTION":
       return {
@@ -73,6 +79,7 @@ export const quizReducer = (
           state.data.questions.length === state.activeQuestion
             ? state.activeQuestion - 1
             : state.activeQuestion,
+        isTouched: true,
       }
     case "CHANGE_ACTIVE_QUESTION":
       return {
@@ -90,6 +97,7 @@ export const quizReducer = (
               : question
           ),
         },
+        isTouched: true,
       }
     case "CHANGE_QUESTION_BACKGROUND":
       return {
@@ -102,6 +110,7 @@ export const quizReducer = (
               : question
           ),
         },
+        isTouched: true,
       }
     case "CHANGE_COVER":
       return {
@@ -110,6 +119,7 @@ export const quizReducer = (
           ...state.data,
           cover: action.payload,
         },
+        isTouched: true,
       }
     default:
       return state

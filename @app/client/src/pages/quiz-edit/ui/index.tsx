@@ -12,6 +12,7 @@ import { useSecuredRequest } from "entities/account"
 import {
   changeActiveQuestion,
   QuizState,
+  resetQuiz,
   setIsSaving,
   setQuiz,
 } from "entities/quiz"
@@ -28,7 +29,7 @@ export function QuizEdit() {
   const { id } = useParams()
   const request = useSecuredRequest()
   const dispatch = useDispatch()
-  const { data, isSaving } = useSelector<AppStore, QuizState>(
+  const { data, isSaving, isTouched } = useSelector<AppStore, QuizState>(
     (state) => state.quiz
   )
   const [modalOpen, setModalOpen] = useState(false)
@@ -36,7 +37,7 @@ export function QuizEdit() {
     queryKey: ["quizEdit"],
     queryFn: async () => {
       const quiz = await request<QuizType>(`/api/quiz/edit/${id}`)
-      dispatch(setQuiz(quiz))
+      dispatch(setQuiz(quiz, false))
       return quiz
     },
     refetchOnWindowFocus: false,
@@ -56,16 +57,16 @@ export function QuizEdit() {
 
   const submitHandler = (newData: QuizType) => {
     if (_.isEqual(newData, data)) return
-    dispatch(setQuiz(newData))
+    dispatch(setQuiz(newData, true))
   }
 
   const errorHandler = (errors: FieldErrors<QuizType>) => {
     if (errors.description) return setModalOpen(true)
     else if (!errors.questions) return
 
-    const index = Object.keys(errors.questions)[0]
+    const index = +Object.keys(errors.questions)[0]
 
-    dispatch(changeActiveQuestion(+index))
+    dispatch(changeActiveQuestion(index))
   }
 
   const debouncedSubmit = useDebouncedCallback(() => {
@@ -73,8 +74,16 @@ export function QuizEdit() {
   }, 1000)
 
   useEffect(() => {
+    if (!isTouched) return
     debouncedSave()
-  }, [data, debouncedSave])
+  }, [isTouched, data, debouncedSave, dispatch])
+
+  // Clear store after unmount
+  useEffect(() => {
+    return () => {
+      dispatch(resetQuiz())
+    }
+  }, [dispatch])
 
   if (isLoading) return <Loader />
   else if (isError) return <NotFound />
@@ -88,7 +97,7 @@ export function QuizEdit() {
           <div className="flex h-[48rem]">
             <Preview />
             <Question />
-            <Settings />
+            <Settings submit={debouncedSubmit} />
           </div>
         </form>
       </FormProvider>
