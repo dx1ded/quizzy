@@ -17,8 +17,9 @@ import {
   SquareAnswer,
   TriangleAnswer,
 } from "shared/ui/Answer"
-import type { AppStore } from "app/model"
 import { AddPhoto } from "shared/icons/AddPhoto"
+import type { AppStore } from "app/model"
+import { EditValidation } from "./EditValidation"
 import { convertToBase64 } from "../model"
 
 export function Question() {
@@ -26,7 +27,11 @@ export function Question() {
   const { activeQuestion } = useSelector<AppStore, QuizState>(
     (state) => state.quiz
   )
-  const { register, watch } = useFormContext<QuizType>()
+  const {
+    register,
+    watch,
+    formState: { errors },
+  } = useFormContext<QuizType>()
   const [open, setOpen] = useState(false)
 
   const question = watch("questions")[activeQuestion]
@@ -75,12 +80,18 @@ export function Question() {
         <AddPhoto width={1.25} />
       </label>
       <div className="flex h-full flex-col items-center justify-between px-5 py-10">
-        <Input
-          className="w-[28.75rem] py-2 text-xl shadow-lg"
-          placeholder="Start typing your question..."
-          isCentered
-          {...register(`questions.${activeQuestion}.name`)}
-        />
+        <div>
+          <Input
+            className="w-[28.75rem] py-2 text-xl shadow-lg"
+            defaultValue=""
+            placeholder="Start typing your question..."
+            isCentered
+            {...register(`questions.${activeQuestion}.name`)}
+          />
+          <EditValidation
+            error={errors.questions && errors.questions[activeQuestion]?.name}
+          />
+        </div>
         <div className="relative flex h-80 w-96 flex-col items-center justify-center rounded bg-white shadow-lg">
           {question.picture && (
             <img
@@ -104,26 +115,68 @@ export function Question() {
           <Text className="font-bold">Find or insert media</Text>
         </div>
         <div className="grid w-full grid-cols-2 gap-4">
-          <TriangleAnswer
-            activeQuestion={activeQuestion}
-            isChecked={question.correctAnswers[0]}
-            value={question.answers[0]}
-          />
-          <RhombusAnswer
-            activeQuestion={activeQuestion}
-            isChecked={question.correctAnswers[1]}
-            value={question.answers[1]}
-          />
-          <CircleAnswer
-            activeQuestion={activeQuestion}
-            isChecked={question.correctAnswers[2]}
-            value={question.answers[2]}
-          />
-          <SquareAnswer
-            activeQuestion={activeQuestion}
-            isChecked={question.correctAnswers[3]}
-            value={question.answers[3]}
-          />
+          <div>
+            <TriangleAnswer
+              activeQuestion={activeQuestion}
+              isChecked={question.correctAnswers[0]}
+              value={question.answers[0]}
+            />
+            <EditValidation
+              error={
+                errors.questions &&
+                errors.questions[activeQuestion]?.answers &&
+                errors.questions[activeQuestion]!.answers![0]
+              }
+            />
+            <EditValidation
+              error={
+                errors.questions &&
+                errors.questions[activeQuestion]?.correctAnswers?.root
+              }
+            />
+          </div>
+          <div>
+            <RhombusAnswer
+              activeQuestion={activeQuestion}
+              isChecked={question.correctAnswers[1]}
+              value={question.answers[1]}
+            />
+            <EditValidation
+              error={
+                errors.questions &&
+                errors.questions[activeQuestion]?.answers &&
+                errors.questions[activeQuestion]!.answers![1]
+              }
+            />
+          </div>
+          <div>
+            <CircleAnswer
+              activeQuestion={activeQuestion}
+              isChecked={question.correctAnswers[2]}
+              value={question.answers[2]}
+            />
+            <EditValidation
+              error={
+                errors.questions &&
+                errors.questions[activeQuestion]?.answers &&
+                errors.questions[activeQuestion]!.answers![2]
+              }
+            />
+          </div>
+          <div>
+            <SquareAnswer
+              activeQuestion={activeQuestion}
+              isChecked={question.correctAnswers[3]}
+              value={question.answers[3]}
+            />
+            <EditValidation
+              error={
+                errors.questions &&
+                errors.questions[activeQuestion]?.answers &&
+                errors.questions[activeQuestion]!.answers![3]
+              }
+            />
+          </div>
         </div>
       </div>
     </main>

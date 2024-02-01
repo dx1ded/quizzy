@@ -1,15 +1,20 @@
 import _ from "lodash"
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { useParams } from "react-router-dom"
-import { FormProvider, useForm, useWatch } from "react-hook-form"
+import { FieldErrors, FormProvider, useForm } from "react-hook-form"
 import { useDebouncedCallback } from "use-debounce"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { QuizSchema, QuizType } from "@quizzy/common"
 import { useQuery } from "@tanstack/react-query"
 import { Snackbar } from "@mui/material"
 import { useSecuredRequest } from "entities/account"
-import { QuizState, setIsSaving, setQuiz } from "entities/quiz"
+import {
+  changeActiveQuestion,
+  QuizState,
+  setIsSaving,
+  setQuiz,
+} from "entities/quiz"
 import { Loader } from "shared/ui/Loader"
 import { NotFound } from "shared/ui/NotFound"
 import type { AppStore } from "app/model"
@@ -26,6 +31,7 @@ export function QuizEdit() {
   const { data, isSaving } = useSelector<AppStore, QuizState>(
     (state) => state.quiz
   )
+  const [modalOpen, setModalOpen] = useState(false)
   const { isLoading, isError } = useQuery({
     queryKey: ["quizEdit"],
     queryFn: async () => {
@@ -41,8 +47,6 @@ export function QuizEdit() {
     resolver: zodResolver(QuizSchema),
   })
 
-  const changes = useWatch({ control: methods.control })
-
   const debouncedSave = useDebouncedCallback(() => {
     dispatch(setIsSaving(true))
     request("/api/quiz/save", { quiz: data }).then(() =>
@@ -51,17 +55,22 @@ export function QuizEdit() {
   }, 3000)
 
   const submitHandler = (newData: QuizType) => {
-    if (_.isEqual(changes, data)) return
+    if (_.isEqual(newData, data)) return
     dispatch(setQuiz(newData))
   }
 
-  const debouncedSubmit = useDebouncedCallback(() => {
-    methods.handleSubmit(submitHandler)()
-  }, 1000)
+  const errorHandler = (errors: FieldErrors<QuizType>) => {
+    if (errors.description) return setModalOpen(true)
+    else if (!errors.questions) return
 
-  useEffect(() => {
-    debouncedSubmit()
-  }, [changes, debouncedSubmit])
+    const index = Object.keys(errors.questions)[0]
+
+    dispatch(changeActiveQuestion(+index))
+  }
+
+  const debouncedSubmit = useDebouncedCallback(() => {
+    methods.handleSubmit(submitHandler, errorHandler)()
+  }, 1000)
 
   useEffect(() => {
     debouncedSave()
@@ -74,12 +83,14 @@ export function QuizEdit() {
     <div>
       <Snackbar message="Saving your quiz" open={isSaving} />
       <FormProvider {...methods}>
-        <Header />
-        <div className="flex h-[48rem]">
-          <Preview />
-          <Question />
-          <Settings />
-        </div>
+        <form onChange={debouncedSubmit}>
+          <Header modalOpen={modalOpen} setModalOpen={setModalOpen} />
+          <div className="flex h-[48rem]">
+            <Preview />
+            <Question />
+            <Settings />
+          </div>
+        </form>
       </FormProvider>
     </div>
   )

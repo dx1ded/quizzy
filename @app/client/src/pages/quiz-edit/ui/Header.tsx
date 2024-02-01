@@ -1,4 +1,4 @@
-import { ChangeEvent, useState } from "react"
+import { ChangeEvent, useState, Dispatch, SetStateAction } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { NavLink, useNavigate } from "react-router-dom"
 import { Controller, useFormContext } from "react-hook-form"
@@ -9,23 +9,32 @@ import { useSecuredRequest } from "entities/account"
 import { Logo } from "shared/ui/Logo"
 import { Input } from "shared/ui/Input"
 import { Button } from "shared/ui/Button"
-import type { AppStore } from "app/model"
 import { QuizzyImage } from "shared/ui/QuizzyImage"
 import { Edit } from "shared/icons/Edit"
 import { Cross } from "shared/icons/Cross"
 import { Caption, Text } from "shared/ui/Typography"
+import type { AppStore } from "app/model"
+import { EditValidation } from "./EditValidation"
 import { convertToBase64 } from "../model"
 
-export function Header() {
+interface HeaderProps {
+  modalOpen: boolean
+  setModalOpen: Dispatch<SetStateAction<boolean>>
+}
+
+export function Header({ modalOpen, setModalOpen }: HeaderProps) {
   const dispatch = useDispatch()
   const request = useSecuredRequest()
   const navigate = useNavigate()
   const { data } = useSelector<AppStore, QuizState>((state) => state.quiz)
-  const [modalOpen, setModalOpen] = useState(false)
   const [messageOpen, setMessageOpen] = useState(false)
   const [dialogOpen, setDialogOpen] = useState(false)
 
-  const { register, control } = useFormContext<QuizType>()
+  const {
+    register,
+    control,
+    formState: { errors },
+  } = useFormContext<QuizType>()
 
   const changeHandler = async (e: ChangeEvent<HTMLInputElement>) => {
     const fileList = (e.target as HTMLInputElement).files
@@ -98,20 +107,26 @@ export function Header() {
               control={control}
               name="name"
               render={({ field }) => (
-                <Input
-                  className="mb-2.5 w-full text-sm"
-                  defaultValue={field.value}
-                  placeholder="Enter quiz name"
-                  onChange={(e) => field.onChange(e.target.value)}
-                />
+                <div>
+                  <Input
+                    className="mb-2.5 w-full text-sm"
+                    defaultValue={field.value}
+                    placeholder="Enter quiz name"
+                    onChange={(e) => field.onChange(e.target.value)}
+                  />
+                  <EditValidation error={errors.name} />
+                </div>
               )}
             />
-            <textarea
-              className="w-full resize-none rounded border border-gray px-2.5 py-1.5 text-sm outline-0"
-              placeholder="Enter quiz description"
-              rows={6}
-              {...register("description")}
-            />
+            <div>
+              <textarea
+                className="w-full resize-none rounded border border-gray px-2.5 py-1.5 text-sm outline-0"
+                placeholder="Enter quiz description"
+                rows={6}
+                {...register("description")}
+              />
+              <EditValidation error={errors.description} />
+            </div>
           </div>
         </div>
       </Modal>
@@ -144,19 +159,22 @@ export function Header() {
         </div>
       </Dialog>
       <Logo as={NavLink} className="mr-6" size={2.75} to="/app" />
-      <Input
-        className="w-60"
-        placeholder="Enter quiz name"
-        {...register("name")}
-      />
+      <div>
+        <Input
+          className="w-60"
+          placeholder="Enter quiz name"
+          {...register("name")}
+        />
+        <EditValidation error={errors.name} />
+      </div>
       <Button
-        className="ml-auto mr-4 px-8"
+        className="ml-auto mr-4 px-6"
         variant="white"
         onClick={() => setDialogOpen(true)}>
         Delete
       </Button>
       <Button
-        className="px-8"
+        className="px-6"
         variant="secondary"
         onClick={() => setModalOpen(true)}>
         Settings
