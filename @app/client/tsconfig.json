@@ -10,7 +10,14 @@
     "noEmit": true,
     "allowSyntheticDefaultImports": true,
     "paths": {
-      "@mui/styled-engine": ["./node_modules/@mui/styled-engine-sc"]
+      "@mui/styled-engine": ["./node_modules/@mui/styled-engine-sc"],
+      "app/*": ["app/*"],
+      "assets/*": ["assets/*"],
+      "features/*": ["features/*"],
+      "pages/*": ["pages/*"],
+      "shared/*": ["shared/*"],
+      "widgets/*": ["widgets/*"],
+      "entities/*": ["entities/*"],
     }
   },
   "include": ["src/**/*"],

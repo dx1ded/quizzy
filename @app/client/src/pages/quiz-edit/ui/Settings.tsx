@@ -1,9 +1,10 @@
-import { useDispatch, useSelector } from "react-redux"
+import { useSelector } from "react-redux"
 import { Controller, useFormContext } from "react-hook-form"
 import { MenuItem, Select } from "@mui/material"
 import { QuizType } from "@quizzy/common"
+import { DeleteQuestion, DuplicateQuestion } from "features/edit-quiz"
 import { Button } from "shared/ui/Button"
-import { duplicateQuestion, QuizState, removeQuestion } from "entities/quiz"
+import { QuizState } from "entities/quiz"
 import type { AppStore } from "app/model"
 
 interface SettingsProps {
@@ -11,7 +12,6 @@ interface SettingsProps {
 }
 
 export function Settings({ submit }: SettingsProps) {
-  const dispatch = useDispatch()
   const { activeQuestion } = useSelector<AppStore, QuizState>(
     (state) => state.quiz
   )
@@ -26,24 +26,22 @@ export function Settings({ submit }: SettingsProps) {
           control={control}
           name={`questions.${activeQuestion}.timeLimit`}
           render={({ field }) => (
-            <fieldset>
-              <Select
-                sx={{
-                  "& .MuiSelect-select": {
-                    padding: "0.5rem 1rem",
-                  },
-                }}
-                value={question.timeLimit}
-                fullWidth
-                onChange={(e) => {
-                  field.onChange(e.target.value)
-                  submit()
-                }}>
-                <MenuItem value={10}>10 sec</MenuItem>
-                <MenuItem value={20}>20 sec</MenuItem>
-                <MenuItem value={30}>30 sec</MenuItem>
-              </Select>
-            </fieldset>
+            <Select
+              sx={{
+                "& .MuiSelect-select": {
+                  padding: "0.5rem 1rem",
+                },
+              }}
+              value={question.timeLimit}
+              fullWidth
+              onChange={(e) => {
+                field.onChange(e.target.value)
+                submit()
+              }}>
+              <MenuItem value={10}>10 sec</MenuItem>
+              <MenuItem value={20}>20 sec</MenuItem>
+              <MenuItem value={30}>30 sec</MenuItem>
+            </Select>
           )}
         />
       </div>
@@ -74,18 +72,20 @@ export function Settings({ submit }: SettingsProps) {
         />
       </div>
       <div className="mt-auto flex flex-col gap-2.5 border-t border-gray pt-3">
-        <Button
-          size="md"
-          variant="white"
-          onClick={() => dispatch(removeQuestion(activeQuestion))}>
-          Delete
-        </Button>
-        <Button
-          size="md"
-          variant="secondary"
-          onClick={() => dispatch(duplicateQuestion(activeQuestion))}>
-          Duplicate
-        </Button>
+        <DeleteQuestion
+          render={() => (
+            <Button size="md" variant="white">
+              Delete
+            </Button>
+          )}
+        />
+        <DuplicateQuestion
+          render={() => (
+            <Button size="md" variant="secondary">
+              Duplicate
+            </Button>
+          )}
+        />
       </div>
     </aside>
   )

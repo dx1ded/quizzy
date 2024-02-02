@@ -1,18 +1,15 @@
-import { useDispatch } from "react-redux"
-import QuizBackground from "assets/quiz-background.png"
 import {
-  changeActiveQuestion,
-  duplicateQuestion,
-  removeQuestion,
-} from "entities/quiz"
-import { Trash } from "shared/icons/Trash"
-import { Copy } from "shared/icons/Copy"
-import {
+  DeleteQuestion,
+  DuplicateQuestion,
+  SwitchQuestion,
   SmallCircleAnswer,
   SmallRhombusAnswer,
   SmallSquareAnswer,
   SmallTriangleAnswer,
-} from "shared/ui/Answer"
+} from "features/edit-quiz"
+import QuizBackground from "assets/quiz-background.png"
+import { Trash } from "shared/icons/Trash"
+import { Copy } from "shared/icons/Copy"
 
 interface PreviewQuestionProps {
   n: number
@@ -33,8 +30,6 @@ export function PreviewQuestion({
   checked,
   isActive,
 }: PreviewQuestionProps) {
-  const dispatch = useDispatch()
-
   return (
     <div
       className="flex h-24 flex-shrink-0 rounded p-1"
@@ -43,54 +38,59 @@ export function PreviewQuestion({
       }}>
       <div className="mr-2 flex flex-col py-0.5 text-center">
         <p className="text-sm font-bold">{n + 1}</p>
-        <button
-          className="mb-2 mt-auto block"
-          type="button"
-          onClick={() => dispatch(removeQuestion(n))}>
-          <Trash color="#FF0000" width={0.8} />
-        </button>
-        <button
-          className="block"
-          type="button"
-          onClick={() => dispatch(duplicateQuestion(n))}>
-          <Copy width={0.8} />
-        </button>
-      </div>
-      <div
-        className="relative flex-1 cursor-pointer"
-        onClick={() => dispatch(changeActiveQuestion(n))}>
-        <img
-          alt="Quiz"
-          className="absolute left-0 top-0 h-full w-full rounded object-cover"
-          src={background || QuizBackground}
+        <DeleteQuestion
+          render={() => (
+            <button className="mb-2 mt-auto block" type="button">
+              <Trash color="#FF0000" width={0.8} />
+            </button>
+          )}
         />
-        <div className="relative z-10 flex h-full flex-col items-center justify-between px-1 py-2">
-          <p className="inline-block rounded-sm bg-white px-1 py-0.5 text-[0.3rem]">
-            {name}
-          </p>
-          {picture && (
+        <DuplicateQuestion
+          render={() => (
+            <button className="block" type="button">
+              <Copy width={0.8} />
+            </button>
+          )}
+        />
+      </div>
+      <SwitchQuestion
+        n={n}
+        render={() => (
+          <div className="relative flex-1 cursor-pointer">
             <img
               alt="Quiz"
-              className="h-6 w-12 rounded-sm bg-white object-cover"
-              src={picture}
+              className="absolute left-0 top-0 h-full w-full rounded object-cover"
+              src={background || QuizBackground}
             />
-          )}
-          <div className="grid h-4 w-full grid-cols-2 gap-0.5">
-            <SmallTriangleAnswer isChecked={checked[0]}>
-              {answers[0]}
-            </SmallTriangleAnswer>
-            <SmallRhombusAnswer isChecked={checked[1]}>
-              {answers[1]}
-            </SmallRhombusAnswer>
-            <SmallCircleAnswer isChecked={checked[2]}>
-              {answers[2]}
-            </SmallCircleAnswer>
-            <SmallSquareAnswer isChecked={checked[3]}>
-              {answers[3]}
-            </SmallSquareAnswer>
+            <div className="relative z-10 flex h-full flex-col items-center justify-between px-1 py-2">
+              <p className="inline-block rounded-sm bg-white px-1 py-0.5 text-[0.3rem]">
+                {name}
+              </p>
+              {picture && (
+                <img
+                  alt="Quiz"
+                  className="h-6 w-12 rounded-sm bg-white object-cover"
+                  src={picture}
+                />
+              )}
+              <div className="grid h-4 w-full grid-cols-2 gap-0.5">
+                <SmallTriangleAnswer isChecked={checked[0]}>
+                  {answers[0]}
+                </SmallTriangleAnswer>
+                <SmallRhombusAnswer isChecked={checked[1]}>
+                  {answers[1]}
+                </SmallRhombusAnswer>
+                <SmallCircleAnswer isChecked={checked[2]}>
+                  {answers[2]}
+                </SmallCircleAnswer>
+                <SmallSquareAnswer isChecked={checked[3]}>
+                  {answers[3]}
+                </SmallSquareAnswer>
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
+        )}
+      />
     </div>
   )
 }

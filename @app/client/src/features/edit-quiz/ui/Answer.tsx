@@ -1,9 +1,9 @@
 import { PropsWithChildren } from "react"
 import { useFormContext } from "react-hook-form"
 import { QuizType } from "@quizzy/common"
-import { Tick } from "../../icons/Tick"
+import { Tick } from "shared/icons/Tick"
 
-interface AnswerType {
+export interface AnswerProps {
   value: string
   isChecked: boolean
   activeQuestion: number
@@ -13,7 +13,7 @@ export function TriangleAnswer({
   activeQuestion,
   isChecked,
   value,
-}: AnswerType) {
+}: AnswerProps) {
   const { register } = useFormContext<QuizType>()
 
   return (
@@ -45,7 +45,7 @@ export function RhombusAnswer({
   activeQuestion,
   isChecked,
   value,
-}: AnswerType) {
+}: AnswerProps) {
   const { register } = useFormContext<QuizType>()
 
   return (
@@ -73,7 +73,11 @@ export function RhombusAnswer({
   )
 }
 
-export function CircleAnswer({ activeQuestion, isChecked, value }: AnswerType) {
+export function CircleAnswer({
+  activeQuestion,
+  isChecked,
+  value,
+}: AnswerProps) {
   const { register } = useFormContext<QuizType>()
 
   return (
@@ -101,7 +105,11 @@ export function CircleAnswer({ activeQuestion, isChecked, value }: AnswerType) {
   )
 }
 
-export function SquareAnswer({ activeQuestion, isChecked, value }: AnswerType) {
+export function SquareAnswer({
+  activeQuestion,
+  isChecked,
+  value,
+}: AnswerProps) {
   const { register } = useFormContext<QuizType>()
 
   return (

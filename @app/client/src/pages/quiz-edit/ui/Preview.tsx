@@ -1,13 +1,13 @@
-import { useDispatch, useSelector } from "react-redux"
+import { useSelector } from "react-redux"
 import { useFormContext } from "react-hook-form"
 import { QuizType } from "@quizzy/common"
-import { addQuestion, QuizState } from "entities/quiz"
+import { AddQuestion } from "features/edit-quiz"
+import { QuizState } from "entities/quiz"
 import { Button } from "shared/ui/Button"
 import type { AppStore } from "app/model"
 import { PreviewQuestion } from "./PreviewQuestion"
 
 export function Preview() {
-  const dispatch = useDispatch()
   const { activeQuestion } = useSelector<AppStore, QuizState>(
     (state) => state.quiz
   )
@@ -28,9 +28,13 @@ export function Preview() {
           picture={question.picture}
         />
       ))}
-      <Button size="md" variant="white" onClick={() => dispatch(addQuestion())}>
-        Add question
-      </Button>
+      <AddQuestion
+        render={() => (
+          <Button size="md" variant="white">
+            Add question
+          </Button>
+        )}
+      />
     </aside>
   )
 }

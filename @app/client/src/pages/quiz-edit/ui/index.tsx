@@ -1,5 +1,5 @@
 import _ from "lodash"
-import { useEffect, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { useParams } from "react-router-dom"
 import { FieldErrors, FormProvider, useForm } from "react-hook-form"
@@ -8,6 +8,11 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { QuizSchema, QuizType } from "@quizzy/common"
 import { useQuery } from "@tanstack/react-query"
 import { Snackbar } from "@mui/material"
+import {
+  EditContext,
+  FileTooLargeMessage,
+  SettingsModal,
+} from "features/edit-quiz"
 import { useSecuredRequest } from "entities/account"
 import {
   changeActiveQuestion,
@@ -33,6 +38,7 @@ export function QuizEdit() {
     (state) => state.quiz
   )
   const [modalOpen, setModalOpen] = useState(false)
+  const [messageOpen, setMessageOpen] = useState(false)
   const { isLoading, isError } = useQuery({
     queryKey: ["quizEdit"],
     queryFn: async () => {
@@ -48,13 +54,6 @@ export function QuizEdit() {
     resolver: zodResolver(QuizSchema),
   })
 
-  const debouncedSave = useDebouncedCallback(() => {
-    dispatch(setIsSaving(true))
-    request("/api/quiz/save", { quiz: data }).then(() =>
-      dispatch(setIsSaving(false))
-    )
-  }, 3000)
-
   const submitHandler = (newData: QuizType) => {
     if (_.isEqual(newData, data)) return
     dispatch(setQuiz(newData, true))
@@ -68,6 +67,13 @@ export function QuizEdit() {
 
     dispatch(changeActiveQuestion(index))
   }
+
+  const debouncedSave = useDebouncedCallback(() => {
+    dispatch(setIsSaving(true))
+    request("/api/quiz/save", { quiz: data }).then(() =>
+      dispatch(setIsSaving(false))
+    )
+  }, 3000)
 
   const debouncedSubmit = useDebouncedCallback(() => {
     methods.handleSubmit(submitHandler, errorHandler)()
@@ -85,15 +91,27 @@ export function QuizEdit() {
     }
   }, [dispatch])
 
+  const contextValue = useMemo(
+    () => ({
+      modalOpen,
+      setModalOpen,
+      messageOpen,
+      setMessageOpen,
+    }),
+    [modalOpen, messageOpen]
+  )
+
   if (isLoading) return <Loader />
   else if (isError) return <NotFound />
 
   return (
-    <div>
+    <EditContext.Provider value={contextValue}>
       <Snackbar message="Saving your quiz" open={isSaving} />
+      <FileTooLargeMessage />
       <FormProvider {...methods}>
         <form onChange={debouncedSubmit}>
-          <Header modalOpen={modalOpen} setModalOpen={setModalOpen} />
+          <SettingsModal />
+          <Header />
           <div className="flex h-[48rem]">
             <Preview />
             <Question />
@@ -101,6 +119,6 @@ export function QuizEdit() {
           </div>
         </form>
       </FormProvider>
-    </div>
+    </EditContext.Provider>
   )
 }
