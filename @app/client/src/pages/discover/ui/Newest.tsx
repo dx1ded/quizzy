@@ -48,8 +48,8 @@ export function Newest() {
             </>
           ) : (
             data?.map((quiz) => (
-              <SwiperSlide>
-                <QuizCard key={quiz.id} cover={quiz.cover} id={quiz.id} />
+              <SwiperSlide key={quiz.id}>
+                <QuizCard cover={quiz.cover} id={quiz.id} />
               </SwiperSlide>
             ))
           )}

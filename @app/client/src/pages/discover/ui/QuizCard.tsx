@@ -11,7 +11,11 @@ export function QuizCard({ id, cover }: QuizCardProps) {
   return (
     <div className="group h-[9.75rem]">
       {cover ? (
-        <img alt="Quiz" src={cover} />
+        <img
+          alt="Quiz"
+          className="h-full w-full rounded-lg object-cover"
+          src={cover}
+        />
       ) : (
         <QuizzyImage
           className="rounded-lg"

@@ -30,6 +30,17 @@ export const QuizRoute = async (f: FastifyInstance) => {
   )
 
   f.withTypeProvider<ZodTypeProvider>().post(
+    "/findBy",
+    {
+      preHandler: [validateToken],
+      schema: {
+        body: AuthToken,
+      },
+    },
+    QuizController.findQuizBy
+  )
+
+  f.withTypeProvider<ZodTypeProvider>().post(
     "/edit/:id",
     {
       preHandler: [validateToken],

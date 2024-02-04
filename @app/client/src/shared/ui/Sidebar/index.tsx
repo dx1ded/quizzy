@@ -4,7 +4,7 @@ import { Caption } from "../Typography"
 
 export function Sidebar() {
   return (
-    <nav className="flex min-h-[48rem] w-56 flex-col border-r border-gray pb-2 pr-3 pt-7">
+    <nav className="sticky top-0 flex h-[48rem] w-56 flex-col rounded pr-3 pt-7">
       <ul className="list-none">
         <li className="[&:not(:last-child)]:mb-2.5">
           <Button

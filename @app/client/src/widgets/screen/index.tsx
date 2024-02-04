@@ -13,7 +13,7 @@ export function Screen({
 
   return (
     <main>
-      <Container className="flex" maxWidth={86}>
+      <Container className="relative flex" maxWidth={86}>
         <Sidebar />
         <div className={screenClassName}>{children}</div>
       </Container>

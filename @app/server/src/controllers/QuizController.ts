@@ -1,3 +1,4 @@
+import { Raw } from "typeorm"
 import { nanoid } from "nanoid"
 import {
   AuthTokenType,
@@ -59,6 +60,21 @@ const findQuizForEdit: FastifyHandler<WithUserId, QuizType> = async (
   }
 
   return quiz
+}
+
+const findQuizBy: FastifyHandler<unknown, QuizType[]> = async (req, res) => {
+  const { name } = req.query as { name: string }
+
+  if (!name) return res.code(404).send({ message: "Not Found!" })
+
+  const quizzes = await quizRepository.find({
+    select: ["name", "cover", "id", "plays", "rating"],
+    where: {
+      name: Raw((alias) => `LOWER(${alias}) Like '%${name.toLowerCase()}%'`),
+    },
+  })
+
+  return quizzes
 }
 
 const saveQuiz: FastifyHandler<WithUserId<{ quiz: QuizType }>> = async (
@@ -162,6 +178,7 @@ const listViralQuizzes: FastifyHandler<unknown, QuizType[]> = async (
 export const QuizController = {
   createNewQuiz,
   findQuiz,
+  findQuizBy,
   findQuizForEdit,
   saveQuiz,
   deleteQuiz,
