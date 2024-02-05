@@ -4,15 +4,26 @@ import {
   RawReplyDefaultExpression,
   RawRequestDefaultExpression,
   RawServerDefault,
+  RouteGenericInterface,
 } from "fastify"
+import { AuthTokenType } from "@quizzy/common"
 
-export type FastifyHandler<RequestBody, ResponseBody = { message: string }> = (
-  req: FastifyRequest<{ Body: RequestBody }>,
+export type FastifyHandler<
+  RequestInterface extends Partial<RouteGenericInterface>,
+> = (
+  req: FastifyRequest<{
+    Body: RequestInterface["Body"]
+    Querystring: RequestInterface["Querystring"]
+    Params: RequestInterface["Params"]
+  }>,
   res: FastifyReply<
     RawServerDefault,
     RawRequestDefaultExpression,
     RawReplyDefaultExpression
   >
-) => ResponseBody | void | Promise<ResponseBody | void>
+) =>
+  | RequestInterface["Reply"]
+  | void
+  | Promise<RequestInterface["Reply"] | void>
 
-export type WithUserId<T = unknown> = T & { userId: number }
+export type WithUserId<T = unknown> = T & AuthTokenType & { userId: number }

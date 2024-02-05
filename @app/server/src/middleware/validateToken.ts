@@ -1,6 +1,6 @@
 import jwt, { JwtPayload } from "jsonwebtoken"
-import { AuthTokenType } from "@quizzy/common"
 import { FastifyReply, FastifyRequest, HookHandlerDoneFunction } from "fastify"
+import { AuthTokenType } from "@quizzy/common"
 import { WithUserId } from "../types"
 
 export const validateToken = (

@@ -15,7 +15,10 @@ export function DeleteQuiz() {
   const [dialogOpen, setDialogOpen] = useState(false)
 
   const deleteHandler = async () => {
-    await request("/api/quiz/delete", { id: data.id })
+    await request("/api/quiz/delete", {
+      method: "DELETE",
+      body: { id: data.id },
+    })
     navigate("/app")
   }
 

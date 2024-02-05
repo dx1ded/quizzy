@@ -12,7 +12,8 @@ export function Newest() {
   const request = useSecuredRequest()
   const { data, isLoading } = useQuery({
     queryKey: ["newestQuizzes"],
-    queryFn: () => request<QuizType[]>("/api/quiz/list/newest"),
+    queryFn: () =>
+      request<QuizType[]>("/api/quiz/list/newest?perPage=4&page=1"),
     refetchOnWindowFocus: false,
   })
 

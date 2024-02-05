@@ -1,4 +1,4 @@
-import { QuizType } from "@quizzy/common"
+import { SearchQuizType } from "@quizzy/common"
 import { NavLink } from "react-router-dom"
 import { Edit } from "../../icons/Edit"
 import { More } from "../../icons/More"
@@ -8,13 +8,11 @@ import { QuizzyImage } from "../QuizzyImage"
 import { Text } from "../Typography"
 
 interface QuizItemProps {
-  quiz: Pick<QuizType, "id" | "cover" | "name" | "plays"> & {
-    questionCount: number
-  }
+  quiz: SearchQuizType
   noEdit?: boolean
   creatorInfo: {
+    id: number
     username: string
-    avatar: string
   }
 }
 
@@ -31,7 +29,7 @@ export function QuizItem({ quiz, creatorInfo, noEdit = false }: QuizItemProps) {
           <QuizzyImage height="5rem" width="10rem" />
         )}
         <span className="absolute bottom-2 right-2 flex h-6 w-6 items-center justify-center rounded-full bg-secondary text-[0.75rem] text-white">
-          {quiz.questionCount}
+          {quiz.questions}
         </span>
       </div>
       <div className="flex h-full flex-1 pb-2.5 pt-3">

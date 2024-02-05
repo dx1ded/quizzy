@@ -12,7 +12,7 @@ export function Viral() {
   const request = useSecuredRequest()
   const { data, isLoading } = useQuery({
     queryKey: ["viralQuizzes"],
-    queryFn: () => request<QuizType[]>("/api/quiz/list/viral"),
+    queryFn: () => request<QuizType[]>("/api/quiz/list/viral?perPage=4&page=1"),
     refetchOnWindowFocus: false,
   })
 

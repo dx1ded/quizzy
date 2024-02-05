@@ -1,19 +1,22 @@
-import { Raw } from "typeorm"
+import { In, Raw } from "typeorm"
 import { nanoid } from "nanoid"
+import { z } from "zod"
 import {
-  AuthTokenType,
   defaultQuiz,
-  FindQuizType,
+  GetQuizType,
   ListQuizzesType,
   QuizType,
+  SearchQuizType,
+  SearchQuizzesType,
 } from "@quizzy/common"
+import { PageSchema, SearchQuizParamsSchema } from "../schemas/quiz.schema"
 import { FastifyHandler, WithUserId } from "../types"
 import { quizRepository, userRepository } from "../database"
 
-const createNewQuiz: FastifyHandler<
-  WithUserId<AuthTokenType>,
-  QuizType
-> = async (req) => {
+const createNewQuiz: FastifyHandler<{
+  Body: WithUserId
+  Reply: QuizType
+}> = async (req) => {
   const newQuiz = defaultQuiz(nanoid(5), req.body.userId)
 
   await quizRepository.save(newQuiz)
@@ -21,13 +24,17 @@ const createNewQuiz: FastifyHandler<
   return newQuiz
 }
 
-const findQuiz: FastifyHandler<WithUserId, FindQuizType> = async (req, res) => {
-  const { id } = req.params as { id: string }
+const getQuiz: FastifyHandler<{
+  Body: WithUserId
+  Reply: GetQuizType
+  Params: Pick<QuizType, "id">
+}> = async (req, res) => {
+  const { id } = req.params
 
   const quiz = await quizRepository.findOne({ where: { id } })
 
   if (!quiz) {
-    return res.code(400).send({ message: "Quiz not found" })
+    return res.code(404).send({ message: "Quiz not found" })
   }
 
   const isCreator = req.body.userId === quiz.userRef
@@ -37,17 +44,18 @@ const findQuiz: FastifyHandler<WithUserId, FindQuizType> = async (req, res) => {
   })
 
   if (!creatorInfo) {
-    return res.code(400).send({ message: "Quiz not found" })
+    return res.code(404).send({ message: "Creator not found" })
   }
 
   return { quiz, isCreator, creatorInfo }
 }
 
-const findQuizForEdit: FastifyHandler<WithUserId, QuizType> = async (
-  req,
-  res
-) => {
-  const { id } = req.params as { id: string }
+const getQuizForEdit: FastifyHandler<{
+  Body: WithUserId
+  Reply: QuizType
+  Params: Pick<QuizType, "id">
+}> = async (req, res) => {
+  const { id } = req.params
 
   const quiz = await quizRepository.findOne({ where: { id } })
 
@@ -56,35 +64,69 @@ const findQuizForEdit: FastifyHandler<WithUserId, QuizType> = async (
   }
 
   if (quiz.userRef !== req.body.userId) {
-    return res.code(403).send({ message: "You are not the quiz creator" })
+    return res.code(403).send({ message: "You are not the creator" })
   }
 
   return quiz
 }
 
-const findQuizBy: FastifyHandler<unknown, QuizType[]> = async (req, res) => {
-  const { name } = req.query as { name: string }
+const searchQuizBy: FastifyHandler<{
+  Body: WithUserId
+  Reply: SearchQuizzesType
+  Querystring: z.infer<typeof SearchQuizParamsSchema>
+}> = async (req, res) => {
+  const { name, perPage, page } = req.query
 
-  if (!name) return res.code(404).send({ message: "Not Found!" })
+  const nPerPage = Number(perPage)
+  const nPage = Number(page)
 
-  const quizzes = await quizRepository.find({
-    select: ["name", "cover", "id", "plays", "rating"],
-    where: {
-      name: Raw((alias) => `LOWER(${alias}) Like '%${name.toLowerCase()}%'`),
-    },
+  const skip = nPerPage * nPage - nPerPage
+
+  let quizzes: SearchQuizType[] = []
+
+  if (name) {
+    const result = await quizRepository.find({
+      take: nPerPage,
+      skip,
+      select: [
+        "id",
+        "userRef",
+        "name",
+        "cover",
+        "plays",
+        "rating",
+        "questions",
+      ],
+      where: {
+        name: Raw((alias) => `LOWER(${alias}) Like '${name.toLowerCase()}%'`),
+      },
+    })
+
+    quizzes = result.map((quiz) => ({
+      ...quiz,
+      questions: quiz.questions.length,
+    })) as SearchQuizType[]
+  }
+
+  if (!quizzes.length) {
+    return res.code(404).send({ message: "Quizzes not found" })
+  }
+
+  const creatorInfo = await userRepository.find({
+    select: ["id", "username"],
+    where: { id: In(quizzes.map((quiz) => quiz.userRef)) },
   })
 
-  return quizzes
+  return { quizzes, creatorInfo }
 }
 
-const saveQuiz: FastifyHandler<WithUserId<{ quiz: QuizType }>> = async (
-  req,
-  res
-) => {
+const saveQuiz: FastifyHandler<{
+  Body: WithUserId<{ quiz: QuizType }>
+}> = async (req, res) => {
   const { userId, quiz } = req.body
 
   if (userId !== quiz.userRef) {
-    return res.code(403).send({ message: "You are not the quiz creator" })
+    return res.code(403).send({ message: "You are not the creator" })
   }
 
   await quizRepository.update({ id: quiz.id }, quiz)
@@ -92,10 +134,9 @@ const saveQuiz: FastifyHandler<WithUserId<{ quiz: QuizType }>> = async (
   return { message: "Success" }
 }
 
-const deleteQuiz: FastifyHandler<WithUserId<{ id: QuizType["id"] }>> = async (
-  req,
-  res
-) => {
+const deleteQuiz: FastifyHandler<{
+  Body: WithUserId<{ id: QuizType["id"] }>
+}> = async (req, res) => {
   const { id, userId } = req.body
 
   const quiz = await quizRepository.findOne({ where: { id } })
@@ -109,47 +150,68 @@ const deleteQuiz: FastifyHandler<WithUserId<{ id: QuizType["id"] }>> = async (
   return { message: "Success" }
 }
 
-const listQuizzes: FastifyHandler<
-  WithUserId<{ page: number }>,
-  QuizType[]
-> = async (req) => {
-  const { page } = req.body
+const listQuizzes: FastifyHandler<{
+  Body: WithUserId
+  Reply: QuizType[]
+  Querystring: z.infer<typeof PageSchema>
+}> = async (req) => {
+  const { page, perPage } = req.query
 
-  const perPage = 5
-  const skip = perPage * page - perPage
+  const nPerPage = Number(perPage)
+  const nPage = Number(page)
+
+  const skip = nPerPage * nPage - nPerPage
 
   const quizzes = await quizRepository.find({
-    take: perPage,
+    take: nPerPage,
     skip,
   })
 
   return quizzes
 }
 
-const listOwnQuizzes: FastifyHandler<
-  WithUserId<{ perPage: number; page: number }>,
-  ListQuizzesType
-> = async (req) => {
-  const { perPage, page, userId } = req.body
+const listOwnQuizzes: FastifyHandler<{
+  Body: WithUserId
+  Reply: ListQuizzesType
+  Querystring: z.infer<typeof PageSchema>
+}> = async (req, res) => {
+  const { userId } = req.body
+  const { page, perPage } = req.query
 
-  const skip = perPage * page - perPage
+  const nPerPage = Number(perPage)
+  const nPage = Number(page)
+
+  const skip = nPerPage * nPage - nPerPage
 
   const [quizzes, count] = await quizRepository.findAndCount({
     where: { userRef: userId },
-    take: perPage,
+    take: nPerPage,
     skip,
   })
+
+  if (!quizzes) {
+    return res.code(404).send({ message: "Quizzes not found" })
+  }
 
   return { quizzes, count }
 }
 
-const listNewestQuizzes: FastifyHandler<unknown, QuizType[]> = async (
-  _,
-  res
-) => {
+const listNewestQuizzes: FastifyHandler<{
+  Body: WithUserId
+  Reply: QuizType[]
+  Querystring: z.infer<typeof PageSchema>
+}> = async (req, res) => {
+  const { page, perPage } = req.query
+
+  const nPerPage = Number(perPage)
+  const nPage = Number(page)
+
+  const skip = nPerPage * nPage - nPerPage
+
   const quizzes = await quizRepository.find({
     order: { id: "DESC" },
-    take: 4,
+    take: nPerPage,
+    skip,
   })
 
   if (!quizzes) {
@@ -159,13 +221,22 @@ const listNewestQuizzes: FastifyHandler<unknown, QuizType[]> = async (
   return quizzes
 }
 
-const listViralQuizzes: FastifyHandler<unknown, QuizType[]> = async (
-  _,
-  res
-) => {
+const listViralQuizzes: FastifyHandler<{
+  Body: WithUserId
+  Reply: QuizType[]
+  Querystring: z.infer<typeof PageSchema>
+}> = async (req, res) => {
+  const { page, perPage } = req.query
+
+  const nPerPage = Number(perPage)
+  const nPage = Number(page)
+
+  const skip = nPerPage * nPage - nPerPage
+
   const quizzes = await quizRepository.find({
     order: { plays: "DESC" },
-    take: 4,
+    take: nPerPage,
+    skip,
   })
 
   if (!quizzes) {
@@ -177,9 +248,9 @@ const listViralQuizzes: FastifyHandler<unknown, QuizType[]> = async (
 
 export const QuizController = {
   createNewQuiz,
-  findQuiz,
-  findQuizBy,
-  findQuizForEdit,
+  getQuiz,
+  getQuizForEdit,
+  searchQuizBy,
   saveQuiz,
   deleteQuiz,
   listQuizzes,

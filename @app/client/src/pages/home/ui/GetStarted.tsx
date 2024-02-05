@@ -12,7 +12,7 @@ export function GetStarted() {
   const { data, isLoading, fetchNextPage } = useInfiniteQuery({
     queryKey: ["quizzesList"],
     queryFn: ({ pageParam = 1 }) =>
-      request<QuizType[]>("/api/quiz/list", { page: pageParam }),
+      request<QuizType[]>(`/api/quiz/list?perPage=5&page=${pageParam}`),
     getNextPageParam: (lastPage, allPages) =>
       lastPage.length < 5 ? undefined : allPages.length + 1,
     initialPageParam: 1,

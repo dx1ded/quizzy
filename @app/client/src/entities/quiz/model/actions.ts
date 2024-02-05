@@ -1,9 +1,9 @@
-import { FindQuizType, QuizType } from "@quizzy/common"
+import { GetQuizType, QuizType } from "@quizzy/common"
 
 export type QuizAction =
   | { type: "SET_IS_SAVING"; payload: boolean }
   | { type: "SET_IS_CREATOR"; payload: boolean }
-  | { type: "SET_CREATOR_INFO"; payload: FindQuizType["creatorInfo"] }
+  | { type: "SET_CREATOR_INFO"; payload: GetQuizType["creatorInfo"] }
   | { type: "SET_QUIZ"; payload: { quiz: QuizType; isTouched: boolean } }
   | { type: "RESET_QUIZ" }
   | { type: "ADD_QUESTION" }
@@ -23,13 +23,13 @@ export function setIsCreator(value: boolean): QuizAction {
 }
 
 export function setCreatorInfo(
-  creator: FindQuizType["creatorInfo"]
+  creator: GetQuizType["creatorInfo"]
 ): QuizAction {
   return { type: "SET_CREATOR_INFO", payload: creator }
 }
 
-export function setQuiz(quiz: QuizType, isTouched: boolean): QuizAction {
-  return { type: "SET_QUIZ", payload: { quiz, isTouched } }
+export function setQuiz(quiz: QuizType, isTouched?: boolean): QuizAction {
+  return { type: "SET_QUIZ", payload: { quiz, isTouched: isTouched || false } }
 }
 
 export function resetQuiz(): QuizAction {

@@ -9,20 +9,25 @@ export function useSecuredRequest() {
     (state) => state.account
   )
 
-  return function send<T = unknown>(url: string, body = {}): Promise<T> {
+  return function send<T = unknown>(
+    url: string,
+    options?: { method?: string; body?: unknown }
+  ): Promise<T> {
     if (!token) {
       dispatch(logout())
       return Promise.reject()
     }
 
+    options = options || {}
+
     return fetch(url, {
-      method: "POST",
+      method: options.method || "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
         token,
-        ...body,
+        ...(options.body ? options.body : {}),
       }),
     })
       .then((response) => {

@@ -61,7 +61,8 @@ module.exports = {
     "no-return-assign": "off",
     "@typescript-eslint/naming-convention": "off",
     "@typescript-eslint/default-param-last": "off",
-    "@typescript-eslint/no-throw-literal": "off"
+    "@typescript-eslint/no-throw-literal": "off",
+    "no-param-reassign": "off"
   },
   settings: {
     "import/resolver": {

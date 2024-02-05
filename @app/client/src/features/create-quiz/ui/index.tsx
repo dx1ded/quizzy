@@ -14,7 +14,9 @@ export function CreateQuiz({
   const buttonClassName = `px-5 ${className || ""}`
 
   const clickHandler = async () => {
-    const { id } = await request<QuizType>("/api/quiz/create")
+    const { id } = await request<QuizType>("/api/quiz/create", {
+      method: "PUT",
+    })
 
     navigate(`/quiz/edit/${id}`)
   }

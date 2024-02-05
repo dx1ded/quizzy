@@ -42,7 +42,7 @@ export function QuizEdit() {
   const { isLoading, isError } = useQuery({
     queryKey: ["quizEdit"],
     queryFn: async () => {
-      const quiz = await request<QuizType>(`/api/quiz/edit/${id}`)
+      const quiz = await request<QuizType>(`/api/quiz/getForEdit/${id}`)
       dispatch(setQuiz(quiz, false))
       return quiz
     },
@@ -70,9 +70,10 @@ export function QuizEdit() {
 
   const debouncedSave = useDebouncedCallback(() => {
     dispatch(setIsSaving(true))
-    request("/api/quiz/save", { quiz: data }).then(() =>
-      dispatch(setIsSaving(false))
-    )
+    request("/api/quiz/save", {
+      method: "PATCH",
+      body: { quiz: data },
+    }).then(() => dispatch(setIsSaving(false)))
   }, 3000)
 
   const debouncedSubmit = useDebouncedCallback(() => {

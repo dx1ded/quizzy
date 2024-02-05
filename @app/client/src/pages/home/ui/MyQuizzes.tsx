@@ -12,7 +12,7 @@ export function MyQuizzes() {
   const { data, isLoading } = useQuery({
     queryKey: ["ownQuizzes"],
     queryFn: () =>
-      request<ListQuizzesType>("/api/quiz/list/own", { perPage: 3, page: 1 }),
+      request<ListQuizzesType>("/api/quiz/list/own?perPage=3&page=1"),
     refetchOnWindowFocus: false,
   })
 

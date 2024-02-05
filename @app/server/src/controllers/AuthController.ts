@@ -14,10 +14,10 @@ import { userRepository } from "../database"
 import { FastifyHandler } from "../types"
 import { emailRegexp } from "../utils"
 
-const signIn: FastifyHandler<
-  z.infer<typeof SignInSchema>,
-  AuthTokenType
-> = async (req, res) => {
+const signIn: FastifyHandler<{
+  Body: z.infer<typeof SignInSchema>
+  Reply: AuthTokenType
+}> = async (req, res) => {
   try {
     const { login, password } = req.body
 
@@ -50,10 +50,10 @@ const signIn: FastifyHandler<
   }
 }
 
-const signUp: FastifyHandler<
-  z.infer<typeof SignUpSchema>,
-  AuthTokenType
-> = async (req, res) => {
+const signUp: FastifyHandler<{
+  Body: z.infer<typeof SignUpSchema>
+  Reply: AuthTokenType
+}> = async (req, res) => {
   try {
     const hashedPassword = await bcrypt.hash(
       req.body.password,
@@ -96,10 +96,10 @@ const signUp: FastifyHandler<
   }
 }
 
-const checkEmailAvailability: FastifyHandler<
-  Pick<z.infer<typeof CredentialsSchema>, "email">,
-  FieldAvailability
-> = async (req) => {
+const checkEmailAvailability: FastifyHandler<{
+  Body: Pick<z.infer<typeof CredentialsSchema>, "email">
+  Reply: FieldAvailability
+}> = async (req) => {
   const { email } = req.body
   let isAvailable = true
 
@@ -112,10 +112,10 @@ const checkEmailAvailability: FastifyHandler<
   return { isAvailable }
 }
 
-const checkUsernameAvailability: FastifyHandler<
-  z.infer<typeof UsernameSchema>,
-  FieldAvailability
-> = async (req) => {
+const checkUsernameAvailability: FastifyHandler<{
+  Body: z.infer<typeof UsernameSchema>
+  Reply: FieldAvailability
+}> = async (req) => {
   const { username } = req.body
   let isAvailable = true
 

@@ -1,8 +1,8 @@
-import { QuizType } from "@quizzy/common"
-import { useQuery } from "@tanstack/react-query"
 import { ChangeEvent } from "react"
 import { useSearchParams } from "react-router-dom"
 import { useDebouncedCallback } from "use-debounce"
+import { SearchQuizzesType } from "@quizzy/common"
+import { useQuery } from "@tanstack/react-query"
 import { QuizItem } from "shared/ui/QuizItem"
 import { useSecuredRequest } from "entities/account"
 import { Subheading } from "shared/ui/Typography"
@@ -13,12 +13,14 @@ export function SearchSection() {
   const [searchParams, setSearchParams] = useSearchParams()
   const { data, refetch } = useQuery({
     queryKey: ["searchQuizzes"],
-    queryFn: (): Promise<QuizType[]> | never[] => {
+    queryFn: () => {
       const name = searchParams.get("name")
 
-      if (!name) return []
+      if (!name) return
 
-      return request(`/api/quiz/findBy?name=${name}`)
+      return request<SearchQuizzesType>(
+        `/api/quiz/searchBy?perPage=5&page=1&name=${name}`
+      )
     },
   })
 
@@ -41,29 +43,17 @@ export function SearchSection() {
         withMagnifier
         onChange={debouncedChangeHandler}
       />
-      <div className="mx-auto mt-16 grid max-w-3xl gap-2">
-        <QuizItem
-          creatorInfo={{
-            username: "vovados1",
-            avatar: "",
-          }}
-          quiz={{
-            id: "sjadj21ji12o3ji",
-            cover: "",
-            name: "Quiz name",
-            plays: 100,
-            questionCount: 2,
-          }}
-          noEdit
-        />
-      </div>
-      {/* {data && ( */}
-      {/*  <div className="grid gap-2"> */}
-      {/*    {data.map((quiz) => ( */}
-      {/*      <div key={quiz.id}>{quiz.name}</div> */}
-      {/*    ))} */}
-      {/*  </div> */}
-      {/* )} */}
+      {data && data.quizzes && (
+        <div className="mx-auto mt-16 grid max-w-3xl gap-2">
+          {data.quizzes.map((quiz) => (
+            <QuizItem
+              creatorInfo={data.creatorInfo.find((i) => i.id === quiz.userRef)!}
+              quiz={quiz}
+              noEdit
+            />
+          ))}
+        </div>
+      )}
     </section>
   )
 }

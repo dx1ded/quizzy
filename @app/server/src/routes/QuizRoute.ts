@@ -1,13 +1,18 @@
 import { FastifyInstance } from "fastify"
 import { ZodTypeProvider } from "fastify-type-provider-zod"
-import { AuthToken, AuthTokenType, QuizSchema, QuizType } from "@quizzy/common"
-import { z } from "zod"
-import { validateToken } from "../middleware"
+import { AuthToken } from "@quizzy/common"
+import { validateToken } from "../middleware/validateToken"
 import { QuizController } from "../controllers/QuizController"
-import { WithUserId } from "../types"
+import {
+  PageSchema,
+  QuizIdSchema,
+  QuizIdWithAuthTokenSchema,
+  QuizWithAuthTokenSchema,
+  SearchQuizParamsSchema,
+} from "../schemas/quiz.schema"
 
 export const QuizRoute = async (f: FastifyInstance) => {
-  f.withTypeProvider<ZodTypeProvider>().post(
+  f.withTypeProvider<ZodTypeProvider>().put(
     "/create",
     {
       preHandler: [validateToken],
@@ -19,101 +24,85 @@ export const QuizRoute = async (f: FastifyInstance) => {
   )
 
   f.withTypeProvider<ZodTypeProvider>().post(
-    "/:id",
+    "/get/:id",
     {
       preHandler: [validateToken],
       schema: {
         body: AuthToken,
+        params: QuizIdSchema,
       },
     },
-    QuizController.findQuiz
+    QuizController.getQuiz
   )
 
   f.withTypeProvider<ZodTypeProvider>().post(
-    "/findBy",
+    "/getForEdit/:id",
     {
       preHandler: [validateToken],
       schema: {
         body: AuthToken,
+        params: QuizIdSchema,
       },
     },
-    QuizController.findQuizBy
+    QuizController.getQuizForEdit
   )
 
   f.withTypeProvider<ZodTypeProvider>().post(
-    "/edit/:id",
+    "/searchBy",
     {
       preHandler: [validateToken],
       schema: {
         body: AuthToken,
+        querystring: SearchQuizParamsSchema,
       },
     },
-    QuizController.findQuizForEdit
+    QuizController.searchQuizBy
   )
 
-  f.withTypeProvider<ZodTypeProvider>().post<{
-    Body: WithUserId<AuthTokenType> & { quiz: QuizType }
-  }>(
+  f.withTypeProvider<ZodTypeProvider>().patch(
     "/save",
     {
       preHandler: [validateToken],
       schema: {
-        body: z.object({ quiz: QuizSchema }).and(AuthToken),
+        body: QuizWithAuthTokenSchema,
       },
     },
     QuizController.saveQuiz
   )
 
-  f.withTypeProvider<ZodTypeProvider>().post<{
-    Body: WithUserId<AuthTokenType> & { id: string }
-  }>(
+  f.withTypeProvider<ZodTypeProvider>().delete(
     "/delete",
     {
       preHandler: [validateToken],
       schema: {
-        body: z.object({ id: z.string() }).and(AuthToken),
+        body: QuizIdWithAuthTokenSchema,
       },
     },
     QuizController.deleteQuiz
   )
 
-  f.withTypeProvider<ZodTypeProvider>().post<{
-    Body: WithUserId<AuthTokenType> & { page: number }
-  }>(
+  f.withTypeProvider<ZodTypeProvider>().post(
     "/list",
     {
       preHandler: [validateToken],
       schema: {
-        body: z.object({ page: z.number() }).and(AuthToken),
+        body: AuthToken,
+        querystring: PageSchema,
       },
     },
     QuizController.listQuizzes
   )
 
-  f.withTypeProvider<ZodTypeProvider>().post<{
-    Body: WithUserId<AuthTokenType> & { perPage: number; page: number }
-  }>(
+  f.withTypeProvider<ZodTypeProvider>().post(
     "/list/own",
     {
       preHandler: [validateToken],
       schema: {
-        body: z
-          .object({ page: z.number(), perPage: z.number() })
-          .and(AuthToken),
+        body: AuthToken,
+        querystring: PageSchema,
       },
     },
     QuizController.listOwnQuizzes
-  )
-
-  f.withTypeProvider<ZodTypeProvider>().post(
-    "/list/viral",
-    {
-      preHandler: [validateToken],
-      schema: {
-        body: AuthToken,
-      },
-    },
-    QuizController.listViralQuizzes
   )
 
   f.withTypeProvider<ZodTypeProvider>().post(
@@ -122,8 +111,21 @@ export const QuizRoute = async (f: FastifyInstance) => {
       preHandler: [validateToken],
       schema: {
         body: AuthToken,
+        querystring: PageSchema,
       },
     },
     QuizController.listNewestQuizzes
+  )
+
+  f.withTypeProvider<ZodTypeProvider>().post(
+    "/list/viral",
+    {
+      preHandler: [validateToken],
+      schema: {
+        body: AuthToken,
+        querystring: PageSchema,
+      },
+    },
+    QuizController.listViralQuizzes
   )
 }

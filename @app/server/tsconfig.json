@@ -2,7 +2,7 @@
   "extends": "@quizzy/eslint-config-default/tsconfig.json",
   "compilerOptions": {
     "module": "ESNext",
-    "target": "ES2017",
+    "target": "ESNext",
     "sourceMap": true,
     "outDir": "./dist",
     "moduleResolution": "node",

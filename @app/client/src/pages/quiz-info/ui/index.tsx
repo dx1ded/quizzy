@@ -1,7 +1,7 @@
 import { useParams } from "react-router-dom"
 import { useDispatch } from "react-redux"
 import { useQuery } from "@tanstack/react-query"
-import { FindQuizType } from "@quizzy/common"
+import { GetQuizType } from "@quizzy/common"
 import { AppHeader } from "widgets/header"
 import { Screen } from "widgets/screen"
 import { setCreatorInfo, setIsCreator, setQuiz } from "entities/quiz"
@@ -17,7 +17,7 @@ export function QuizInfo() {
   const { isLoading, isError } = useQuery({
     queryKey: ["quizInfo"],
     queryFn: async () => {
-      const data = await request<FindQuizType>(`/api/quiz/${id}`)
+      const data = await request<GetQuizType>(`/api/quiz/get/${id}`)
       dispatch(setQuiz(data.quiz))
       dispatch(setCreatorInfo(data.creatorInfo))
       dispatch(setIsCreator(data.isCreator))
