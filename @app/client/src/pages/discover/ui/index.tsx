@@ -1,11 +1,11 @@
 import "swiper/css"
 
+import { SearchSection } from "features/search-quiz"
 import { AppHeader } from "widgets/header"
 import { Screen } from "widgets/screen"
 import { Box } from "shared/ui/Box"
 import { Viral } from "./Viral"
 import { Newest } from "./Newest"
-import { SearchSection } from "./SearchSection"
 
 export function Discover() {
   return (

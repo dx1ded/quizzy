@@ -1,3 +1,3 @@
 export * from "./store"
-export * from "./hooks"
+export * from "./Routes"
 export type { AppStore } from "./rootReducer"

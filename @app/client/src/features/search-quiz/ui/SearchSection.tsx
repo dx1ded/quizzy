@@ -1,44 +1,57 @@
-import { ChangeEvent } from "react"
+import { ChangeEvent, useEffect, useRef } from "react"
 import { useSearchParams } from "react-router-dom"
 import { useDebouncedCallback } from "use-debounce"
 import { SearchQuizzesType } from "@quizzy/common"
 import { useQuery } from "@tanstack/react-query"
-import { QuizItem } from "shared/ui/QuizItem"
 import { useSecuredRequest } from "entities/account"
+import { QuizItem } from "shared/ui/QuizItem"
 import { Subheading } from "shared/ui/Typography"
 import { Input } from "shared/ui/Input"
 
 export function SearchSection() {
   const request = useSecuredRequest()
+  const inputRef = useRef<HTMLInputElement>(null)
   const [searchParams, setSearchParams] = useSearchParams()
-  const { data, refetch } = useQuery({
-    queryKey: ["searchQuizzes"],
+  const { data } = useQuery({
+    queryKey: ["searchQuizzes", searchParams.get("name")],
     queryFn: () => {
       const name = searchParams.get("name")
 
-      if (!name) return
+      if (!name) return Promise.reject(new Error("No name"))
 
       return request<SearchQuizzesType>(
         `/api/quiz/searchBy?perPage=5&page=1&name=${name}`
       )
     },
+    retry: false,
   })
 
   const debouncedChangeHandler = useDebouncedCallback(
     (e: ChangeEvent<HTMLInputElement>) => {
       searchParams.set("name", e.target.value)
       setSearchParams(searchParams)
-      refetch()
     },
-    1500
+    1000
   )
+
+  useEffect(() => {
+    if (searchParams.get("scroll") && inputRef.current) {
+      inputRef.current.scrollIntoView({
+        behavior: "smooth",
+        inline: "nearest",
+      })
+    }
+  }, [searchParams])
 
   return (
     <section className="rounded bg-accent py-20 text-center">
       <Subheading className="mb-6 text-white">Search for</Subheading>
       <Input
+        key={searchParams.get("name")!}
+        ref={inputRef}
         className="inline-block w-[30rem] rounded-lg border-none py-2"
-        defaultValue={searchParams.get("name") || ""}
+        defaultValue={searchParams.get("name")!}
+        id="search"
         placeholder="Search for public quizzes"
         withMagnifier
         onChange={debouncedChangeHandler}
@@ -47,6 +60,7 @@ export function SearchSection() {
         <div className="mx-auto mt-16 grid max-w-3xl gap-2">
           {data.quizzes.map((quiz) => (
             <QuizItem
+              key={quiz.id}
               creatorInfo={data.creatorInfo.find((i) => i.id === quiz.userRef)!}
               quiz={quiz}
               noEdit

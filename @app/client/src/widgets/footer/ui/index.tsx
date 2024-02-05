@@ -2,7 +2,7 @@ import { NavLink } from "react-router-dom"
 import { Container } from "shared/ui/Container"
 import { Logo } from "shared/ui/Logo"
 
-export function Footer() {
+export function Index() {
   return (
     <footer className="bg-primary py-5">
       <Container className="flex items-center justify-between">
