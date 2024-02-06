@@ -9,6 +9,7 @@ import {
   QuizIdWithAuthTokenSchema,
   QuizWithAuthTokenSchema,
   SearchQuizParamsSchema,
+  SetFavoriteQuizSchema,
 } from "../schemas/quiz.schema"
 
 export const QuizRoute = async (f: FastifyInstance) => {
@@ -79,6 +80,17 @@ export const QuizRoute = async (f: FastifyInstance) => {
       },
     },
     QuizController.deleteQuiz
+  )
+
+  f.withTypeProvider<ZodTypeProvider>().patch(
+    "/set-favorite",
+    {
+      preHandler: [validateToken],
+      schema: {
+        body: SetFavoriteQuizSchema,
+      },
+    },
+    QuizController.setQuizFavorite
   )
 
   f.withTypeProvider<ZodTypeProvider>().post(

@@ -9,7 +9,11 @@ import {
   SearchQuizType,
   SearchQuizzesType,
 } from "@quizzy/common"
-import { PageSchema, SearchQuizParamsSchema } from "../schemas/quiz.schema"
+import {
+  PageSchema,
+  SearchQuizParamsSchema,
+  SetFavoriteQuizSchema,
+} from "../schemas/quiz.schema"
 import { FastifyHandler, WithUserId } from "../types"
 import { quizRepository, userRepository } from "../database"
 
@@ -29,6 +33,7 @@ const getQuiz: FastifyHandler<{
   Reply: GetQuizType
   Params: Pick<QuizType, "id">
 }> = async (req, res) => {
+  const { userId } = req.body
   const { id } = req.params
 
   const quiz = await quizRepository.findOne({ where: { id } })
@@ -37,7 +42,9 @@ const getQuiz: FastifyHandler<{
     return res.code(404).send({ message: "Quiz not found" })
   }
 
-  const isCreator = req.body.userId === quiz.userRef
+  const isCreator = userId === quiz.userRef
+  const isFavorite = quiz.favoriteBy.includes(userId)
+
   const creatorInfo = await userRepository.findOne({
     where: { id: quiz.userRef },
     select: ["username"],
@@ -47,7 +54,7 @@ const getQuiz: FastifyHandler<{
     return res.code(404).send({ message: "Creator not found" })
   }
 
-  return { quiz, isCreator, creatorInfo }
+  return { quiz, isCreator, isFavorite, creatorInfo }
 }
 
 const getQuizForEdit: FastifyHandler<{
@@ -150,6 +157,30 @@ const deleteQuiz: FastifyHandler<{
   return { message: "Success" }
 }
 
+const setQuizFavorite: FastifyHandler<{
+  Body: WithUserId<z.infer<typeof SetFavoriteQuizSchema>>
+}> = async (req, res) => {
+  const { id, userId, favorite } = req.body
+
+  const quiz = await quizRepository.findOne({ where: { id } })
+
+  if (!quiz) {
+    return res.code(404).send("Quiz not found")
+  }
+
+  if (favorite) {
+    quiz.rating += 1
+    quiz.favoriteBy = [...quiz.favoriteBy, userId]
+  } else {
+    quiz.rating -= 1
+    quiz.favoriteBy = quiz.favoriteBy.filter((_id) => _id !== userId)
+  }
+
+  await quizRepository.update({ id }, quiz)
+
+  return { message: "Success" }
+}
+
 const listQuizzes: FastifyHandler<{
   Body: WithUserId
   Reply: QuizType[]
@@ -163,6 +194,7 @@ const listQuizzes: FastifyHandler<{
   const skip = nPerPage * nPage - nPerPage
 
   const quizzes = await quizRepository.find({
+    select: ["id", "cover", "name", "description"],
     take: nPerPage,
     skip,
   })
@@ -184,6 +216,7 @@ const listOwnQuizzes: FastifyHandler<{
   const skip = nPerPage * nPage - nPerPage
 
   const [quizzes, count] = await quizRepository.findAndCount({
+    select: ["id", "cover", "name", "plays"],
     where: { userRef: userId },
     take: nPerPage,
     skip,
@@ -193,7 +226,7 @@ const listOwnQuizzes: FastifyHandler<{
     return res.code(404).send({ message: "Quizzes not found" })
   }
 
-  return { quizzes, count }
+  return { quizzes, count: count - nPerPage }
 }
 
 const listNewestQuizzes: FastifyHandler<{
@@ -209,6 +242,7 @@ const listNewestQuizzes: FastifyHandler<{
   const skip = nPerPage * nPage - nPerPage
 
   const quizzes = await quizRepository.find({
+    select: ["id", "cover"],
     order: { id: "DESC" },
     take: nPerPage,
     skip,
@@ -234,6 +268,7 @@ const listViralQuizzes: FastifyHandler<{
   const skip = nPerPage * nPage - nPerPage
 
   const quizzes = await quizRepository.find({
+    select: ["id", "cover"],
     order: { plays: "DESC" },
     take: nPerPage,
     skip,
@@ -253,6 +288,7 @@ export const QuizController = {
   searchQuizBy,
   saveQuiz,
   deleteQuiz,
+  setQuizFavorite,
   listQuizzes,
   listOwnQuizzes,
   listNewestQuizzes,

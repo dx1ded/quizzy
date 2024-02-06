@@ -2,7 +2,8 @@ import { ChangeEvent, useEffect, useRef } from "react"
 import { useSearchParams } from "react-router-dom"
 import { useDebouncedCallback } from "use-debounce"
 import { SearchQuizzesType } from "@quizzy/common"
-import { useQuery } from "@tanstack/react-query"
+import { useInfiniteQuery } from "@tanstack/react-query"
+import { Button } from "shared/ui/Button"
 import { useSecuredRequest } from "entities/account"
 import { QuizItem } from "shared/ui/QuizItem"
 import { Subheading } from "shared/ui/Typography"
@@ -12,17 +13,20 @@ export function SearchSection() {
   const request = useSecuredRequest()
   const inputRef = useRef<HTMLInputElement>(null)
   const [searchParams, setSearchParams] = useSearchParams()
-  const { data } = useQuery({
+  const { data, fetchNextPage, hasNextPage } = useInfiniteQuery({
     queryKey: ["searchQuizzes", searchParams.get("name")],
-    queryFn: () => {
+    queryFn: ({ pageParam = 1 }) => {
       const name = searchParams.get("name")
 
       if (!name) return Promise.reject(new Error("No name"))
 
       return request<SearchQuizzesType>(
-        `/api/quiz/searchBy?perPage=5&page=1&name=${name}`
+        `/api/quiz/searchBy?perPage=5&page=${pageParam}&name=${name}`
       )
     },
+    getNextPageParam: (lastPage, allPages) =>
+      lastPage.quizzes.length < 5 ? undefined : allPages.length + 1,
+    initialPageParam: 1,
     retry: false,
   })
 
@@ -56,17 +60,34 @@ export function SearchSection() {
         withMagnifier
         onChange={debouncedChangeHandler}
       />
-      {data && data.quizzes && (
-        <div className="mx-auto mt-16 grid max-w-3xl gap-2">
-          {data.quizzes.map((quiz) => (
-            <QuizItem
-              key={quiz.id}
-              creatorInfo={data.creatorInfo.find((i) => i.id === quiz.userRef)!}
-              quiz={quiz}
-              noEdit
-            />
-          ))}
-        </div>
+      {data?.pages && (
+        <>
+          <div className="mx-auto mt-16 grid max-w-3xl gap-2">
+            {data?.pages.map((page) =>
+              page.quizzes.map((quiz) => (
+                <QuizItem
+                  key={quiz.id}
+                  creatorInfo={
+                    page.creatorInfo.find((i) => i.id === quiz.userRef)!
+                  }
+                  quiz={quiz}
+                  noEdit
+                />
+              ))
+            )}
+          </div>
+          {hasNextPage && (
+            <div className="mt-4 flex justify-center">
+              <Button
+                className="px-6"
+                size="md"
+                variant="white"
+                onClick={() => fetchNextPage()}>
+                Load more
+              </Button>
+            </div>
+          )}
+        </>
       )}
     </section>
   )

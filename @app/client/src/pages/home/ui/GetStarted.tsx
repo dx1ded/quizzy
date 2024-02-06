@@ -9,7 +9,7 @@ import { AddQuizBox, QuizBox } from "./QuizBox"
 
 export function GetStarted() {
   const request = useSecuredRequest()
-  const { data, isLoading, fetchNextPage } = useInfiniteQuery({
+  const { data, isLoading, fetchNextPage, hasNextPage } = useInfiniteQuery({
     queryKey: ["quizzesList"],
     queryFn: ({ pageParam = 1 }) =>
       request<QuizType[]>(`/api/quiz/list?perPage=5&page=${pageParam}`),
@@ -49,13 +49,15 @@ export function GetStarted() {
             ))
         )}
       </div>
-      <Button
-        className="mx-auto mt-6 block px-6"
-        size="md"
-        variant="white"
-        onClick={() => fetchNextPage()}>
-        Load more
-      </Button>
+      {hasNextPage && (
+        <Button
+          className="mx-auto mt-6 block px-6"
+          size="md"
+          variant="white"
+          onClick={() => fetchNextPage()}>
+          Load more
+        </Button>
+      )}
     </Box>
   )
 }

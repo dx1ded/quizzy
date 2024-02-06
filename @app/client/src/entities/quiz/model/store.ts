@@ -1,5 +1,5 @@
 import {
-  FindQuizType,
+  GetQuizType,
   emptyQuestion,
   QuizType,
   defaultQuiz,
@@ -10,15 +10,17 @@ export interface QuizState {
   data: QuizType
   activeQuestion: number
   isCreator: boolean
+  isFavorite: boolean
   isSaving: boolean
   isTouched: boolean
-  creatorInfo: FindQuizType["creatorInfo"]
+  creatorInfo: GetQuizType["creatorInfo"]
 }
 
 const initialState: QuizState = {
   data: defaultQuiz("", -1),
   activeQuestion: 0,
   isCreator: false,
+  isFavorite: false,
   isSaving: false,
   isTouched: false,
   creatorInfo: { username: "" },
@@ -33,6 +35,8 @@ export const quizReducer = (
       return { ...state, isSaving: action.payload }
     case "SET_IS_CREATOR":
       return { ...state, isCreator: action.payload }
+    case "SET_IS_FAVORITE":
+      return { ...state, isFavorite: action.payload }
     case "SET_CREATOR_INFO":
       return { ...state, creatorInfo: action.payload }
     case "SET_QUIZ":

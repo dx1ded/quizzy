@@ -33,7 +33,7 @@ export function QuizItem({ quiz, creatorInfo, noEdit = false }: QuizItemProps) {
         </span>
       </div>
       <div className="flex h-full flex-1 pb-2.5 pt-3">
-        <div className="flex flex-col justify-between">
+        <div className="flex flex-col items-start justify-between">
           <Text className="font-semibold leading-[1rem]">{quiz.name}</Text>
           <div className="flex items-center gap-1.5">
             <div className="h-5 w-5 rounded-full bg-gray" />

@@ -14,6 +14,12 @@ export const QuizWithAuthTokenSchema = z
 
 export const QuizIdWithAuthTokenSchema = QuizIdSchema.and(AuthToken)
 
+export const SetFavoriteQuizSchema = QuizIdSchema.and(AuthToken).and(
+  z.object({
+    favorite: z.boolean(),
+  })
+)
+
 export const SearchQuizParamsSchema = QuizSchema.pick({ name: true })
   .and(PageSchema)
   .and(

@@ -3,6 +3,7 @@ import { GetQuizType, QuizType } from "@quizzy/common"
 export type QuizAction =
   | { type: "SET_IS_SAVING"; payload: boolean }
   | { type: "SET_IS_CREATOR"; payload: boolean }
+  | { type: "SET_IS_FAVORITE"; payload: boolean }
   | { type: "SET_CREATOR_INFO"; payload: GetQuizType["creatorInfo"] }
   | { type: "SET_QUIZ"; payload: { quiz: QuizType; isTouched: boolean } }
   | { type: "RESET_QUIZ" }
@@ -20,6 +21,10 @@ export function setIsSaving(value: boolean): QuizAction {
 
 export function setIsCreator(value: boolean): QuizAction {
   return { type: "SET_IS_CREATOR", payload: value }
+}
+
+export function setIsFavorite(value: boolean): QuizAction {
+  return { type: "SET_IS_FAVORITE", payload: value }
 }
 
 export function setCreatorInfo(

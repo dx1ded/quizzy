@@ -1,11 +1,11 @@
 import { useSelector } from "react-redux"
 import { NavLink } from "react-router-dom"
 import Skeleton from "react-loading-skeleton"
+import { SetFavoriteQuiz } from "features/set-favorite-quiz"
 import { QuizState } from "entities/quiz"
 import { Box } from "shared/ui/Box"
 import { QuizzyImage } from "shared/ui/QuizzyImage"
 import { Caption, Subheading } from "shared/ui/Typography"
-import { Star } from "shared/icons/Star"
 import { Button } from "shared/ui/Button"
 import { Edit } from "shared/icons/Edit"
 import type { AppStore } from "app/model"
@@ -36,9 +36,7 @@ export function Quiz({ isLoading }: { isLoading: boolean }) {
       <div className="px-4">
         <div className="mb-2 flex items-center justify-between">
           <Subheading>{data.name}</Subheading>
-          <button type="button">
-            <Star color="#FFB800" width={1.25} />
-          </button>
+          <SetFavoriteQuiz />
         </div>
         <Caption className="mb-5 block">{data.plays} plays</Caption>
         <div className="mb-6 flex items-center justify-between">

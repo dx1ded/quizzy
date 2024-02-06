@@ -128,9 +128,16 @@ const checkUsernameAvailability: FastifyHandler<{
   return { isAvailable }
 }
 
+const checkTokenValidity: FastifyHandler<{
+  Body: AuthTokenType
+}> = () => {
+  return { message: "Success" }
+}
+
 export const AuthController = {
   signIn,
   signUp,
   checkEmailAvailability,
   checkUsernameAvailability,
+  checkTokenValidity,
 }

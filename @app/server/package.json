@@ -3,7 +3,7 @@
   "main": "./dist/index.js",
   "version": "0.0.1",
   "scripts": {
-    "dev": "tsx ./src/index.ts",
+    "dev": "tsx watch ./src/index.ts",
     "build": "pkgroll",
     "lint": "eslint . --ext ts --report-unused-disable-directives",
     "lint:fix": "eslint . --ext ts --fix"

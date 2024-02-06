@@ -1,6 +1,7 @@
 import { FastifyInstance } from "fastify"
 import { ZodTypeProvider } from "fastify-type-provider-zod"
 import {
+  AuthToken,
   Credentials,
   SignInSchema,
   SignUpSchema,
@@ -47,5 +48,15 @@ export const AuthRoute = async (f: FastifyInstance) => {
       },
     },
     AuthController.checkUsernameAvailability
+  )
+
+  f.withTypeProvider<ZodTypeProvider>().post(
+    "/check-token",
+    {
+      schema: {
+        body: AuthToken,
+      },
+    },
+    AuthController.checkTokenValidity
   )
 }

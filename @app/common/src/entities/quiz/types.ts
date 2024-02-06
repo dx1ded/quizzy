@@ -1,7 +1,7 @@
 import { z } from "zod"
 import { QuestionSchema, QuizSchema } from "./schemas"
 
-export type QuizType = z.infer<typeof QuizSchema>
+export type QuizType = z.infer<typeof QuizSchema> & { favoriteBy: number[] }
 export type QuestionType = z.infer<typeof QuestionSchema>
 export type SearchQuizType = QuizType & {
   questions: number
@@ -11,6 +11,7 @@ export type GetQuizType = {
   quiz: QuizType
   creatorInfo: { username: string }
   isCreator: boolean
+  isFavorite: boolean
 }
 
 export type ListQuizzesType = {

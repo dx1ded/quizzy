@@ -24,6 +24,9 @@ export class Quiz implements QuizType {
   @Column("int")
   rating!: number
 
+  @Column("int", { array: true, default: [] })
+  favoriteBy!: number[]
+
   @Column("int")
   plays!: number
 }

@@ -4,7 +4,12 @@ import { useQuery } from "@tanstack/react-query"
 import { GetQuizType } from "@quizzy/common"
 import { AppHeader } from "widgets/header"
 import { Screen } from "widgets/screen"
-import { setCreatorInfo, setIsCreator, setQuiz } from "entities/quiz"
+import {
+  setCreatorInfo,
+  setIsCreator,
+  setIsFavorite,
+  setQuiz,
+} from "entities/quiz"
 import { useSecuredRequest } from "entities/account"
 import { NotFound } from "shared/ui/NotFound"
 import { Quiz } from "./Quiz"
@@ -21,6 +26,7 @@ export function QuizInfo() {
       dispatch(setQuiz(data.quiz))
       dispatch(setCreatorInfo(data.creatorInfo))
       dispatch(setIsCreator(data.isCreator))
+      dispatch(setIsFavorite(data.isFavorite))
       return data
     },
     refetchOnWindowFocus: false,
