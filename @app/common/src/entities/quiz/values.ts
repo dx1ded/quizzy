@@ -19,4 +19,5 @@ export const defaultQuiz = (id: string, userRef: number): QuizType => ({
   questions: [emptyQuestion],
   rating: 0,
   plays: 0,
+  favoriteBy: [],
 })
