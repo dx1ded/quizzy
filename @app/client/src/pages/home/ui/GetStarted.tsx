@@ -1,5 +1,5 @@
 import Skeleton from "react-loading-skeleton"
-import { QuizType } from "@quizzy/common"
+import { PublishedQuizType } from "@quizzy/common"
 import { useInfiniteQuery } from "@tanstack/react-query"
 import { useSecuredRequest } from "entities/account"
 import { Box } from "shared/ui/Box"
@@ -12,7 +12,9 @@ export function GetStarted() {
   const { data, isLoading, fetchNextPage, hasNextPage } = useInfiniteQuery({
     queryKey: ["quizzesList"],
     queryFn: ({ pageParam = 1 }) =>
-      request<QuizType[]>(`/api/quiz/list?perPage=5&page=${pageParam}`),
+      request<PublishedQuizType[]>(
+        `/api/quiz/list?perPage=5&page=${pageParam}`
+      ),
     getNextPageParam: (lastPage, allPages) =>
       lastPage.length < 5 ? undefined : allPages.length + 1,
     initialPageParam: 1,

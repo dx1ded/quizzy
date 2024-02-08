@@ -1,6 +1,6 @@
 import { useSelector } from "react-redux"
 import { useFormContext } from "react-hook-form"
-import { QuizType } from "@quizzy/common"
+import { DraftQuizType } from "@quizzy/common"
 import { AddQuestion } from "features/edit-quiz"
 import { QuizState } from "entities/quiz"
 import { Button } from "shared/ui/Button"
@@ -8,10 +8,10 @@ import type { AppStore } from "app/model"
 import { PreviewQuestion } from "./PreviewQuestion"
 
 export function Preview() {
-  const { activeQuestion } = useSelector<AppStore, QuizState>(
+  const { activeQuestion, isPublished } = useSelector<AppStore, QuizState>(
     (state) => state.quiz
   )
-  const { watch } = useFormContext<QuizType>()
+  const { watch } = useFormContext<DraftQuizType>()
   const quiz = watch()
 
   return (
@@ -23,6 +23,7 @@ export function Preview() {
           background={question.background}
           checked={question.correctAnswers}
           isActive={i === activeQuestion}
+          isPublished={isPublished}
           n={i}
           name={question.name}
           picture={question.picture}
@@ -30,7 +31,7 @@ export function Preview() {
       ))}
       <AddQuestion
         render={() => (
-          <Button size="md" variant="white">
+          <Button disabled={isPublished} size="md" variant="white">
             Add question
           </Button>
         )}

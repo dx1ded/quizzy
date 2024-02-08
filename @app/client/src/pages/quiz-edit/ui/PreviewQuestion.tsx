@@ -19,6 +19,7 @@ interface PreviewQuestionProps {
   answers: string[]
   checked: boolean[]
   isActive: boolean
+  isPublished: boolean
 }
 
 export function PreviewQuestion({
@@ -29,6 +30,7 @@ export function PreviewQuestion({
   answers,
   checked,
   isActive,
+  isPublished,
 }: PreviewQuestionProps) {
   return (
     <div
@@ -40,14 +42,17 @@ export function PreviewQuestion({
         <p className="text-sm font-bold">{n + 1}</p>
         <DeleteQuestion
           render={() => (
-            <button className="mb-2 mt-auto block" type="button">
+            <button
+              className="mb-2 mt-auto block"
+              disabled={isPublished}
+              type="button">
               <Trash color="#FF0000" width={0.8} />
             </button>
           )}
         />
         <DuplicateQuestion
           render={() => (
-            <button className="block" type="button">
+            <button className="block" disabled={isPublished} type="button">
               <Copy width={0.8} />
             </button>
           )}

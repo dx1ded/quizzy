@@ -3,7 +3,8 @@ import { dirname } from "node:path"
 import { fileURLToPath } from "node:url"
 import { DataSource } from "typeorm"
 import { User } from "./entities/User"
-import { Quiz } from "./entities/Quiz"
+import { DraftQuiz } from "./entities/DraftQuiz"
+import { PublishedQuiz } from "./entities/PublishedQuiz"
 
 const dirnamePath = dirname(fileURLToPath(import.meta.url))
 
@@ -19,7 +20,10 @@ export const AppDataSource = new DataSource({
 })
 
 export const userRepository = AppDataSource.getRepository(User)
-export const quizRepository = AppDataSource.getRepository(Quiz)
+export const draftQuizRepository = AppDataSource.getRepository(DraftQuiz)
+
+export const publishedQuizRepository =
+  AppDataSource.getRepository(PublishedQuiz)
 
 AppDataSource.initialize()
   .then(() => console.log("Connected to the DB!"))

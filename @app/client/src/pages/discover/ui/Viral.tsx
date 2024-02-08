@@ -1,7 +1,7 @@
 import Skeleton from "react-loading-skeleton"
 import { Navigation } from "swiper/modules"
 import { Swiper, SwiperSlide } from "swiper/react"
-import { QuizType } from "@quizzy/common"
+import { PublishedQuizType } from "@quizzy/common"
 import { useQuery } from "@tanstack/react-query"
 import { useSecuredRequest } from "entities/account"
 import { Heading } from "shared/ui/Typography"
@@ -12,7 +12,8 @@ export function Viral() {
   const request = useSecuredRequest()
   const { data, isLoading } = useQuery({
     queryKey: ["viralQuizzes"],
-    queryFn: () => request<QuizType[]>("/api/quiz/list/viral?perPage=4&page=1"),
+    queryFn: () =>
+      request<PublishedQuizType[]>("/api/quiz/list/viral?perPage=4&page=1"),
     refetchOnWindowFocus: false,
   })
 

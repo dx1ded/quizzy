@@ -10,6 +10,7 @@ export {
 } from "./Answer"
 export { EditName } from "./EditName"
 export { DeleteQuiz } from "./DeleteQuiz"
+export { PublishQuiz } from "./PublishQuiz"
 export { EditSettings } from "./EditSettings"
 export { FileTooLargeMessage } from "./FileTooLargeMessage"
 export { SettingsModal } from "./SettingsModal"

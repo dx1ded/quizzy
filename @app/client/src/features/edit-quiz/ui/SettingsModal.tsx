@@ -2,7 +2,7 @@ import { ChangeEvent, useContext } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { Controller, useFormContext } from "react-hook-form"
 import { Modal } from "@mui/material"
-import { QuizType } from "@quizzy/common"
+import { DraftQuizType } from "@quizzy/common"
 import { changeCover, QuizState } from "entities/quiz"
 import { Cross } from "shared/icons/Cross"
 import { Edit } from "shared/icons/Edit"
@@ -16,12 +16,14 @@ import { EditValidation } from "./EditValidation"
 export function SettingsModal() {
   const dispatch = useDispatch()
   const { modalOpen, setModalOpen, setMessageOpen } = useContext(EditContext)
-  const { data } = useSelector<AppStore, QuizState>((state) => state.quiz)
+  const { data, isPublished } = useSelector<AppStore, QuizState>(
+    (state) => state.quiz
+  )
   const {
     register,
     formState: { errors },
     control,
-  } = useFormContext<QuizType>()
+  } = useFormContext<DraftQuizType>()
 
   const changeHandler = async (e: ChangeEvent<HTMLInputElement>) => {
     const fileList = (e.target as HTMLInputElement).files
@@ -61,6 +63,7 @@ export function SettingsModal() {
             <input
               accept=".png,.jpg,.jpeg"
               className="visually-hidden"
+              disabled={isPublished}
               id="question-background"
               type="file"
               onChange={changeHandler}
@@ -84,6 +87,7 @@ export function SettingsModal() {
                 <Input
                   className="mb-2.5 w-full text-sm"
                   defaultValue={field.value}
+                  disabled={isPublished}
                   placeholder="Enter quiz name"
                   onChange={(e) => field.onChange(e.target.value)}
                 />
@@ -94,6 +98,7 @@ export function SettingsModal() {
           <div>
             <textarea
               className="w-full resize-none rounded border border-gray px-2.5 py-1.5 text-sm outline-0"
+              disabled={isPublished}
               placeholder="Enter quiz description"
               rows={6}
               {...register("description")}

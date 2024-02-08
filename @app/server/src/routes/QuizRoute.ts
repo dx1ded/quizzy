@@ -4,10 +4,10 @@ import { AuthToken } from "@quizzy/common"
 import { validateToken } from "../middleware/validateToken"
 import { QuizController } from "../controllers/QuizController"
 import {
+  DraftQuizWithAuthTokenSchema,
   PageSchema,
   QuizIdSchema,
   QuizIdWithAuthTokenSchema,
-  QuizWithAuthTokenSchema,
   SearchQuizParamsSchema,
   SetFavoriteQuizSchema,
 } from "../schemas/quiz.schema"
@@ -65,10 +65,32 @@ export const QuizRoute = async (f: FastifyInstance) => {
     {
       preHandler: [validateToken],
       schema: {
-        body: QuizWithAuthTokenSchema,
+        body: DraftQuizWithAuthTokenSchema,
       },
     },
     QuizController.saveQuiz
+  )
+
+  f.withTypeProvider<ZodTypeProvider>().put(
+    "/publish",
+    {
+      preHandler: [validateToken],
+      schema: {
+        body: QuizIdWithAuthTokenSchema,
+      },
+    },
+    QuizController.publishQuiz
+  )
+
+  f.withTypeProvider<ZodTypeProvider>().put(
+    "/unpublish",
+    {
+      preHandler: [validateToken],
+      schema: {
+        body: QuizIdWithAuthTokenSchema,
+      },
+    },
+    QuizController.unpublishQuiz
   )
 
   f.withTypeProvider<ZodTypeProvider>().delete(

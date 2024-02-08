@@ -1,18 +1,25 @@
+import { useSelector } from "react-redux"
 import { useFormContext } from "react-hook-form"
-import { QuizType } from "@quizzy/common"
+import { DraftQuizType } from "@quizzy/common"
+import { QuizState } from "entities/quiz"
 import { Input } from "shared/ui/Input"
+import type { AppStore } from "app/model"
 import { EditValidation } from "./EditValidation"
 
 export function EditName() {
+  const { isPublished } = useSelector<AppStore, QuizState>(
+    (state) => state.quiz
+  )
   const {
     register,
     formState: { errors },
-  } = useFormContext<QuizType>()
+  } = useFormContext<DraftQuizType>()
 
   return (
-    <div>
+    <div className="mr-2.5">
       <Input
         className="w-60"
+        disabled={isPublished}
         placeholder="Enter quiz name"
         {...register("name")}
       />

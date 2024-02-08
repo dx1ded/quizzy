@@ -11,6 +11,10 @@ interface EditContextType {
    */
   messageOpen: boolean
   setMessageOpen: Dispatch<SetStateAction<boolean>>
+  /**
+   * Submit handler function
+   */
+  submitHandler(): void
 }
 
 const initialState: EditContextType = {
@@ -18,6 +22,7 @@ const initialState: EditContextType = {
   setModalOpen() {},
   messageOpen: false,
   setMessageOpen() {},
+  submitHandler() {},
 }
 
 export const EditContext = createContext<EditContextType>(initialState)

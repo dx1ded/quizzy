@@ -1,7 +1,7 @@
 import { ChangeEvent, cloneElement, ReactElement, useContext } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { useFormContext } from "react-hook-form"
-import { QuizType } from "@quizzy/common"
+import { DraftQuizType } from "@quizzy/common"
 import {
   addQuestion,
   changeActiveQuestion,
@@ -69,6 +69,9 @@ export function DuplicateQuestion({ render }: ElementRenderProp) {
 
 export function ChangeQuestionBackground() {
   const dispatch = useDispatch()
+  const { isPublished } = useSelector<AppStore, QuizState>(
+    (state) => state.quiz
+  )
   const { setMessageOpen } = useContext(EditContext)
 
   const changeImage = async (e: ChangeEvent<HTMLInputElement>) => {
@@ -91,6 +94,7 @@ export function ChangeQuestionBackground() {
       <input
         accept=".png,.jpg,.jpeg"
         className="visually-hidden"
+        disabled={isPublished}
         id="question-background"
         type="file"
         onChange={changeImage}
@@ -102,6 +106,9 @@ export function ChangeQuestionBackground() {
 
 export function ChangeQuestionPicture() {
   const dispatch = useDispatch()
+  const { isPublished } = useSelector<AppStore, QuizState>(
+    (state) => state.quiz
+  )
   const { setMessageOpen } = useContext(EditContext)
 
   const changeImage = async (e: ChangeEvent<HTMLInputElement>) => {
@@ -122,6 +129,7 @@ export function ChangeQuestionPicture() {
       <input
         accept=".png,.jpg,.jpeg"
         className="visually-hidden"
+        disabled={isPublished}
         id="question-picture"
         type="file"
         onChange={changeImage}
@@ -134,19 +142,19 @@ export function ChangeQuestionPicture() {
 }
 
 export function EditQuestionName() {
-  const { activeQuestion } = useSelector<AppStore, QuizState>(
+  const { activeQuestion, isPublished } = useSelector<AppStore, QuizState>(
     (state) => state.quiz
   )
   const {
     register,
     formState: { errors },
-  } = useFormContext<QuizType>()
+  } = useFormContext<DraftQuizType>()
 
   return (
     <div>
       <Input
         className="w-[28.75rem] py-2 text-xl shadow-lg"
-        defaultValue=""
+        disabled={isPublished}
         placeholder="Start typing your question..."
         isCentered
         {...register(`questions.${activeQuestion}.name`)}
@@ -179,13 +187,13 @@ const answerComponents: Record<
 }
 
 export function QuestionAnswer({ type }: QuestionAnswerProps) {
-  const { activeQuestion } = useSelector<AppStore, QuizState>(
+  const { activeQuestion, isPublished } = useSelector<AppStore, QuizState>(
     (state) => state.quiz
   )
   const {
     watch,
     formState: { errors },
-  } = useFormContext<QuizType>()
+  } = useFormContext<DraftQuizType>()
 
   const question = watch("questions")[activeQuestion]
 
@@ -197,6 +205,7 @@ export function QuestionAnswer({ type }: QuestionAnswerProps) {
       <Component
         activeQuestion={activeQuestion}
         isChecked={question.correctAnswers[index]}
+        isPublished={isPublished}
         value={question.answers[index]}
       />
       <EditValidation

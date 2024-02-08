@@ -1,8 +1,8 @@
 import { Entity, Column, PrimaryColumn } from "typeorm"
-import { QuizType, QuestionType } from "@quizzy/common"
+import { DraftQuizType, QuestionType } from "@quizzy/common"
 
-@Entity({ name: "quizzes" })
-export class Quiz implements QuizType {
+@Entity({ name: "draft_quizzes" })
+export class DraftQuiz implements DraftQuizType {
   @PrimaryColumn("text")
   id!: string
 
@@ -20,13 +20,4 @@ export class Quiz implements QuizType {
 
   @Column({ type: "jsonb" })
   questions!: QuestionType[]
-
-  @Column("int")
-  rating!: number
-
-  @Column("int", { array: true, default: [] })
-  favoriteBy!: number[]
-
-  @Column("int")
-  plays!: number
 }

@@ -1,11 +1,16 @@
 import _ from "lodash"
-import { useEffect, useMemo, useState } from "react"
+import { useCallback, useEffect, useMemo, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { useParams } from "react-router-dom"
 import { FieldErrors, FormProvider, useForm } from "react-hook-form"
 import { useDebouncedCallback } from "use-debounce"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { QuizSchema, QuizType } from "@quizzy/common"
+import {
+  DraftQuizSchema,
+  DraftQuizType,
+  GetQuizForEditType,
+  PublishedQuizSchema,
+} from "@quizzy/common"
 import { useQuery } from "@tanstack/react-query"
 import { Snackbar } from "@mui/material"
 import {
@@ -18,6 +23,7 @@ import {
   changeActiveQuestion,
   QuizState,
   resetQuiz,
+  setIsPublished,
   setIsSaving,
   setQuiz,
 } from "entities/quiz"
@@ -34,39 +40,59 @@ export function QuizEdit() {
   const { id } = useParams()
   const request = useSecuredRequest()
   const dispatch = useDispatch()
-  const { data, isSaving, isTouched } = useSelector<AppStore, QuizState>(
-    (state) => state.quiz
-  )
+  const { data, isSaving, isTouched, isPublished } = useSelector<
+    AppStore,
+    QuizState
+  >((state) => state.quiz)
+
   const [modalOpen, setModalOpen] = useState(false)
   const [messageOpen, setMessageOpen] = useState(false)
+
   const { isLoading, isError } = useQuery({
     queryKey: ["quizEdit"],
     queryFn: async () => {
-      const quiz = await request<QuizType>(`/api/quiz/getForEdit/${id}`)
-      dispatch(setQuiz(quiz, false))
-      return quiz
+      const result = await request<GetQuizForEditType>(
+        `/api/quiz/getForEdit/${id}`
+      )
+      dispatch(setQuiz(result.quiz, false))
+      dispatch(setIsPublished(result.isPublished))
+      return result.quiz
     },
     refetchOnWindowFocus: false,
   })
 
   const methods = useForm({
     values: data,
-    resolver: zodResolver(QuizSchema),
+    resolver: zodResolver(
+      isPublished
+        ? PublishedQuizSchema.omit({
+            rating: true,
+            plays: true,
+            favoriteBy: true,
+          })
+        : DraftQuizSchema
+    ),
   })
 
-  const submitHandler = (newData: QuizType) => {
-    if (_.isEqual(newData, data)) return
-    dispatch(setQuiz(newData, true))
-  }
+  const submitHandler = useCallback(
+    (newData: DraftQuizType) => {
+      if (_.isEqual(newData, data)) return
+      dispatch(setQuiz(newData, true))
+    },
+    [dispatch, data]
+  )
 
-  const errorHandler = (errors: FieldErrors<QuizType>) => {
-    if (errors.description) return setModalOpen(true)
-    else if (!errors.questions) return
+  const errorHandler = useCallback(
+    (errors: FieldErrors<DraftQuizType>) => {
+      if (errors.description) return setModalOpen(true)
+      else if (!errors.questions) return
 
-    const index = +Object.keys(errors.questions)[0]
+      const index = +Object.keys(errors.questions)[0]
 
-    dispatch(changeActiveQuestion(index))
-  }
+      dispatch(changeActiveQuestion(index))
+    },
+    [dispatch]
+  )
 
   const debouncedSave = useDebouncedCallback(() => {
     dispatch(setIsSaving(true))
@@ -74,11 +100,11 @@ export function QuizEdit() {
       method: "PATCH",
       body: { quiz: data },
     }).then(() => dispatch(setIsSaving(false)))
-  }, 3000)
+  }, 1500)
 
   const debouncedSubmit = useDebouncedCallback(() => {
     methods.handleSubmit(submitHandler, errorHandler)()
-  }, 1000)
+  }, 500)
 
   useEffect(() => {
     if (!isTouched) return
@@ -98,8 +124,9 @@ export function QuizEdit() {
       setModalOpen,
       messageOpen,
       setMessageOpen,
+      submitHandler: methods.handleSubmit(submitHandler, errorHandler),
     }),
-    [modalOpen, messageOpen]
+    [modalOpen, messageOpen, methods, submitHandler, errorHandler]
   )
 
   if (isLoading) return <Loader />

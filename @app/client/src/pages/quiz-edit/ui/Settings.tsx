@@ -1,7 +1,7 @@
 import { useSelector } from "react-redux"
 import { Controller, useFormContext } from "react-hook-form"
 import { MenuItem, Select } from "@mui/material"
-import { QuizType } from "@quizzy/common"
+import { DraftQuizType } from "@quizzy/common"
 import { DeleteQuestion, DuplicateQuestion } from "features/edit-quiz"
 import { Button } from "shared/ui/Button"
 import { QuizState } from "entities/quiz"
@@ -12,10 +12,10 @@ interface SettingsProps {
 }
 
 export function Settings({ submit }: SettingsProps) {
-  const { activeQuestion } = useSelector<AppStore, QuizState>(
+  const { activeQuestion, isPublished } = useSelector<AppStore, QuizState>(
     (state) => state.quiz
   )
-  const { control, getValues } = useFormContext<QuizType>()
+  const { control, getValues } = useFormContext<DraftQuizType>()
   const question = getValues().questions[activeQuestion]
 
   return (
@@ -27,6 +27,7 @@ export function Settings({ submit }: SettingsProps) {
           name={`questions.${activeQuestion}.timeLimit`}
           render={({ field }) => (
             <Select
+              disabled={isPublished}
               sx={{
                 "& .MuiSelect-select": {
                   padding: "0.5rem 1rem",
@@ -52,6 +53,7 @@ export function Settings({ submit }: SettingsProps) {
           name={`questions.${activeQuestion}.points`}
           render={({ field }) => (
             <Select
+              disabled={isPublished}
               sx={{
                 "& .MuiSelect-select": {
                   padding: "0.5rem 1rem",
@@ -74,14 +76,14 @@ export function Settings({ submit }: SettingsProps) {
       <div className="mt-auto flex flex-col gap-2.5 border-t border-gray pt-3">
         <DeleteQuestion
           render={() => (
-            <Button size="md" variant="white">
+            <Button disabled={isPublished} size="md" variant="white">
               Delete
             </Button>
           )}
         />
         <DuplicateQuestion
           render={() => (
-            <Button size="md" variant="secondary">
+            <Button disabled={isPublished} size="md" variant="secondary">
               Duplicate
             </Button>
           )}

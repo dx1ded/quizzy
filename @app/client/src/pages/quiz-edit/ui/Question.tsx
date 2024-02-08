@@ -1,6 +1,6 @@
 import { useSelector } from "react-redux"
 import { useFormContext } from "react-hook-form"
-import { QuizType } from "@quizzy/common"
+import { DraftQuizType } from "@quizzy/common"
 import QuizBackground from "assets/quiz-background.png"
 import {
   ChangeQuestionBackground,
@@ -16,7 +16,7 @@ export function Question() {
   const { activeQuestion } = useSelector<AppStore, QuizState>(
     (state) => state.quiz
   )
-  const { watch } = useFormContext<QuizType>()
+  const { watch } = useFormContext<DraftQuizType>()
 
   const question = watch("questions")[activeQuestion]
 

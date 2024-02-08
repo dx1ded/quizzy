@@ -11,7 +11,9 @@ import type { AppStore } from "app/model"
 export function DeleteQuiz() {
   const request = useSecuredRequest()
   const navigate = useNavigate()
-  const { data } = useSelector<AppStore, QuizState>((state) => state.quiz)
+  const { data, isPublished } = useSelector<AppStore, QuizState>(
+    (state) => state.quiz
+  )
   const [dialogOpen, setDialogOpen] = useState(false)
 
   const deleteHandler = async () => {
@@ -54,6 +56,7 @@ export function DeleteQuiz() {
       </Dialog>
       <Button
         className="px-6"
+        disabled={isPublished}
         variant="white"
         onClick={() => setDialogOpen(true)}>
         Delete

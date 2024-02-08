@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom"
-import { QuizType } from "@quizzy/common"
+import { DraftQuizType } from "@quizzy/common"
 import { ComponentPropsWithoutRef } from "react"
 import { Button } from "shared/ui/Button"
 import { useSecuredRequest } from "entities/account"
@@ -14,7 +14,7 @@ export function CreateQuiz({
   const buttonClassName = `px-5 ${className || ""}`
 
   const clickHandler = async () => {
-    const { id } = await request<QuizType>("/api/quiz/create", {
+    const { id } = await request<DraftQuizType>("/api/quiz/create", {
       method: "PUT",
     })
 
