@@ -191,23 +191,15 @@ export function QuestionAnswer({ type }: QuestionAnswerProps) {
     (state) => state.quiz
   )
   const {
-    watch,
     formState: { errors },
   } = useFormContext<DraftQuizType>()
-
-  const question = watch("questions")[activeQuestion]
 
   const Component = answerComponents[type]
   const index = answerTypes.indexOf(type)
 
   return (
     <div>
-      <Component
-        activeQuestion={activeQuestion}
-        isChecked={question.correctAnswers[index]}
-        isPublished={isPublished}
-        value={question.answers[index]}
-      />
+      <Component activeQuestion={activeQuestion} isPublished={isPublished} />
       <EditValidation
         error={
           errors.questions &&
