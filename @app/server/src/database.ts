@@ -2,6 +2,7 @@ import "reflect-metadata"
 import { dirname } from "node:path"
 import { fileURLToPath } from "node:url"
 import { DataSource } from "typeorm"
+import { Records } from "./entities/Records"
 import { User } from "./entities/User"
 import { DraftQuiz } from "./entities/DraftQuiz"
 import { PublishedQuiz } from "./entities/PublishedQuiz"
@@ -21,6 +22,7 @@ export const AppDataSource = new DataSource({
 
 export const userRepository = AppDataSource.getRepository(User)
 export const draftQuizRepository = AppDataSource.getRepository(DraftQuiz)
+export const recordsRepository = AppDataSource.getRepository(Records)
 
 export const publishedQuizRepository =
   AppDataSource.getRepository(PublishedQuiz)

@@ -5,9 +5,9 @@ import { SearchQuizzesType } from "@quizzy/common"
 import { useInfiniteQuery } from "@tanstack/react-query"
 import { Button } from "shared/ui/Button"
 import { useSecuredRequest } from "entities/account"
-import { QuizItem } from "shared/ui/QuizItem"
 import { Subheading } from "shared/ui/Typography"
 import { Input } from "shared/ui/Input"
+import { QuizItem } from "./QuizItem"
 
 export function SearchSection() {
   const request = useSecuredRequest()
@@ -21,7 +21,7 @@ export function SearchSection() {
       if (!name) return Promise.reject(new Error("No name"))
 
       return request<SearchQuizzesType>(
-        `/api/quiz/searchBy?perPage=5&page=${pageParam}&name=${name}`
+        `/api/quiz/search?perPage=5&page=${pageParam}&name=${name}`
       )
     },
     getNextPageParam: (lastPage, allPages) =>
@@ -62,7 +62,7 @@ export function SearchSection() {
       />
       {data?.pages && (
         <>
-          <div className="mx-auto mt-16 grid max-w-3xl gap-2">
+          <div className="mx-auto mt-16 grid max-w-3xl gap-3">
             {data?.pages.map((page) =>
               page.quizzes.map((quiz) => (
                 <QuizItem

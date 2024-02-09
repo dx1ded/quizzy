@@ -7,6 +7,7 @@ import {
   DraftQuizWithAuthTokenSchema,
   PageSchema,
   QuizIdSchema,
+  QuizIdsWithAuthTokenSchema,
   QuizIdWithAuthTokenSchema,
   SearchQuizParamsSchema,
   SetFavoriteQuizSchema,
@@ -49,7 +50,7 @@ export const QuizRoute = async (f: FastifyInstance) => {
   )
 
   f.withTypeProvider<ZodTypeProvider>().post(
-    "/searchBy",
+    "/search",
     {
       preHandler: [validateToken],
       schema: {
@@ -57,7 +58,43 @@ export const QuizRoute = async (f: FastifyInstance) => {
         querystring: SearchQuizParamsSchema,
       },
     },
-    QuizController.searchQuizBy
+    QuizController.searchQuiz
+  )
+
+  f.withTypeProvider<ZodTypeProvider>().post(
+    "/search/draft",
+    {
+      preHandler: [validateToken],
+      schema: {
+        body: AuthToken,
+        querystring: PageSchema,
+      },
+    },
+    QuizController.searchDraftQuiz
+  )
+
+  f.withTypeProvider<ZodTypeProvider>().post(
+    "/search/favorite",
+    {
+      preHandler: [validateToken],
+      schema: {
+        body: AuthToken,
+        querystring: PageSchema,
+      },
+    },
+    QuizController.searchFavoriteQuiz
+  )
+
+  f.withTypeProvider<ZodTypeProvider>().post(
+    "/search/recent",
+    {
+      preHandler: [validateToken],
+      schema: {
+        body: AuthToken,
+        querystring: PageSchema,
+      },
+    },
+    QuizController.searchRecentQuiz
   )
 
   f.withTypeProvider<ZodTypeProvider>().patch(
@@ -102,6 +139,17 @@ export const QuizRoute = async (f: FastifyInstance) => {
       },
     },
     QuizController.deleteQuiz
+  )
+
+  f.withTypeProvider<ZodTypeProvider>().delete(
+    "/deleteMany",
+    {
+      preHandler: [validateToken],
+      schema: {
+        body: QuizIdsWithAuthTokenSchema,
+      },
+    },
+    QuizController.deleteQuizzes
   )
 
   f.withTypeProvider<ZodTypeProvider>().patch(

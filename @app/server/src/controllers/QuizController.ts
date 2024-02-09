@@ -16,10 +16,12 @@ import { z } from "zod"
 import {
   draftQuizRepository,
   publishedQuizRepository,
+  recordsRepository,
   userRepository,
 } from "../database"
 import {
   PageSchema,
+  QuizIdsWithAuthTokenSchema,
   SearchQuizParamsSchema,
   SetFavoriteQuizSchema,
 } from "../schemas/quiz.schema"
@@ -96,7 +98,7 @@ const getQuizForEdit: FastifyHandler<{
   return { quiz, isPublished }
 }
 
-const searchQuizBy: FastifyHandler<{
+const searchQuiz: FastifyHandler<{
   Body: WithUserId
   Reply: SearchQuizzesType
   Querystring: z.infer<typeof SearchQuizParamsSchema>
@@ -105,34 +107,138 @@ const searchQuizBy: FastifyHandler<{
 
   const nPerPage = Number(perPage)
   const nPage = Number(page)
-
   const skip = nPerPage * nPage - nPerPage
 
-  let quizzes: SearchQuizType[] = []
+  const result = await publishedQuizRepository.find({
+    take: nPerPage,
+    skip,
+    where: {
+      name: Raw((alias) => `LOWER(${alias}) Like '${name.toLowerCase()}%'`),
+    },
+    select: ["id", "userRef", "name", "cover", "plays", "rating", "questions"],
+  })
 
-  if (name) {
-    const result = await publishedQuizRepository.find({
-      take: nPerPage,
-      skip,
-      select: [
-        "id",
-        "userRef",
-        "name",
-        "cover",
-        "plays",
-        "rating",
-        "questions",
-      ],
-      where: {
-        name: Raw((alias) => `LOWER(${alias}) Like '${name.toLowerCase()}%'`),
-      },
-    })
+  const quizzes = result.map((quiz) => ({
+    ...quiz,
+    questions: quiz.questions.length,
+  })) as SearchQuizType[]
 
-    quizzes = result.map((quiz) => ({
-      ...quiz,
-      questions: quiz.questions.length,
-    })) as SearchQuizType[]
+  if (!quizzes.length) {
+    return res.code(404).send({ message: "Quizzes not found" })
   }
+
+  const creatorInfo = await userRepository.find({
+    select: ["id", "username"],
+    where: { id: In(quizzes.map((quiz) => quiz.userRef)) },
+  })
+
+  return { quizzes, creatorInfo }
+}
+
+const searchDraftQuiz: FastifyHandler<{
+  Body: WithUserId
+  Reply: SearchQuizzesType
+  Querystring: z.infer<typeof PageSchema>
+}> = async (req, res) => {
+  const { perPage, page } = req.query
+
+  const nPerPage = Number(perPage)
+  const nPage = Number(page)
+  const skip = nPerPage * nPage - nPerPage
+
+  const result = await draftQuizRepository.find({
+    take: nPerPage,
+    skip,
+    select: ["id", "userRef", "name", "cover", "questions"],
+  })
+
+  const quizzes = result.map((quiz) => ({
+    ...quiz,
+    questions: quiz.questions.length,
+  })) as SearchQuizType[]
+
+  if (!quizzes.length) {
+    return res.code(404).send({ message: "Quizzes not found" })
+  }
+
+  const creatorInfo = await userRepository.find({
+    select: ["id", "username"],
+    where: { id: In(quizzes.map((quiz) => quiz.userRef)) },
+  })
+
+  return { quizzes, creatorInfo }
+}
+
+const searchRecentQuiz: FastifyHandler<{
+  Body: WithUserId
+  Reply: SearchQuizzesType
+  Querystring: z.infer<typeof PageSchema>
+}> = async (req, res) => {
+  const { perPage, page } = req.query
+
+  const nPerPage = Number(perPage)
+  const nPage = Number(page)
+  const skip = nPerPage * nPage - nPerPage
+
+  const recent = await recordsRepository.find({
+    take: nPerPage,
+    skip,
+  })
+
+  const result = await publishedQuizRepository.find({
+    select: ["id", "userRef", "name", "cover", "plays", "rating", "questions"],
+    where: { id: In(recent.map(({ quizId }) => quizId)) },
+  })
+
+  const quizzes = result.map((quiz) => ({
+    ...quiz,
+    questions: quiz.questions.length,
+  })) as SearchQuizType[]
+
+  if (!quizzes.length) {
+    return res.code(404).send({ message: "Quizzes not found" })
+  }
+
+  const creatorInfo = await userRepository.find({
+    select: ["id", "username"],
+    where: { id: In(quizzes.map((quiz) => quiz.userRef)) },
+  })
+
+  return { quizzes, creatorInfo }
+}
+
+const searchFavoriteQuiz: FastifyHandler<{
+  Body: WithUserId
+  Reply: SearchQuizzesType
+  Querystring: z.infer<typeof PageSchema>
+}> = async (req, res) => {
+  const { userId } = req.body
+  const { perPage, page } = req.query
+
+  const nPerPage = Number(perPage)
+  const nPage = Number(page)
+  const skip = nPerPage * nPage - nPerPage
+
+  const result = await publishedQuizRepository
+    .createQueryBuilder("quiz")
+    .take(nPerPage)
+    .skip(skip)
+    .where(":userId = ANY(quiz.favoriteBy)", { userId })
+    .select([
+      "quiz.id",
+      "quiz.userRef",
+      "quiz.name",
+      "quiz.cover",
+      "quiz.plays",
+      "quiz.rating",
+      "quiz.questions",
+    ])
+    .getMany()
+
+  const quizzes = result.map((quiz) => ({
+    ...quiz,
+    questions: quiz.questions.length,
+  })) as SearchQuizType[]
 
   if (!quizzes.length) {
     return res.code(404).send({ message: "Quizzes not found" })
@@ -227,6 +333,23 @@ const deleteQuiz: FastifyHandler<{
   }
 
   await draftQuizRepository.remove(quiz)
+
+  return { message: "Success" }
+}
+
+const deleteQuizzes: FastifyHandler<{
+  Body: WithUserId<z.infer<typeof QuizIdsWithAuthTokenSchema>>
+}> = async (req, res) => {
+  const { ids, userId } = req.body
+
+  const quizzes = await draftQuizRepository.find({ where: { id: In(ids) } })
+  const isCreator = quizzes.every((quiz) => quiz.userRef === userId)
+
+  if (!quizzes || !isCreator) {
+    return res.code(403).send("You are not the quiz creator")
+  }
+
+  await draftQuizRepository.remove(quizzes)
 
   return { message: "Success" }
 }
@@ -362,11 +485,15 @@ export const QuizController = {
   createNewQuiz,
   getQuiz,
   getQuizForEdit,
-  searchQuizBy,
+  searchQuiz,
+  searchDraftQuiz,
+  searchFavoriteQuiz,
+  searchRecentQuiz,
   saveQuiz,
   publishQuiz,
   unpublishQuiz,
   deleteQuiz,
+  deleteQuizzes,
   setQuizFavorite,
   listQuizzes,
   listOwnQuizzes,
