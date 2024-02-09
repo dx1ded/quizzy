@@ -1,6 +1,6 @@
 import { useContext, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
-import { useFormContext } from "react-hook-form"
+import { useFormContext, useWatch } from "react-hook-form"
 import { DraftQuizType } from "@quizzy/common"
 import { ConfirmModal } from "shared/ui/ConfirmModal"
 import { useSecuredRequest } from "entities/account"
@@ -17,10 +17,10 @@ export function PublishQuiz() {
   const { isPublished } = useSelector<AppStore, QuizState>(
     (state) => state.quiz
   )
-  const { watch, trigger } = useFormContext<DraftQuizType>()
+  const { control, trigger } = useFormContext<DraftQuizType>()
   const [isOpen, setIsOpen] = useState(false)
 
-  const id = watch("id")
+  const id = useWatch({ control, name: "id" })
 
   const clickHandler = async () => {
     await dispatch(setIsPublished(!isPublished))

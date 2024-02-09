@@ -84,8 +84,8 @@ export const quizReducer = (
               : state.data.questions,
         },
         activeQuestion:
-          state.data.questions.length === state.activeQuestion
-            ? state.activeQuestion - 1
+          state.data.questions.length - 1 === state.activeQuestion
+            ? state.activeQuestion - (state.activeQuestion === 0 ? 0 : 1)
             : state.activeQuestion,
         isTouched: true,
       }

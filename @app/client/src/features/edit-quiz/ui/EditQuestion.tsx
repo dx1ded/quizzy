@@ -147,6 +147,7 @@ export function EditQuestionName() {
   )
   const {
     register,
+    getValues,
     formState: { errors },
   } = useFormContext<DraftQuizType>()
 
@@ -156,6 +157,7 @@ export function EditQuestionName() {
         className="w-[28.75rem] py-2 text-xl shadow-lg"
         disabled={isPublished}
         placeholder="Start typing your question..."
+        value={getValues(`questions.${activeQuestion}.name`)}
         isCentered
         {...register(`questions.${activeQuestion}.name`)}
       />
@@ -191,6 +193,7 @@ export function QuestionAnswer({ type }: QuestionAnswerProps) {
     (state) => state.quiz
   )
   const {
+    getValues,
     formState: { errors },
   } = useFormContext<DraftQuizType>()
 
@@ -199,7 +202,14 @@ export function QuestionAnswer({ type }: QuestionAnswerProps) {
 
   return (
     <div>
-      <Component activeQuestion={activeQuestion} isPublished={isPublished} />
+      <Component
+        activeQuestion={activeQuestion}
+        isChecked={getValues(
+          `questions.${activeQuestion}.correctAnswers.${index}`
+        )}
+        isPublished={isPublished}
+        value={getValues(`questions.${activeQuestion}.answers.${index}`)}
+      />
       <EditValidation
         error={
           errors.questions &&

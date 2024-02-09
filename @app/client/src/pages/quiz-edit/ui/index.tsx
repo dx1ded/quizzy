@@ -140,7 +140,7 @@ export function QuizEdit() {
         <form onChange={debouncedSubmit}>
           <SettingsModal />
           <Header />
-          <div className="flex h-[48rem]">
+          <div className="flex h-[54rem]">
             <Preview />
             <Question />
             <Settings submit={debouncedSubmit} />

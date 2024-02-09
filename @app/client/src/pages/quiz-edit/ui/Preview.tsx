@@ -1,5 +1,5 @@
 import { useSelector } from "react-redux"
-import { useFormContext } from "react-hook-form"
+import { useFormContext, useWatch } from "react-hook-form"
 import { DraftQuizType } from "@quizzy/common"
 import { AddQuestion } from "features/edit-quiz"
 import { QuizState } from "entities/quiz"
@@ -11,12 +11,13 @@ export function Preview() {
   const { activeQuestion, isPublished } = useSelector<AppStore, QuizState>(
     (state) => state.quiz
   )
-  const { watch } = useFormContext<DraftQuizType>()
-  const quiz = watch()
+
+  const { control } = useFormContext<DraftQuizType>()
+  const questions = useWatch({ control, name: "questions" })
 
   return (
     <aside className="flex basis-56 flex-col gap-4 overflow-y-auto px-2 py-1.5">
-      {quiz.questions.map((question, i) => (
+      {questions.map((question, i) => (
         <PreviewQuestion
           key={i}
           answers={question.answers}

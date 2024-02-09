@@ -6,9 +6,16 @@ import { Tick } from "shared/icons/Tick"
 export interface AnswerProps {
   isPublished: boolean
   activeQuestion: number
+  value: string
+  isChecked: boolean
 }
 
-export function TriangleAnswer({ activeQuestion, isPublished }: AnswerProps) {
+export function TriangleAnswer({
+  activeQuestion,
+  isPublished,
+  value,
+  isChecked,
+}: AnswerProps) {
   const { register } = useFormContext<DraftQuizType>()
 
   return (
@@ -16,6 +23,7 @@ export function TriangleAnswer({ activeQuestion, isPublished }: AnswerProps) {
       className="flex w-full cursor-pointer items-center rounded bg-[#E01D3B] p-4 text-lg text-white shadow-lg"
       htmlFor="triangle-answer">
       <input
+        checked={isChecked}
         className="visually-hidden peer"
         disabled={isPublished}
         id="triangle-answer"
@@ -27,6 +35,7 @@ export function TriangleAnswer({ activeQuestion, isPublished }: AnswerProps) {
         className="flex-1 bg-transparent outline-none"
         disabled={isPublished}
         type="text"
+        value={value}
         {...register(`questions.${activeQuestion}.answers.0`)}
       />
       <span className="ml-4 flex h-7 w-7 items-center justify-center rounded-full border-2 border-white bg-transparent text-transparent peer-checked:border-secondary peer-checked:bg-secondary peer-checked:text-white">
@@ -36,7 +45,12 @@ export function TriangleAnswer({ activeQuestion, isPublished }: AnswerProps) {
   )
 }
 
-export function RhombusAnswer({ activeQuestion, isPublished }: AnswerProps) {
+export function RhombusAnswer({
+  activeQuestion,
+  isPublished,
+  value,
+  isChecked,
+}: AnswerProps) {
   const { register } = useFormContext<DraftQuizType>()
 
   return (
@@ -44,6 +58,7 @@ export function RhombusAnswer({ activeQuestion, isPublished }: AnswerProps) {
       className="flex w-full cursor-pointer items-center rounded bg-[#1368CF] p-4 text-lg text-white shadow-lg"
       htmlFor="rhombus-answer">
       <input
+        checked={isChecked}
         className="visually-hidden peer"
         disabled={isPublished}
         id="rhombus-answer"
@@ -55,6 +70,7 @@ export function RhombusAnswer({ activeQuestion, isPublished }: AnswerProps) {
         className="flex-1 bg-transparent outline-none"
         disabled={isPublished}
         type="text"
+        value={value}
         {...register(`questions.${activeQuestion}.answers.1`)}
       />
       <span className="ml-4 flex h-7 w-7 items-center justify-center rounded-full border-2 border-white bg-transparent text-transparent peer-checked:border-secondary peer-checked:bg-secondary peer-checked:text-white">
@@ -64,7 +80,12 @@ export function RhombusAnswer({ activeQuestion, isPublished }: AnswerProps) {
   )
 }
 
-export function CircleAnswer({ activeQuestion, isPublished }: AnswerProps) {
+export function CircleAnswer({
+  activeQuestion,
+  isPublished,
+  value,
+  isChecked,
+}: AnswerProps) {
   const { register } = useFormContext<DraftQuizType>()
 
   return (
@@ -72,6 +93,7 @@ export function CircleAnswer({ activeQuestion, isPublished }: AnswerProps) {
       className="flex w-full cursor-pointer items-center rounded bg-[#FFB800] p-4 text-lg text-white shadow-lg"
       htmlFor="circle-answer">
       <input
+        checked={isChecked}
         className="visually-hidden peer"
         disabled={isPublished}
         id="circle-answer"
@@ -83,6 +105,7 @@ export function CircleAnswer({ activeQuestion, isPublished }: AnswerProps) {
         className="flex-1 bg-transparent outline-none"
         disabled={isPublished}
         type="text"
+        value={value}
         {...register(`questions.${activeQuestion}.answers.2`)}
       />
       <span className="ml-4 flex h-7 w-7 items-center justify-center rounded-full border-2 border-white bg-transparent text-transparent peer-checked:border-secondary peer-checked:bg-secondary peer-checked:text-white">
@@ -92,7 +115,12 @@ export function CircleAnswer({ activeQuestion, isPublished }: AnswerProps) {
   )
 }
 
-export function SquareAnswer({ activeQuestion, isPublished }: AnswerProps) {
+export function SquareAnswer({
+  activeQuestion,
+  isPublished,
+  value,
+  isChecked,
+}: AnswerProps) {
   const { register } = useFormContext<DraftQuizType>()
 
   return (
@@ -100,6 +128,7 @@ export function SquareAnswer({ activeQuestion, isPublished }: AnswerProps) {
       className="flex w-full cursor-pointer items-center rounded bg-[#28BC01] p-4 text-lg text-white shadow-lg"
       htmlFor="square-answer">
       <input
+        checked={isChecked}
         className="visually-hidden peer"
         disabled={isPublished}
         id="square-answer"
@@ -111,6 +140,7 @@ export function SquareAnswer({ activeQuestion, isPublished }: AnswerProps) {
         className="flex-1 bg-transparent outline-none"
         disabled={isPublished}
         type="text"
+        value={value}
         {...register(`questions.${activeQuestion}.answers.3`)}
       />
       <span className="ml-4 flex h-7 w-7 items-center justify-center rounded-full border-2 border-white bg-transparent text-transparent peer-checked:border-secondary peer-checked:bg-secondary peer-checked:text-white">

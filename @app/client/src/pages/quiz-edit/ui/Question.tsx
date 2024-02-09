@@ -1,5 +1,5 @@
 import { useSelector } from "react-redux"
-import { useFormContext } from "react-hook-form"
+import { useFormContext, useWatch } from "react-hook-form"
 import { DraftQuizType } from "@quizzy/common"
 import QuizBackground from "assets/quiz-background.png"
 import {
@@ -16,9 +16,8 @@ export function Question() {
   const { activeQuestion } = useSelector<AppStore, QuizState>(
     (state) => state.quiz
   )
-  const { watch } = useFormContext<DraftQuizType>()
-
-  const question = watch("questions")[activeQuestion]
+  const { control } = useFormContext<DraftQuizType>()
+  const question = useWatch({ control, name: "questions" })[activeQuestion]
 
   return (
     <main className="relative flex-1">
