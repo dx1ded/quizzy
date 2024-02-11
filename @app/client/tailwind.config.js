@@ -29,6 +29,9 @@ export default {
           "100%": { opacity: "100%" }
         }
       },
+      gridTemplateColumns: {
+        "reports-table": "1rem repeat(3, 1fr) 1.5rem"
+      },
       animation: {
         fadeIn: "fadeIn 0.5s ease-in-out forwards",
         appear: "appear 0.5s ease-in-out forwards"

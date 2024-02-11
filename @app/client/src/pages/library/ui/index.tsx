@@ -127,12 +127,10 @@ export function Library() {
               </>
             ) : data?.pages && !isError ? (
               data?.pages.map((page) =>
-                page.quizzes.map((quiz) => (
+                page.quizzes.map((quiz, i) => (
                   <QuizItem
                     key={quiz.id}
-                    creatorInfo={
-                      page.creatorInfo.find((i) => i.id === quiz.userRef)!
-                    }
+                    creatorInfo={page.creatorInfo[i]}
                     isExpanded={view === "expanded"}
                     quiz={quiz}
                     refetch={refetch}

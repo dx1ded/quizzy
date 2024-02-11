@@ -6,6 +6,7 @@ import {
 } from "fastify-type-provider-zod"
 import { AuthRoute } from "./routes/AuthRoute"
 import { QuizRoute } from "./routes/QuizRoute"
+import { RecordRoute } from "./routes/RecordRoute"
 
 const server = fastify({
   // 200mb
@@ -17,6 +18,7 @@ server.setSerializerCompiler(serializerCompiler)
 
 await server.register(AuthRoute, { prefix: "/api/auth" })
 await server.register(QuizRoute, { prefix: "/api/quiz" })
+await server.register(RecordRoute, { prefix: "/api/record" })
 
 const PORT = Number(process.env.PORT)
 

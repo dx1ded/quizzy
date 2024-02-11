@@ -44,10 +44,10 @@ export function Sidebar() {
             as={NavLink}
             className="block pl-4 [&.active]:border-primary [&.active]:bg-primary [&.active]:text-white"
             size="md"
-            to="/app/reports"
+            to="/app/records"
             variant="white"
             end>
-            Reports
+            Records
           </Button>
         </li>
       </ul>

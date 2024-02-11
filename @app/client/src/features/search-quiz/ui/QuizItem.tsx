@@ -1,4 +1,4 @@
-import { useRef, useState, Dispatch, SetStateAction, FormEvent } from "react"
+import { useRef, useState, Dispatch, SetStateAction, ChangeEvent } from "react"
 import { NavLink, useNavigate } from "react-router-dom"
 import { Menu, MenuItem } from "@mui/material"
 import { SearchQuizType } from "@quizzy/common"
@@ -34,6 +34,7 @@ interface QuizItemProps {
   creatorInfo: {
     id: number
     username: string
+    isCreator: boolean
   }
   /**
    * Refetch function
@@ -82,17 +83,18 @@ export function QuizItem({
     setModalOpen(false)
   }
 
-  const checkboxChangeHandler = (e: FormEvent<HTMLLabelElement>) => {
-    const checkbox = e.target as HTMLInputElement
+  const clickHandler = () => {
+    setModalOpen(true)
+    setMenuOpen(false)
+  }
 
+  const checkboxChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
     setSelected!((prevState) =>
-      checkbox.checked
+      e.target.checked
         ? [...prevState, quiz.id]
         : prevState.filter((id) => id !== quiz.id)
     )
   }
-
-  const isCreator = quiz.userRef === creatorInfo.id
   const isPublished = Number.isInteger(quiz.plays)
 
   const content = modalContent[isPublished ? "published" : "unpublished"]
@@ -111,7 +113,7 @@ export function QuizItem({
         title={content.title}
         onConfirm={isPublished ? unpublishQuiz : deleteQuiz}
       />
-      {!noEdit && isCreator && !isPublished && isExpanded && (
+      {!noEdit && creatorInfo.isCreator && !isPublished && isExpanded && (
         <Checkbox
           className="h-[1.125rem] w-[1.125rem]"
           name="edit"
@@ -153,7 +155,7 @@ export function QuizItem({
           } ml-auto flex justify-between gap-3.5`}>
           {!noEdit && (
             <div className="flex items-center justify-end gap-2.5">
-              {isCreator && (
+              {creatorInfo.isCreator && (
                 <>
                   <NavLink to={`/quiz/edit/${quiz.id}`}>
                     <Edit color="#C8C8C8" height={0.875} width={0.875} />
@@ -173,7 +175,7 @@ export function QuizItem({
                         <MenuItem onClick={() => navigate(`/quiz/${quiz.id}`)}>
                           <span className="text-sm">Start</span>
                         </MenuItem>
-                        <MenuItem onClick={() => setModalOpen(true)}>
+                        <MenuItem onClick={clickHandler}>
                           <span className="text-sm text-yellow-600">
                             Unpublish
                           </span>
@@ -185,7 +187,7 @@ export function QuizItem({
                           onClick={() => navigate(`/quiz/edit/${quiz.id}`)}>
                           <span className="text-sm">Edit</span>
                         </MenuItem>
-                        <MenuItem onClick={() => setModalOpen(true)}>
+                        <MenuItem onClick={clickHandler}>
                           <span className="text-sm text-red-500">Delete</span>
                         </MenuItem>
                       </div>

@@ -36,5 +36,5 @@ export type ListQuizzesType = {
 
 export type SearchQuizzesType = {
   quizzes: SearchQuizType[]
-  creatorInfo: { id: number; username: string }[]
+  creatorInfo: { id: number; isCreator: boolean; username: string }[]
 }

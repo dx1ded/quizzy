@@ -16,7 +16,7 @@ import { z } from "zod"
 import {
   draftQuizRepository,
   publishedQuizRepository,
-  recordsRepository,
+  recordRepository,
   userRepository,
 } from "../database"
 import {
@@ -102,7 +102,7 @@ const searchQuiz: FastifyHandler<{
   Body: WithUserId
   Reply: SearchQuizzesType
   Querystring: z.infer<typeof SearchQuizParamsSchema>
-}> = async (req, res) => {
+}> = async (req) => {
   const { name, perPage, page } = req.query
 
   const nPerPage = Number(perPage)
@@ -123,14 +123,15 @@ const searchQuiz: FastifyHandler<{
     questions: quiz.questions.length,
   })) as SearchQuizType[]
 
-  if (!quizzes.length) {
-    return res.code(404).send({ message: "Quizzes not found" })
-  }
-
-  const creatorInfo = await userRepository.find({
+  const users = await userRepository.find({
     select: ["id", "username"],
     where: { id: In(quizzes.map((quiz) => quiz.userRef)) },
   })
+
+  // Make it consecutively
+  const creatorInfo = result
+    .map(({ userRef }) => users.find((user) => user.id === userRef)!)
+    .map((user, i) => ({ ...user, isCreator: user.id === quizzes[i].userRef }))
 
   return { quizzes, creatorInfo }
 }
@@ -139,7 +140,7 @@ const searchDraftQuiz: FastifyHandler<{
   Body: WithUserId
   Reply: SearchQuizzesType
   Querystring: z.infer<typeof PageSchema>
-}> = async (req, res) => {
+}> = async (req) => {
   const { perPage, page } = req.query
 
   const nPerPage = Number(perPage)
@@ -157,14 +158,15 @@ const searchDraftQuiz: FastifyHandler<{
     questions: quiz.questions.length,
   })) as SearchQuizType[]
 
-  if (!quizzes.length) {
-    return res.code(404).send({ message: "Quizzes not found" })
-  }
-
-  const creatorInfo = await userRepository.find({
+  const users = await userRepository.find({
     select: ["id", "username"],
     where: { id: In(quizzes.map((quiz) => quiz.userRef)) },
   })
+
+  // Make it consecutively
+  const creatorInfo = result
+    .map(({ userRef }) => users.find((user) => user.id === userRef)!)
+    .map((user, i) => ({ ...user, isCreator: user.id === quizzes[i].userRef }))
 
   return { quizzes, creatorInfo }
 }
@@ -173,14 +175,14 @@ const searchRecentQuiz: FastifyHandler<{
   Body: WithUserId
   Reply: SearchQuizzesType
   Querystring: z.infer<typeof PageSchema>
-}> = async (req, res) => {
+}> = async (req) => {
   const { perPage, page } = req.query
 
   const nPerPage = Number(perPage)
   const nPage = Number(page)
   const skip = nPerPage * nPage - nPerPage
 
-  const recent = await recordsRepository.find({
+  const recent = await recordRepository.find({
     take: nPerPage,
     skip,
   })
@@ -195,14 +197,15 @@ const searchRecentQuiz: FastifyHandler<{
     questions: quiz.questions.length,
   })) as SearchQuizType[]
 
-  if (!quizzes.length) {
-    return res.code(404).send({ message: "Quizzes not found" })
-  }
-
-  const creatorInfo = await userRepository.find({
+  const users = await userRepository.find({
     select: ["id", "username"],
     where: { id: In(quizzes.map((quiz) => quiz.userRef)) },
   })
+
+  // Make it consecutively
+  const creatorInfo = result
+    .map(({ userRef }) => users.find((user) => user.id === userRef)!)
+    .map((user, i) => ({ ...user, isCreator: user.id === quizzes[i].userRef }))
 
   return { quizzes, creatorInfo }
 }
@@ -211,7 +214,7 @@ const searchFavoriteQuiz: FastifyHandler<{
   Body: WithUserId
   Reply: SearchQuizzesType
   Querystring: z.infer<typeof PageSchema>
-}> = async (req, res) => {
+}> = async (req) => {
   const { userId } = req.body
   const { perPage, page } = req.query
 
@@ -240,14 +243,15 @@ const searchFavoriteQuiz: FastifyHandler<{
     questions: quiz.questions.length,
   })) as SearchQuizType[]
 
-  if (!quizzes.length) {
-    return res.code(404).send({ message: "Quizzes not found" })
-  }
-
-  const creatorInfo = await userRepository.find({
+  const users = await userRepository.find({
     select: ["id", "username"],
     where: { id: In(quizzes.map((quiz) => quiz.userRef)) },
   })
+
+  // Make it consecutively
+  const creatorInfo = result
+    .map(({ userRef }) => users.find((user) => user.id === userRef)!)
+    .map((user, i) => ({ ...user, isCreator: user.id === quizzes[i].userRef }))
 
   return { quizzes, creatorInfo }
 }

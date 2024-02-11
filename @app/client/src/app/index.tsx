@@ -12,7 +12,7 @@ import { QuizInfo } from "pages/quiz-info"
 import { QuizEdit } from "pages/quiz-edit"
 import { About } from "pages/about"
 import { Library } from "pages/library"
-import { Reports } from "pages/reports"
+import { Records } from "pages/records"
 
 import { PrivateRoutes, PublicRoutes, store } from "./model"
 
@@ -35,7 +35,7 @@ export function App() {
               <Route element={<Home />} path="/app" index />
               <Route element={<Discover />} path="/app/discover" />
               <Route element={<Library />} path="/app/library" />
-              <Route element={<Reports />} path="/app/reports" />
+              <Route element={<Records />} path="/app/records" />
               <Route element={<About />} path="/app/about" />
               <Route element={<QuizInfo />} path="/quiz/:id" />
               <Route element={<QuizEdit />} path="/quiz/edit/:id" />

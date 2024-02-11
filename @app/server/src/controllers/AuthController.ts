@@ -9,7 +9,6 @@ import {
   UsernameSchema,
   FieldAvailability,
 } from "@quizzy/common"
-import { User } from "../entities/User"
 import { userRepository } from "../database"
 import { FastifyHandler } from "../types"
 import { emailRegexp } from "../utils"
@@ -60,8 +59,7 @@ const signUp: FastifyHandler<{
       Number(process.env.SALT_ROUNDS)
     )
 
-    const userModel = new User()
-    const user = { ...userModel, ...req.body, password: hashedPassword }
+    const newUser = { ...req.body, password: hashedPassword }
 
     const isEmailUsed = await userRepository.findOne({
       where: { email: req.body.email },
@@ -79,6 +77,7 @@ const signUp: FastifyHandler<{
       throw new Error("Username is already used")
     }
 
+    const user = await userRepository.save(newUser)
     const token = jwt.sign(
       {
         exp: Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 7, // 7 days
@@ -86,8 +85,6 @@ const signUp: FastifyHandler<{
       },
       process.env.SECRET_TOKEN!
     )
-
-    await userRepository.save(user)
 
     return { token }
   } catch (e) {
