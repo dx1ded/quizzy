@@ -1,6 +1,5 @@
 import { Container } from "shared/ui/Container"
 import { Heading, Text } from "shared/ui/Typography"
-import friends from "assets/friends-hugging.png"
 
 export function Invite() {
   return (
@@ -17,7 +16,7 @@ export function Invite() {
         <img
           alt="Friends hugging each other"
           className="max-w-lg"
-          src={friends}
+          src="https://firebasestorage.googleapis.com/v0/b/quizzy-222b7.appspot.com/o/friends-hugging.png?alt=media"
         />
       </Container>
     </section>

@@ -19,7 +19,7 @@ export type SearchQuizType = PublishedQuizType & {
 
 export type GetQuizType = {
   quiz: PublishedQuizType
-  creatorInfo: { username: string }
+  creatorInfo: { username: string; picture: string }
   isCreator: boolean
   isFavorite: boolean
 }
@@ -36,5 +36,10 @@ export type ListQuizzesType = {
 
 export type SearchQuizzesType = {
   quizzes: SearchQuizType[]
-  creatorInfo: { id: number; isCreator: boolean; username: string }[]
+  creatorInfo: {
+    id: number
+    username: string
+    picture: string
+  }[]
+  isCreator: boolean[]
 }

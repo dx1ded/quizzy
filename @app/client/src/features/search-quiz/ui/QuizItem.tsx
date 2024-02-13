@@ -8,7 +8,6 @@ import { More } from "shared/icons/More"
 import { Button } from "shared/ui/Button"
 import { Checkbox } from "shared/ui/Checkbox"
 import { ConfirmModal } from "shared/ui/ConfirmModal"
-import { QuizzyImage } from "shared/ui/QuizzyImage"
 import { Text } from "shared/ui/Typography"
 
 const modalContent = {
@@ -34,8 +33,9 @@ interface QuizItemProps {
   creatorInfo: {
     id: number
     username: string
-    isCreator: boolean
+    picture: string
   }
+  isCreator: boolean
   /**
    * Refetch function
    */
@@ -54,6 +54,7 @@ interface QuizItemProps {
 export function QuizItem({
   quiz,
   creatorInfo,
+  isCreator,
   refetch,
   setSelected,
   noEdit = false,
@@ -113,7 +114,7 @@ export function QuizItem({
         title={content.title}
         onConfirm={isPublished ? unpublishQuiz : deleteQuiz}
       />
-      {!noEdit && creatorInfo.isCreator && !isPublished && isExpanded && (
+      {!noEdit && isCreator && !isPublished && isExpanded && (
         <Checkbox
           className="h-[1.125rem] w-[1.125rem]"
           name="edit"
@@ -121,15 +122,11 @@ export function QuizItem({
         />
       )}
       <div className="relative h-full">
-        {quiz.cover ? (
-          <img
-            alt="Quiz"
-            className={`${isExpanded ? "w-40" : "w-24"} h-full object-cover`}
-            src={quiz.cover}
-          />
-        ) : (
-          <QuizzyImage height="100%" width={isExpanded ? "10rem" : "6rem"} />
-        )}
+        <img
+          alt="Quiz"
+          className={`${isExpanded ? "w-40" : "w-24"} h-full object-cover`}
+          src={quiz.cover}
+        />
         {isExpanded && (
           <span className="absolute bottom-2 right-2 flex h-6 w-6 items-center justify-center rounded-full bg-secondary text-[0.75rem] text-white">
             {quiz.questions}
@@ -144,7 +141,11 @@ export function QuizItem({
           <Text className="font-semibold leading-[1rem]">{quiz.name}</Text>
           {isExpanded && (
             <div className="flex items-center gap-1.5">
-              <div className="h-5 w-5 rounded-full bg-gray" />
+              <img
+                alt="Profile"
+                className="h-5 w-5 rounded-full"
+                src={creatorInfo.picture}
+              />
               <span className="text-[0.75rem]">@{creatorInfo.username}</span>
             </div>
           )}
@@ -155,7 +156,7 @@ export function QuizItem({
           } ml-auto flex justify-between gap-3.5`}>
           {!noEdit && (
             <div className="flex items-center justify-end gap-2.5">
-              {creatorInfo.isCreator && (
+              {isCreator && (
                 <>
                   <NavLink to={`/quiz/edit/${quiz.id}`}>
                     <Edit color="#C8C8C8" height={0.875} width={0.875} />

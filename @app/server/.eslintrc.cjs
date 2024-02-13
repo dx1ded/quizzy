@@ -2,5 +2,7 @@ module.exports = {
   root: true,
   extends: ["@quizzy/default"],
   plugins: [],
-  rules: {}
+  rules: {
+    "@typescript-eslint/no-shadow": "off"
+  }
 }

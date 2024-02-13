@@ -131,6 +131,7 @@ export function Library() {
                   <QuizItem
                     key={quiz.id}
                     creatorInfo={page.creatorInfo[i]}
+                    isCreator={page.isCreator[i]}
                     isExpanded={view === "expanded"}
                     quiz={quiz}
                     refetch={refetch}

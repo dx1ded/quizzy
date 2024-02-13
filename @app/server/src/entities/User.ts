@@ -2,8 +2,12 @@ import { Entity, Column, PrimaryGeneratedColumn } from "typeorm"
 import { z } from "zod"
 import { SignUpSchema } from "@quizzy/common"
 
+interface IUser extends z.infer<typeof SignUpSchema> {
+  picture: string
+}
+
 @Entity({ name: "users" })
-export class User implements z.infer<typeof SignUpSchema> {
+export class User implements IUser {
   @PrimaryGeneratedColumn()
   id!: number
 
@@ -27,4 +31,10 @@ export class User implements z.infer<typeof SignUpSchema> {
 
   @Column("text", { array: true, default: [] })
   interests!: string[]
+
+  @Column("text", {
+    default:
+      "https://firebasestorage.googleapis.com/v0/b/quizzy-222b7.appspot.com/o/profile-pic.png?alt=media",
+  })
+  picture!: string
 }

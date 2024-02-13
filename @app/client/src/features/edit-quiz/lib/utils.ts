@@ -11,7 +11,7 @@ export function convertToBase64(file: File): Promise<string> {
         .replace("data:", "")
         .replace(/^.+,/, "")
 
-      resolve(`data:image/png;base64, ${base64String}`)
+      resolve(base64String)
     }
   })
 }

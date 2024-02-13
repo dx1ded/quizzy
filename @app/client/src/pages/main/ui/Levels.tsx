@@ -1,6 +1,5 @@
 import { Container } from "shared/ui/Container"
 import { Heading, Text } from "shared/ui/Typography"
-import svg from "assets/people-creating-design.svg"
 
 export function Levels() {
   return (
@@ -9,7 +8,7 @@ export function Levels() {
         <img
           alt="Tiny people creating a design"
           className="max-w-2xl"
-          src={svg}
+          src="https://firebasestorage.googleapis.com/v0/b/quizzy-222b7.appspot.com/o/people-creating-design.svg?alt=media"
         />
         <div className="text-right">
           <Heading className="mb-4">

@@ -13,6 +13,7 @@ import _ from "lodash"
 import { nanoid } from "nanoid"
 import { In, Raw } from "typeorm"
 import { z } from "zod"
+import { ref, uploadString } from "firebase/storage"
 import {
   draftQuizRepository,
   publishedQuizRepository,
@@ -26,6 +27,7 @@ import {
   SetFavoriteQuizSchema,
 } from "../schemas/quiz.schema"
 import { FastifyHandler, WithUserId } from "../types"
+import { storage } from "../admin"
 
 const createNewQuiz: FastifyHandler<{
   Body: WithUserId
@@ -57,7 +59,7 @@ const getQuiz: FastifyHandler<{
 
   const creatorInfo = await userRepository.findOne({
     where: { id: quiz.userRef },
-    select: ["username"],
+    select: ["username", "picture"],
   })
 
   if (!creatorInfo) {
@@ -124,16 +126,18 @@ const searchQuiz: FastifyHandler<{
   })) as SearchQuizType[]
 
   const users = await userRepository.find({
-    select: ["id", "username"],
+    select: ["id", "username", "picture"],
     where: { id: In(quizzes.map((quiz) => quiz.userRef)) },
   })
 
   // Make it consecutively
-  const creatorInfo = result
-    .map(({ userRef }) => users.find((user) => user.id === userRef)!)
-    .map((user, i) => ({ ...user, isCreator: user.id === quizzes[i].userRef }))
+  const creatorInfo = result.map(
+    ({ userRef }) => users.find((user) => user.id === userRef)!
+  )
 
-  return { quizzes, creatorInfo }
+  const isCreator = users.map((user, i) => user.id === quizzes[i].userRef)
+
+  return { quizzes, creatorInfo, isCreator }
 }
 
 const searchDraftQuiz: FastifyHandler<{
@@ -159,16 +163,18 @@ const searchDraftQuiz: FastifyHandler<{
   })) as SearchQuizType[]
 
   const users = await userRepository.find({
-    select: ["id", "username"],
+    select: ["id", "username", "picture"],
     where: { id: In(quizzes.map((quiz) => quiz.userRef)) },
   })
 
   // Make it consecutively
-  const creatorInfo = result
-    .map(({ userRef }) => users.find((user) => user.id === userRef)!)
-    .map((user, i) => ({ ...user, isCreator: user.id === quizzes[i].userRef }))
+  const creatorInfo = result.map(
+    ({ userRef }) => users.find((user) => user.id === userRef)!
+  )
 
-  return { quizzes, creatorInfo }
+  const isCreator = users.map((user, i) => user.id === quizzes[i].userRef)
+
+  return { quizzes, creatorInfo, isCreator }
 }
 
 const searchRecentQuiz: FastifyHandler<{
@@ -198,16 +204,18 @@ const searchRecentQuiz: FastifyHandler<{
   })) as SearchQuizType[]
 
   const users = await userRepository.find({
-    select: ["id", "username"],
+    select: ["id", "username", "picture"],
     where: { id: In(quizzes.map((quiz) => quiz.userRef)) },
   })
 
   // Make it consecutively
-  const creatorInfo = result
-    .map(({ userRef }) => users.find((user) => user.id === userRef)!)
-    .map((user, i) => ({ ...user, isCreator: user.id === quizzes[i].userRef }))
+  const creatorInfo = result.map(
+    ({ userRef }) => users.find((user) => user.id === userRef)!
+  )
 
-  return { quizzes, creatorInfo }
+  const isCreator = users.map((user, i) => user.id === quizzes[i].userRef)
+
+  return { quizzes, creatorInfo, isCreator }
 }
 
 const searchFavoriteQuiz: FastifyHandler<{
@@ -244,16 +252,18 @@ const searchFavoriteQuiz: FastifyHandler<{
   })) as SearchQuizType[]
 
   const users = await userRepository.find({
-    select: ["id", "username"],
+    select: ["id", "username", "picture"],
     where: { id: In(quizzes.map((quiz) => quiz.userRef)) },
   })
 
   // Make it consecutively
-  const creatorInfo = result
-    .map(({ userRef }) => users.find((user) => user.id === userRef)!)
-    .map((user, i) => ({ ...user, isCreator: user.id === quizzes[i].userRef }))
+  const creatorInfo = result.map(
+    ({ userRef }) => users.find((user) => user.id === userRef)!
+  )
 
-  return { quizzes, creatorInfo }
+  const isCreator = users.map((user, i) => user.id === quizzes[i].userRef)
+
+  return { quizzes, creatorInfo, isCreator }
 }
 
 const saveQuiz: FastifyHandler<{
@@ -264,6 +274,19 @@ const saveQuiz: FastifyHandler<{
   if (userId !== quiz.userRef) {
     return res.code(403).send({ message: "You are not the creator" })
   }
+
+  const cover = await uploadString(
+    ref(storage, `quizzes/${quiz.id}/cover.jpg`),
+    quiz.cover,
+    "base64"
+  )
+  console.log(cover)
+  // const pictures = quiz.questions.map((_, i) =>
+  //   ref(storage, `quizzes/${quiz.id}/pictures/${i}.jpg`)
+  // )
+  // const backgrounds = quiz.questions.map((_, i) =>
+  //   ref(storage, `quizzes/${quiz.id}/backgrounds/${i}.jpg`)
+  // )
 
   await draftQuizRepository.update({ id: quiz.id }, quiz)
 

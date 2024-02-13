@@ -1,31 +1,20 @@
-import {
-  GetQuizType,
-  emptyQuestion,
-  DraftQuizType,
-  defaultQuiz,
-} from "@quizzy/common"
+import { emptyQuestion, DraftQuizType, defaultQuiz } from "@quizzy/common"
 import { QuizAction } from "./actions"
 
 export interface QuizState {
   data: DraftQuizType
   activeQuestion: number
-  isCreator: boolean
-  isFavorite: boolean
   isSaving: boolean
   isPublished: boolean
   isTouched: boolean
-  creatorInfo: GetQuizType["creatorInfo"]
 }
 
 const initialState: QuizState = {
   data: defaultQuiz("", -1),
   activeQuestion: 0,
-  isCreator: false,
-  isFavorite: false,
   isSaving: false,
   isPublished: false,
   isTouched: false,
-  creatorInfo: { username: "" },
 }
 
 export const quizReducer = (
@@ -35,14 +24,8 @@ export const quizReducer = (
   switch (action.type) {
     case "SET_IS_SAVING":
       return { ...state, isSaving: action.payload }
-    case "SET_IS_CREATOR":
-      return { ...state, isCreator: action.payload }
-    case "SET_IS_FAVORITE":
-      return { ...state, isFavorite: action.payload }
     case "SET_IS_PUBLISHED":
       return { ...state, isPublished: action.payload }
-    case "SET_CREATOR_INFO":
-      return { ...state, creatorInfo: action.payload }
     case "SET_QUIZ":
       return {
         ...state,

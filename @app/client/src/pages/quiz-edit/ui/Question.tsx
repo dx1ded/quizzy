@@ -1,7 +1,6 @@
 import { useSelector } from "react-redux"
 import { useFormContext, useWatch } from "react-hook-form"
 import { DraftQuizType } from "@quizzy/common"
-import QuizBackground from "assets/quiz-background.png"
 import {
   ChangeQuestionBackground,
   ChangeQuestionPicture,
@@ -24,7 +23,7 @@ export function Question() {
       <img
         alt="Quiz"
         className="absolute left-0 top-0 -z-10 h-full w-full object-cover"
-        src={question.background || QuizBackground}
+        src={question.background}
       />
       <ChangeQuestionBackground />
       <div className="flex h-full flex-col items-center justify-between px-5 py-10">

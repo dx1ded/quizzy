@@ -3,7 +3,6 @@ import { Container } from "shared/ui/Container"
 import { Heading, Text } from "shared/ui/Typography"
 import { Logo } from "shared/ui/Logo"
 import { Button } from "shared/ui/Button"
-import gif from "assets/woman-looking-for-people.gif"
 
 export function Hero() {
   return (
@@ -23,7 +22,11 @@ export function Hero() {
           </Button>
         </div>
         <div>
-          <img alt="Woman looking for people" className="max-w-2xl" src={gif} />
+          <img
+            alt="Woman looking for people"
+            className="max-w-2xl"
+            src="https://firebasestorage.googleapis.com/v0/b/quizzy-222b7.appspot.com/o/woman-looking-for-people.gif?alt=media"
+          />
         </div>
       </Container>
     </section>

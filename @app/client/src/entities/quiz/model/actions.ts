@@ -1,11 +1,8 @@
-import { GetQuizType, DraftQuizType } from "@quizzy/common"
+import { DraftQuizType } from "@quizzy/common"
 
 export type QuizAction =
   | { type: "SET_IS_SAVING"; payload: boolean }
-  | { type: "SET_IS_CREATOR"; payload: boolean }
-  | { type: "SET_IS_FAVORITE"; payload: boolean }
   | { type: "SET_IS_PUBLISHED"; payload: boolean }
-  | { type: "SET_CREATOR_INFO"; payload: GetQuizType["creatorInfo"] }
   | { type: "SET_QUIZ"; payload: { quiz: DraftQuizType; isTouched: boolean } }
   | { type: "RESET_QUIZ" }
   | { type: "ADD_QUESTION" }
@@ -20,22 +17,8 @@ export function setIsSaving(value: boolean): QuizAction {
   return { type: "SET_IS_SAVING", payload: value }
 }
 
-export function setIsCreator(value: boolean): QuizAction {
-  return { type: "SET_IS_CREATOR", payload: value }
-}
-
-export function setIsFavorite(value: boolean): QuizAction {
-  return { type: "SET_IS_FAVORITE", payload: value }
-}
-
 export function setIsPublished(value: boolean): QuizAction {
   return { type: "SET_IS_PUBLISHED", payload: value }
-}
-
-export function setCreatorInfo(
-  creator: GetQuizType["creatorInfo"]
-): QuizAction {
-  return { type: "SET_CREATOR_INFO", payload: creator }
 }
 
 export function setQuiz(quiz: DraftQuizType, isTouched?: boolean): QuizAction {

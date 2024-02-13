@@ -1,13 +1,12 @@
-import { useSelector } from "react-redux"
+import { useContext } from "react"
 import Skeleton from "react-loading-skeleton"
-import { QuizState } from "entities/quiz"
+import { QuizInfoContext } from "entities/quiz"
 import { Box } from "shared/ui/Box"
 import { Subheading } from "shared/ui/Typography"
-import type { AppStore } from "app/model"
 import { Question } from "./Question"
 
-export function Questions({ isLoading }: { isLoading: boolean }) {
-  const { data } = useSelector<AppStore, QuizState>((state) => state.quiz)
+export function Questions() {
+  const { quiz, isLoading } = useContext(QuizInfoContext)
 
   return (
     <Box className="h-full flex-1">
@@ -16,7 +15,7 @@ export function Questions({ isLoading }: { isLoading: boolean }) {
         {isLoading ? (
           <Skeleton containerClassName="mx-1" width={30} />
         ) : (
-          <span className="text-secondary">{data.questions.length}</span>
+          <span className="text-secondary">{quiz.questions.length}</span>
         )}
         )
       </Subheading>
@@ -31,7 +30,7 @@ export function Questions({ isLoading }: { isLoading: boolean }) {
             <Skeleton height={50} />
           </>
         ) : (
-          data.questions.map((question, i) => (
+          quiz.questions.map((question, i) => (
             <Question
               key={i}
               cover={question.background}

@@ -1,4 +1,3 @@
-import QuizBackground from "assets/quiz-background.png"
 import { Caption } from "shared/ui/Typography"
 
 interface QuestionProps {
@@ -16,11 +15,7 @@ export function Question({ n, name, cover, time }: QuestionProps) {
         <Caption>{name}</Caption>
       </div>
       <div className="relative basis-36 rounded-r">
-        <img
-          alt="Quiz classroom"
-          className="h-16 w-full"
-          src={cover || QuizBackground}
-        />
+        <img alt="Quiz classroom" className="h-16 w-full" src={cover} />
         <p className="absolute bottom-1.5 right-1.5 rounded-xl bg-secondary px-2 py-1 text-[0.725rem] font-bold text-white">
           {time} sec
         </p>

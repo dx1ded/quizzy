@@ -1,21 +1,17 @@
-import { useDispatch, useSelector } from "react-redux"
+import { useContext } from "react"
 import { useSecuredRequest } from "entities/account"
-import { QuizState, setIsFavorite } from "entities/quiz"
+import { QuizInfoContext } from "entities/quiz"
 import { Star } from "shared/icons/Star"
-import type { AppStore } from "app/model"
 
 export function SetFavoriteQuiz() {
   const request = useSecuredRequest()
-  const dispatch = useDispatch()
-  const { isFavorite, data } = useSelector<AppStore, QuizState>(
-    (state) => state.quiz
-  )
+  const { quiz, isFavorite, setIsFavorite } = useContext(QuizInfoContext)
 
   const clickHandler = () => {
     request("/api/quiz/set-favorite", {
       method: "PATCH",
-      body: { id: data.id, favorite: !isFavorite },
-    }).then(() => dispatch(setIsFavorite(!isFavorite)))
+      body: { id: quiz.id, favorite: !isFavorite },
+    }).then(() => setIsFavorite(!isFavorite))
   }
 
   return (

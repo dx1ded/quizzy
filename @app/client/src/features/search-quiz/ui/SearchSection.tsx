@@ -63,13 +63,12 @@ export function SearchSection() {
       {data?.pages && (
         <>
           <div className="mx-auto mt-16 grid max-w-3xl gap-3">
-            {data?.pages.map((page) =>
+            {data?.pages.map((page, i) =>
               page.quizzes.map((quiz) => (
                 <QuizItem
                   key={quiz.id}
-                  creatorInfo={
-                    page.creatorInfo.find((i) => i.id === quiz.userRef)!
-                  }
+                  creatorInfo={page.creatorInfo[i]}
+                  isCreator={page.isCreator[i]}
                   quiz={quiz}
                   noEdit
                 />

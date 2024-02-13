@@ -7,7 +7,6 @@ import { changeCover, QuizState } from "entities/quiz"
 import { Cross } from "shared/icons/Cross"
 import { Edit } from "shared/icons/Edit"
 import { Input } from "shared/ui/Input"
-import { QuizzyImage } from "shared/ui/QuizzyImage"
 import type { AppStore } from "app/model"
 import { EditContext } from "../model"
 import { convertToBase64 } from "../lib"
@@ -45,20 +44,11 @@ export function SettingsModal() {
       onClose={() => setModalOpen(false)}>
       <div className="w-96 rounded bg-white shadow">
         <div className="relative">
-          {data.cover ? (
-            <img
-              alt="Quiz"
-              className="h-[7rem] w-full rounded-t object-cover"
-              src={data.cover}
-            />
-          ) : (
-            <QuizzyImage
-              className="rounded-t"
-              height="7rem"
-              size={1.5}
-              width="100%"
-            />
-          )}
+          <img
+            alt="Quiz"
+            className="mb-3 h-[7.25rem] w-full rounded-t-md object-cover"
+            src={data.cover}
+          />
           <label className="absolute right-2 top-2 flex h-6 w-6 cursor-pointer items-center justify-center rounded bg-white shadow">
             <input
               accept=".png,.jpg,.jpeg"
