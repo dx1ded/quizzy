@@ -7,11 +7,9 @@ export function convertToBase64(file: File): Promise<string> {
       if (!reader.result) {
         return reject(new Error("Couldn't convert"))
       }
-      const base64String = (reader.result as string)
-        .replace("data:", "")
-        .replace(/^.+,/, "")
+      const dataUrl = reader.result as string
 
-      resolve(base64String)
+      resolve(dataUrl)
     }
   })
 }

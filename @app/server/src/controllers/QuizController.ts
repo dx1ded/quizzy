@@ -13,7 +13,7 @@ import _ from "lodash"
 import { nanoid } from "nanoid"
 import { In, Raw } from "typeorm"
 import { z } from "zod"
-import { ref, uploadString } from "firebase/storage"
+import { ref, uploadString, getDownloadURL } from "firebase/storage"
 import {
   draftQuizRepository,
   publishedQuizRepository,
@@ -27,7 +27,8 @@ import {
   SetFavoriteQuizSchema,
 } from "../schemas/quiz.schema"
 import { FastifyHandler, WithUserId } from "../types"
-import { storage } from "../admin"
+import { storage } from "../firebase"
+import { isDataUrl } from "../utils"
 
 const createNewQuiz: FastifyHandler<{
   Body: WithUserId
@@ -268,6 +269,7 @@ const searchFavoriteQuiz: FastifyHandler<{
 
 const saveQuiz: FastifyHandler<{
   Body: WithUserId<{ quiz: DraftQuizType }>
+  Reply: DraftQuizType
 }> = async (req, res) => {
   const { userId, quiz } = req.body
 
@@ -275,22 +277,86 @@ const saveQuiz: FastifyHandler<{
     return res.code(403).send({ message: "You are not the creator" })
   }
 
-  const cover = await uploadString(
-    ref(storage, `quizzes/${quiz.id}/cover.jpg`),
-    quiz.cover,
-    "base64"
-  )
-  console.log(cover)
-  // const pictures = quiz.questions.map((_, i) =>
-  //   ref(storage, `quizzes/${quiz.id}/pictures/${i}.jpg`)
-  // )
-  // const backgrounds = quiz.questions.map((_, i) =>
-  //   ref(storage, `quizzes/${quiz.id}/backgrounds/${i}.jpg`)
-  // )
+  const coverRef = isDataUrl(quiz.cover)
+    ? ref(storage, `quizzes/${quiz.id}/cover.jpeg`)
+    : undefined
 
-  await draftQuizRepository.update({ id: quiz.id }, quiz)
+  const backgroundRefs = quiz.questions.reduce<
+    {
+      ref: ReturnType<typeof ref>
+      i: number
+    }[]
+  >((acc, question, i) => {
+    if (isDataUrl(question.background)) {
+      acc.push({
+        ref: ref(storage, `quizzes/${quiz.id}/background/${i}.jpeg`),
+        i,
+      })
+    }
 
-  return { message: "Success" }
+    return acc
+  }, [])
+
+  const pictureRefs = quiz.questions.reduce<
+    {
+      ref: ReturnType<typeof ref>
+      i: number
+    }[]
+  >((acc, question, i) => {
+    if (isDataUrl(question.picture)) {
+      acc.push({
+        ref: ref(storage, `quizzes/${quiz.id}/picture/${i}.jpeg`),
+        i,
+      })
+    }
+
+    return acc
+  }, [])
+
+  if (coverRef) {
+    await uploadString(coverRef, quiz.cover, "data_url", {
+      contentType: "image/jpeg",
+    })
+  }
+  if (backgroundRefs.length) {
+    await Promise.all(
+      backgroundRefs.map((item) =>
+        uploadString(item.ref, quiz.questions[item.i].background, "data_url", {
+          contentType: "image/jpeg",
+        })
+      )
+    )
+  }
+  if (pictureRefs.length) {
+    await Promise.all(
+      pictureRefs.map((item) =>
+        uploadString(item.ref, quiz.questions[item.i].picture, "data_url", {
+          contentType: "image/jpeg",
+        })
+      )
+    )
+  }
+
+  const savedQuiz = {
+    ...quiz,
+    cover: coverRef ? await getDownloadURL(coverRef) : quiz.cover,
+    questions: await Promise.all(
+      quiz.questions.map(async (question, i) => {
+        const bg = backgroundRefs.find((item) => item.i === i)
+        const pic = pictureRefs.find((item) => item.i === i)
+
+        return {
+          ...question,
+          background: bg ? await getDownloadURL(bg.ref) : question.background,
+          picture: pic ? await getDownloadURL(pic.ref) : question.picture,
+        }
+      })
+    ),
+  }
+
+  await draftQuizRepository.update({ id: quiz.id }, savedQuiz)
+
+  return savedQuiz
 }
 
 const publishQuiz: FastifyHandler<{

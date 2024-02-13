@@ -28,6 +28,7 @@ const initialState: QuizInfoContextType = {
   },
   creatorInfo: {
     username: "",
+    picture: "",
   },
   isCreator: false,
   isFavorite: false,

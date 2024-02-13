@@ -96,10 +96,13 @@ export function QuizEdit() {
 
   const debouncedSave = useDebouncedCallback(() => {
     dispatch(setIsSaving(true))
-    request("/api/quiz/save", {
+    request<DraftQuizType>("/api/quiz/save", {
       method: "PATCH",
       body: { quiz: data },
-    }).then(() => dispatch(setIsSaving(false)))
+    }).then((quiz) => {
+      dispatch(setIsSaving(false))
+      dispatch(setQuiz(quiz))
+    })
   }, 1500)
 
   const debouncedSubmit = useDebouncedCallback(() => {

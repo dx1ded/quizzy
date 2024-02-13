@@ -10,7 +10,7 @@ import { RecordRoute } from "./routes/RecordRoute"
 
 const server = fastify({
   // 200mb
-  bodyLimit: 209715200,
+  bodyLimit: 2097152000,
 })
 
 server.setValidatorCompiler(validatorCompiler)
