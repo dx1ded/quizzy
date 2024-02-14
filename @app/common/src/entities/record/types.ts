@@ -1,11 +1,16 @@
+export type RecordResult = {
+  id?: number
+  nickname: string
+  points: number
+}
+
 export type RecordType = {
   id: string
   quizId: string
   quizName: string
   userRef: number
-  points: number
   date: number
-  playersIds: number[]
+  result: RecordResult[]
 }
 
 export type GetRecordsType = {

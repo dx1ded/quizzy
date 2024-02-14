@@ -1,5 +1,5 @@
 import { Entity, Column, PrimaryColumn } from "typeorm"
-import { RecordType } from "@quizzy/common"
+import { RecordResult, RecordType } from "@quizzy/common"
 
 @Entity({ name: "records" })
 export class Record implements RecordType {
@@ -18,12 +18,9 @@ export class Record implements RecordType {
   @Column("int")
   userRef!: number
 
-  @Column("int")
-  points!: number
-
   @Column("int8")
   date!: number
 
-  @Column("int", { array: true })
-  playersIds!: number[]
+  @Column("jsonb", { array: true })
+  result!: RecordResult[]
 }

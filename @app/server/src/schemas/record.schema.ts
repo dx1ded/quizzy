@@ -2,11 +2,9 @@ import { z } from "zod"
 import { AuthToken, RecordSchema } from "@quizzy/common"
 import { PageSchema } from "./quiz.schema"
 
-export const RecordWithAuthTokenSchema = z
-  .object({
-    record: RecordSchema,
-  })
-  .and(AuthToken)
+export const RecordBodySchema = z.object({
+  record: RecordSchema,
+})
 
 export const RecordIdWithAuthTokenSchema = z
   .object({

@@ -1,13 +1,13 @@
 import { nanoid } from "nanoid"
 import { In, Raw } from "typeorm"
 import { z } from "zod"
-import { GetRecordsType } from "@quizzy/common"
+import { GetRecordsType, RecordType } from "@quizzy/common"
 import { recordRepository, userRepository } from "../database"
 import { PageSchema } from "../schemas/quiz.schema"
 import {
+  RecordBodySchema,
   RecordIdsWithAuthTokenSchema,
   RecordIdWithAuthTokenSchema,
-  RecordWithAuthTokenSchema,
   SearchRecordParamsSchema,
 } from "../schemas/record.schema"
 import { FastifyHandler, WithUserId } from "../types"
@@ -30,7 +30,7 @@ const listReport: FastifyHandler<{
     where: [
       { userRef: userId },
       {
-        playersIds: Raw((columnAlias) => `:userId = ANY(${columnAlias})`, {
+        result: Raw((columnAlias) => `:userId = ${columnAlias}->>'id'`, {
           userId,
         }),
       },
@@ -79,7 +79,7 @@ const searchReport: FastifyHandler<{
         quizName: Raw(
           (alias) => `LOWER(${alias}) Like '${quizName.toLowerCase()}%'`
         ),
-        playersIds: Raw((columnAlias) => `:userId = ANY(${columnAlias})`, {
+        result: Raw((columnAlias) => `:userId = ${columnAlias}->>'id'`, {
           userId,
         }),
       },
@@ -103,19 +103,19 @@ const searchReport: FastifyHandler<{
 }
 
 const createReport: FastifyHandler<{
-  Body: WithUserId<z.infer<typeof RecordWithAuthTokenSchema>>
+  Body: z.infer<typeof RecordBodySchema>
+  Reply: RecordType
 }> = async (req) => {
-  const { record, userId } = req.body
+  const { record } = req.body
 
   const newRecord = {
     id: nanoid(5),
     ...record,
-    userRef: userId,
   }
 
   await recordRepository.save(newRecord)
 
-  return { message: "Success" }
+  return newRecord
 }
 
 const deleteReport: FastifyHandler<{

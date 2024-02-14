@@ -1,3 +1,4 @@
+import { SocketStream } from "@fastify/websocket"
 import {
   FastifyReply,
   FastifyRequest,
@@ -6,7 +7,7 @@ import {
   RawServerDefault,
   RouteGenericInterface,
 } from "fastify"
-import { AuthTokenType } from "@quizzy/common"
+import { AnswerType, AuthTokenType, JoinType } from "@quizzy/common"
 
 export type FastifyHandler<
   RequestInterface extends Partial<RouteGenericInterface>,
@@ -26,4 +27,21 @@ export type FastifyHandler<
   | void
   | Promise<RequestInterface["Reply"] | void>
 
+export type FastifyWebsocketHandler<
+  RequestInterface extends Partial<RouteGenericInterface>,
+> = (
+  connection: SocketStream,
+  req: FastifyRequest<{
+    Body: RequestInterface["Body"]
+    Querystring: RequestInterface["Querystring"]
+    Params: RequestInterface["Params"]
+  }>
+) => void
+
 export type WithUserId<T = unknown> = T & AuthTokenType & { userId: number }
+
+export type PlaySessionMessage =
+  | { type: "start" }
+  | { type: "join"; body: JoinType }
+  | { type: "answer"; body: AnswerType }
+  | { type: "leave"; body: string }

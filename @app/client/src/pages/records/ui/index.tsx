@@ -138,7 +138,7 @@ export function Records() {
                       date={record.date}
                       id={record.id}
                       isCreator={page.isCreator[i]}
-                      numberOfPlayers={record.playersIds.length}
+                      numberOfPlayers={record.result.length}
                       quizName={record.quizName}
                       refetch={refetch}
                       selected={selected}

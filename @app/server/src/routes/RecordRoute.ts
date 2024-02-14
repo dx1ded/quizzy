@@ -5,9 +5,9 @@ import { RecordController } from "../controllers/RecordController"
 import { validateToken } from "../middleware/validateToken"
 import { PageSchema } from "../schemas/quiz.schema"
 import {
+  RecordBodySchema,
   RecordIdsWithAuthTokenSchema,
   RecordIdWithAuthTokenSchema,
-  RecordWithAuthTokenSchema,
   SearchRecordParamsSchema,
 } from "../schemas/record.schema"
 
@@ -39,9 +39,8 @@ export const RecordRoute = async (f: FastifyInstance) => {
   f.withTypeProvider<ZodTypeProvider>().put(
     "/create",
     {
-      preHandler: [validateToken],
       schema: {
-        body: RecordWithAuthTokenSchema,
+        body: RecordBodySchema,
       },
     },
     RecordController.createReport

@@ -62,7 +62,9 @@ module.exports = {
     "@typescript-eslint/naming-convention": "off",
     "@typescript-eslint/default-param-last": "off",
     "@typescript-eslint/no-throw-literal": "off",
-    "no-param-reassign": "off"
+    "no-param-reassign": "off",
+    "@typescript-eslint/lines-between-class-members": "off",
+    "no-new": "off"
   },
   settings: {
     "import/resolver": {
