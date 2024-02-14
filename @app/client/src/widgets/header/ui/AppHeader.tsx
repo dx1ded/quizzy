@@ -5,6 +5,7 @@ import { NavLink } from "react-router-dom"
 import { logout } from "entities/account"
 import { HeaderSearch } from "features/search-quiz"
 import { CreateQuiz } from "features/create-quiz"
+import { Logout } from "shared/icons/Logout"
 import { Container } from "shared/ui/Container"
 import { Logo } from "shared/ui/Logo"
 import { Person } from "shared/icons/Person"
@@ -37,7 +38,10 @@ export function AppHeader() {
               open={menuOpen}
               onClose={() => setMenuOpen(false)}>
               <MenuItem onClick={() => dispatch(logout())}>
-                <span className="text-sm text-red-600">Sign out</span>
+                <div className="flex items-center gap-2">
+                  <Logout color="#FF0000" width={0.8} />
+                  <span className="text-sm text-red-600">Sign out</span>
+                </div>
               </MenuItem>
             </Menu>
           </li>

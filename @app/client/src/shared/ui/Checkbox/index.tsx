@@ -11,12 +11,16 @@ interface CheckboxProps extends ComponentPropsWithoutRef<"input"> {
    * Checked state which determines if a checkbox is selected
    */
   checked?: boolean
+  /**
+   * Span classname
+   */
+  checkboxClassName?: string
 }
 
 export const Checkbox = forwardRef<
   HTMLInputElement,
   PropsWithChildren<CheckboxProps>
->(function Checkbox({ children, className, ...attrs }, ref) {
+>(function Checkbox({ children, className, checkboxClassName, ...attrs }, ref) {
   const id = uuidv4()
   const labelClassName = `inline-flex items-center gap-1.5 ${className || ""}`
 
@@ -29,8 +33,11 @@ export const Checkbox = forwardRef<
         type="checkbox"
         {...attrs}
       />
-      <span className="h-4 w-4 cursor-pointer rounded border border-secondary bg-white text-white peer-checked:bg-secondary">
-        <Tick className="text-current" />
+      <span
+        className={`h-4 w-4 cursor-pointer rounded border border-secondary bg-white text-white peer-checked:border-secondary peer-checked:bg-secondary ${
+          checkboxClassName || ""
+        }`}>
+        <Tick />
       </span>
       {children}
     </label>

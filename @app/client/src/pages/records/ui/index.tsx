@@ -111,6 +111,7 @@ export function Records() {
             <div className="grid grid-cols-reports-table items-center gap-4 rounded-t bg-primary px-3 py-3.5 text-white">
               <div>
                 <Checkbox
+                  checkboxClassName="border-white"
                   checked={selected.checked}
                   className="align-middle"
                   name="report-checkbox"
@@ -129,7 +130,7 @@ export function Records() {
                   <Skeleton height="3rem" />
                   <Skeleton height="3rem" />
                 </>
-              ) : data?.pages ? (
+              ) : data?.pages[0].records.length ? (
                 data?.pages.map((page) =>
                   page.records.map((record, i) => (
                     <Record

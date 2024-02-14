@@ -25,7 +25,7 @@ export function Library() {
     { name: "Favorites", isActive: false, url: "/api/quiz/search/favorite" },
   ])
 
-  const { data, fetchNextPage, hasNextPage, isLoading, isError, refetch } =
+  const { data, fetchNextPage, hasNextPage, isLoading, refetch } =
     useInfiniteQuery({
       queryKey: ["libraryQuizzes", options],
       queryFn: ({ pageParam = 1 }) => {
@@ -125,7 +125,7 @@ export function Library() {
                 <Skeleton height="5rem" />
                 <Skeleton height="5rem" />
               </>
-            ) : data?.pages && !isError ? (
+            ) : data?.pages[0].quizzes.length ? (
               data?.pages.map((page) =>
                 page.quizzes.map((quiz, i) => (
                   <QuizItem
