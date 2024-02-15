@@ -1,6 +1,6 @@
 import { z } from "zod"
 
 export const PlaySessionQuerySchema = z.object({
-  sessionToken: z.number(),
+  sessionToken: z.string(),
   playerToken: z.string().optional(),
 })

@@ -35,19 +35,27 @@ export type AnswerType = {
 }
 
 export interface IGameState {
-  token: number
+  token: string
   creatorId: number
   quizId: string
   quizName: string
   /**
+   * Settings - Creator chooses his avatar (in this stage players cannot join)
    * Menu - Lobby (waiting menu)
    * Start - "Get ready" message at the start
    * Question - Question asked
    * Answer - Answers list (user has to answer in this stage)
    * Result - Question result
-   * End - Podium / scoreboard
+   * EndStage - Podium / scoreboard
    */
-  stage: "menu" | "start" | "question" | "answer" | "result" | "end"
+  stage:
+    | "settings"
+    | "menu"
+    | "start"
+    | "question"
+    | "answer"
+    | "result"
+    | "end"
   players: PlayerType[]
   activeQuestion: number
   questions: QuestionType[]

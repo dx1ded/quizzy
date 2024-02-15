@@ -18,7 +18,7 @@ export const createPlaySession: FastifyHandler<{
   Reply: SessionToken
 }> = async (req, res) => {
   const { userId, id } = req.body
-  const token = +nanoid()
+  const token = nanoid()
 
   const quiz = await publishedQuizRepository.findOne({ where: { id } })
 

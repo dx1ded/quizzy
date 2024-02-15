@@ -6,6 +6,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { Main } from "pages/main"
 import { Auth } from "pages/auth"
 import { Play } from "pages/play"
+import { Join } from "pages/join"
 import { Home } from "pages/home"
 import { Discover } from "pages/discover"
 import { QuizInfo } from "pages/quiz-info"
@@ -27,6 +28,7 @@ export function App() {
             {/* Public Routes */}
             <Route element={<PublicRoutes />}>
               <Route element={<Main />} path="/" />
+              <Route element={<Join />} path="/join" />
               <Route element={<Play />} path="/play" />
               <Route element={<Auth />} path="/auth" />
             </Route>
