@@ -1,5 +1,5 @@
 import { QuizId, SessionToken } from "@quizzy/common"
-import { nanoid } from "nanoid"
+import { customAlphabet } from "nanoid"
 import { z } from "zod"
 import { publishedQuizRepository } from "../database"
 import { PlaySessionQuerySchema } from "../schemas/play.schema"
@@ -11,12 +11,14 @@ import {
   WithUserId,
 } from "../types"
 
+const nanoid = customAlphabet("123456789", 7)
+
 export const createPlaySession: FastifyHandler<{
   Body: WithUserId<QuizId>
   Reply: SessionToken
 }> = async (req, res) => {
   const { userId, id } = req.body
-  const token = nanoid(8)
+  const token = +nanoid()
 
   const quiz = await publishedQuizRepository.findOne({ where: { id } })
 

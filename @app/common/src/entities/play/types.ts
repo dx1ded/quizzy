@@ -1,8 +1,27 @@
 import { QuestionType } from "../quiz"
 
+export type AvatarType =
+  | "monkey"
+  | "squirrel"
+  | "racoon"
+  | "hamster"
+  | "fox"
+  | "bunny"
+  | "wolf"
+  | "pig"
+  | "elk"
+  | "bear"
+  | "cat"
+  | "panda"
+  | "zebra"
+  | "donkey"
+  | "elephant"
+  | "rabbit"
+
 export type JoinType = {
   id?: number
   nickname: string
+  avatar: AvatarType
 }
 
 export type PlayerType = JoinType & {
@@ -16,7 +35,7 @@ export type AnswerType = {
 }
 
 export interface IGameState {
-  token: string
+  token: number
   creatorId: number
   quizId: string
   quizName: string
