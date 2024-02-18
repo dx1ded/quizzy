@@ -8,9 +8,10 @@ import {
   CredentialsSchema,
   UsernameSchema,
   FieldAvailability,
+  GetAccountInfo,
 } from "@quizzy/common"
 import { userRepository } from "../database"
-import { FastifyHandler } from "../types"
+import { FastifyHandler, WithUserId } from "../types"
 import { emailRegexp } from "../utils"
 
 const signIn: FastifyHandler<{
@@ -131,10 +132,29 @@ const checkTokenValidity: FastifyHandler<{
   return { message: "Success" }
 }
 
+const getAccountInfo: FastifyHandler<{
+  Body: WithUserId
+  Reply: GetAccountInfo
+}> = async (req, res) => {
+  const { userId } = req.body
+
+  const user = await userRepository.findOne({
+    where: { id: userId },
+    select: ["username"],
+  })
+
+  if (!user) {
+    return res.code(404).send("User not found")
+  }
+
+  return { id: userId, username: user.username }
+}
+
 export const AuthController = {
   signIn,
   signUp,
   checkEmailAvailability,
   checkUsernameAvailability,
   checkTokenValidity,
+  getAccountInfo,
 }

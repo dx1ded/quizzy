@@ -1,21 +1,11 @@
 import { Modal } from "@mui/material"
 import { AvatarType } from "@quizzy/common"
-import { Dispatch, SetStateAction, useState } from "react"
+import { Dispatch, SetStateAction, useContext, useState } from "react"
 import { Edit } from "shared/icons/Edit"
 import { Avatar } from "shared/ui/Avatar"
 import { Button } from "shared/ui/Button"
 import { Subheading, Text } from "shared/ui/Typography"
-
-interface ChooseAvatarProps {
-  token: string
-  nickname: string
-  avatar: AvatarType
-  /**
-   * If true then there's a "Start" button meaning the game hasn't started yet and creator is
-   * choosing their avatar
-   */
-  isSettings?: boolean
-}
+import { PlayContext } from "../../model"
 
 interface ChooseAvatarModalProps {
   currentAvatar: AvatarType
@@ -43,16 +33,23 @@ const avatarsList: AvatarType[] = [
 ]
 
 function ChooseAvatarModal({
-  currentAvatar,
   open,
   setOpen,
+  currentAvatar,
 }: ChooseAvatarModalProps) {
+  const { sendJsonMessage, playerToken } = useContext(PlayContext)
   const [avatar, setAvatar] = useState(currentAvatar)
 
   const clickHandler = () => {
     if (currentAvatar === avatar) return setOpen(false)
 
-    console.log(avatar)
+    sendJsonMessage({
+      type: "change_avatar",
+      body: {
+        playerToken,
+        avatar,
+      },
+    })
 
     setOpen(false)
   }
@@ -101,18 +98,22 @@ function ChooseAvatarModal({
   )
 }
 
-export function ChooseAvatar({
-  token,
-  nickname,
-  avatar,
-  isSettings = false,
-}: ChooseAvatarProps) {
+export function ChooseAvatar() {
+  const { state, playerToken, sendJsonMessage } = useContext(PlayContext)
   const [modalOpen, setModalOpen] = useState(false)
+
+  const player = state.players.find((player) => player.token === playerToken)!
+
+  const setMenu = () => {
+    sendJsonMessage({
+      type: "menu",
+    })
+  }
 
   return (
     <div className="absolute flex h-full w-full flex-col items-center justify-center">
       <ChooseAvatarModal
-        currentAvatar={avatar}
+        currentAvatar={player.avatar}
         open={modalOpen}
         setOpen={setModalOpen}
       />
@@ -126,7 +127,7 @@ export function ChooseAvatar({
           <Avatar
             className="mx-auto"
             height="12.5rem"
-            name={avatar}
+            name={player.avatar}
             width="12.5rem"
           />
           <button
@@ -137,9 +138,9 @@ export function ChooseAvatar({
             <Edit width={1.25} />
           </button>
         </div>
-        <Subheading className="text-white">{nickname}</Subheading>
-        {isSettings ? (
-          <Button className="mt-3 px-7" variant="secondary">
+        <Subheading className="text-white">{player.nickname}</Subheading>
+        {state.stage === "settings" ? (
+          <Button className="mt-3 px-7" variant="secondary" onClick={setMenu}>
             Next
           </Button>
         ) : (

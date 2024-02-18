@@ -1,10 +1,28 @@
+import { useContext } from "react"
+import { useNavigate } from "react-router-dom"
 import { ExitToApp } from "shared/icons/ExitToApp"
 import { Avatar } from "shared/ui/Avatar"
 import { Button } from "shared/ui/Button"
 import { Logo } from "shared/ui/Logo"
 import { Heading, Text } from "shared/ui/Typography"
+import { PlayContext } from "../../model"
 
 export function EndStage() {
+  const navigate = useNavigate()
+  const { state, playerToken, sendJsonMessage } = useContext(PlayContext)
+  const topPlayers = state.players.sort(
+    (playerA, playerB) => playerA.points - playerB.points
+  )
+
+  const leave = () => {
+    sendJsonMessage({
+      type: "leave",
+      body: playerToken,
+    })
+
+    navigate("/app")
+  }
+
   return (
     <div className="absolute flex h-full w-full">
       <div className="flex flex-1 flex-col items-center self-end">
@@ -15,12 +33,13 @@ export function EndStage() {
         />
         <button
           className="absolute left-5 top-5 rounded-lg bg-secondary p-2 shadow"
-          type="button">
+          type="button"
+          onClick={leave}>
           <ExitToApp color="#fff" width={1.5} />
         </button>
         <Logo className="mb-4" color="#fff" size={3.5} />
         <div className="mb-10 bg-white px-14 py-2.5 shadow-2xl">
-          <Heading>Quiz Name</Heading>
+          <Heading>{state.quizName}</Heading>
         </div>
         <div className="flex h-[28rem] items-end">
           <div className="h-[65%] w-44 rounded-t-xl bg-primary py-6 shadow-2xl">
@@ -44,9 +63,11 @@ export function EndStage() {
               </h2>
             </div>
             <Text className="text-center !font-semibold text-white">
-              @nickname
+              @{topPlayers[1].nickname}
             </Text>
-            <p className="text-center font-bold text-white">40</p>
+            <p className="text-center font-bold text-white">
+              {topPlayers[1].points}
+            </p>
           </div>
           <div className="h-full w-44">
             <Avatar
@@ -76,9 +97,11 @@ export function EndStage() {
                 </h2>
               </div>
               <Text className="text-center !font-semibold text-white">
-                @nickname
+                @{topPlayers[0].nickname}
               </Text>
-              <p className="text-center font-bold text-white">40</p>
+              <p className="text-center font-bold text-white">
+                {topPlayers[0].points}
+              </p>
             </div>
           </div>
           <div className="h-[55%] w-44 rounded-t-xl bg-primary py-6 shadow-2xl">
@@ -102,9 +125,11 @@ export function EndStage() {
               </h2>
             </div>
             <Text className="text-center !font-semibold text-white">
-              @nickname
+              @{topPlayers[2].nickname}
             </Text>
-            <p className="text-center font-bold text-white">40</p>
+            <p className="text-center font-bold text-white">
+              {topPlayers[2].points}
+            </p>
           </div>
         </div>
       </div>

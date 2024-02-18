@@ -1,15 +1,13 @@
-import { PlayerType } from "@quizzy/common"
+import { useContext } from "react"
 import { Avatar } from "shared/ui/Avatar"
 import { Button } from "shared/ui/Button"
 import { Logo } from "shared/ui/Logo"
 import { Subheading, Text } from "shared/ui/Typography"
+import { PlayContext } from "../../model"
 
-interface PlayersListProps {
-  pin: string
-  players: PlayerType[]
-}
+export function PlayersList() {
+  const { state } = useContext(PlayContext)
 
-export function PlayersList({ pin, players }: PlayersListProps) {
   return (
     <div className="absolute flex h-full w-full flex-col items-center pt-16">
       <img
@@ -42,13 +40,15 @@ export function PlayersList({ pin, players }: PlayersListProps) {
           <div>
             <Subheading className="mb-3.5">Game PIN:</Subheading>
             <h1 className="text-5xl font-extrabold">
-              {`${pin.substring(0, 3)} ${pin.substring(3)}`}
+              {`${state.sessionId.substring(0, 3)} ${state.sessionId.substring(
+                3
+              )}`}
             </h1>
           </div>
         </div>
         <Logo className="mb-9 text-center" color="#fff" size={4.75} />
         <div className="grid justify-center gap-5">
-          {players.map((player) => (
+          {state.players.map((player) => (
             <div
               key={player.token}
               className="flex w-80 items-center gap-4 rounded bg-white px-5 py-3.5 shadow-lg">

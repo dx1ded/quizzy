@@ -1,13 +1,12 @@
-import { QuestionType } from "@quizzy/common"
+import { useContext } from "react"
 import { QuestionIcon } from "shared/icons/QuestionIcon"
+import { PlayContext } from "../../model"
 import { ProgressBar } from "../ProgressBar"
 
-interface QuestionStageProps {
-  question: QuestionType
-  progressBar: number
-}
+export function QuestionStage() {
+  const { state } = useContext(PlayContext)
+  const question = state.questions[state.activeQuestion]
 
-export function QuestionStage({ question, progressBar }: QuestionStageProps) {
   return (
     <div className="absolute h-full w-full">
       <img
@@ -30,7 +29,7 @@ export function QuestionStage({ question, progressBar }: QuestionStageProps) {
             </h2>
           </div>
         </div>
-        <ProgressBar progress={progressBar} />
+        <ProgressBar progress={state.progressBar} />
       </div>
     </div>
   )

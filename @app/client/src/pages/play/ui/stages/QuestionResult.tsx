@@ -1,5 +1,6 @@
-import { AnswerType, QuestionType } from "@quizzy/common"
+import { useContext } from "react"
 import { Subheading } from "shared/ui/Typography"
+import { PlayContext } from "../../model"
 import {
   CircleAnswer,
   RhombusAnswer,
@@ -13,17 +14,10 @@ import {
   TriangleAnswerColumn,
 } from "../AnswerColumn"
 
-interface QuestionResultProps {
-  question: QuestionType
-  answers: AnswerType[]
-  players: number
-}
+export function QuestionResult() {
+  const { state } = useContext(PlayContext)
+  const question = state.questions[state.activeQuestion]
 
-export function QuestionResult({
-  answers,
-  question,
-  players,
-}: QuestionResultProps) {
   return (
     <div className="absolute h-full w-full">
       <img
@@ -41,31 +35,31 @@ export function QuestionResult({
         <div className="flex items-end justify-center gap-7">
           <TriangleAnswerColumn
             answers={
-              answers.filter((answer) => answer.answerIndex === 0).length
+              state.answers.filter((answer) => answer.answerIndex === 0).length
             }
             isCorrect={question.correctAnswers[0]}
-            players={players}
+            players={state.players.length}
           />
           <RhombusAnswerColumn
             answers={
-              answers.filter((answer) => answer.answerIndex === 1).length
+              state.answers.filter((answer) => answer.answerIndex === 1).length
             }
             isCorrect={question.correctAnswers[1]}
-            players={players}
+            players={state.players.length}
           />
           <CircleAnswerColumn
             answers={
-              answers.filter((answer) => answer.answerIndex === 2).length
+              state.answers.filter((answer) => answer.answerIndex === 2).length
             }
             isCorrect={question.correctAnswers[2]}
-            players={players}
+            players={state.players.length}
           />
           <SquareAnswerColumn
             answers={
-              answers.filter((answer) => answer.answerIndex === 3).length
+              state.answers.filter((answer) => answer.answerIndex === 3).length
             }
             isCorrect={question.correctAnswers[3]}
-            players={players}
+            players={state.players.length}
           />
         </div>
         <div className="grid grid-cols-2 gap-4">

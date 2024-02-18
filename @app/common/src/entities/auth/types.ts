@@ -6,3 +6,8 @@ export interface FieldAvailability {
 }
 
 export type AuthTokenType = z.infer<typeof AuthToken>
+
+export type GetAccountInfo = {
+  id: number
+  username: string
+}

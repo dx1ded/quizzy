@@ -1,10 +1,10 @@
+import { useContext } from "react"
+import { PlayContext } from "../../model"
 import { ProgressBar } from "../ProgressBar"
 
-interface GetReadyProps {
-  progressBar: number
-}
+export function GetReady() {
+  const { state } = useContext(PlayContext)
 
-export function GetReady({ progressBar }: GetReadyProps) {
   return (
     <div className="absolute h-full w-full">
       <img
@@ -17,7 +17,7 @@ export function GetReady({ progressBar }: GetReadyProps) {
         <div className="flex h-60 w-60 animate-bounce items-center justify-center rounded-full bg-secondary">
           <h1 className="font-lobster text-5xl text-white">Get ready!</h1>
         </div>
-        <ProgressBar progress={progressBar} />
+        <ProgressBar progress={state.progressBar} />
       </div>
     </div>
   )

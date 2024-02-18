@@ -1,11 +1,18 @@
-import { useContext, useRef } from "react"
+import { useRef } from "react"
+import { useDispatch } from "react-redux"
+import { useNavigate } from "react-router-dom"
+import { setNickname } from "entities/account"
 import { Heading } from "shared/ui/Typography"
 import { Input } from "shared/ui/Input"
 import { Button } from "shared/ui/Button"
-import { JoinContext } from "../model"
 
-export function Nickname() {
-  const { pin, setNickname } = useContext(JoinContext)
+interface NicknameProps {
+  pin: string
+}
+
+export function Nickname({ pin }: NicknameProps) {
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
   const inputRef = useRef<HTMLInputElement>(null)
 
   const clickHandler = () => {
@@ -13,7 +20,8 @@ export function Nickname() {
 
     const { value } = inputRef.current
 
-    setNickname(value)
+    dispatch(setNickname(value))
+    navigate(`/play?sessionId=${pin}`)
   }
 
   return (

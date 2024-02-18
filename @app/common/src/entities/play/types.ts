@@ -34,8 +34,13 @@ export type AnswerType = {
   answerIndex: number
 }
 
+export type ChangeAvatarType = {
+  playerToken: string
+  avatar: AvatarType
+}
+
 export interface IGameState {
-  token: string
+  sessionId: string
   creatorId: number
   quizId: string
   quizName: string
@@ -63,4 +68,12 @@ export interface IGameState {
   progressBar: number
 }
 
-export type SessionToken = Pick<IGameState, "token">
+export type CreateGameResponse = {
+  sessionId: IGameState["sessionId"]
+  playerToken: PlayerType["token"]
+}
+
+export type PlayResponse = {
+  state: IGameState
+  playerToken: PlayerType["token"]
+}

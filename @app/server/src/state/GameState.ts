@@ -1,11 +1,17 @@
-import { nanoid } from "nanoid"
-import { AnswerType, IGameState, JoinType, RecordType } from "@quizzy/common"
+import { customAlphabet } from "nanoid"
+import {
+  AnswerType,
+  ChangeAvatarType,
+  IGameState,
+  JoinType,
+  RecordType,
+} from "@quizzy/common"
 
 export class GameState {
   public state: IGameState
   public record: RecordType | undefined
 
-  static sessions: GameState[]
+  static sessions: GameState[] = []
 
   readonly START_MESSAGE_TIME = 5
   readonly QUESTION_ASKED_TIME = 10
@@ -16,19 +22,24 @@ export class GameState {
     GameState.sessions.push(this)
   }
 
+  menu() {
+    this.state.stage = "menu"
+  }
+
   start() {
     this.state.stage = "start"
     const interval = setInterval(() => {
-      if (this.state.progressBar === 0) {
+      if (this.state.progressBar === 100) {
         clearInterval(interval)
         return this.setNextQuestion()
       }
-      this.state.progressBar--
+      this.state.progressBar++
     }, this.START_MESSAGE_TIME / 60)
   }
 
   join(player: JoinType) {
-    const playerToken = nanoid(8)
+    const nanoid = customAlphabet("123456789", 7)
+    const playerToken = nanoid()
 
     this.state.players.push({
       ...player,
@@ -49,6 +60,14 @@ export class GameState {
         (session) => session !== this
       )
     }
+  }
+
+  changeAvatar(data: ChangeAvatarType) {
+    this.state.players = this.state.players.map((player) =>
+      player.token === data.playerToken
+        ? { ...player, avatar: data.avatar }
+        : player
+    )
   }
 
   answer(answer: AnswerType) {
@@ -77,45 +96,45 @@ export class GameState {
 
     this.state.stage = "question"
     this.state.answers = []
-    this.state.progressBar = 100
+    this.state.progressBar = 0
 
     const interval = setInterval(() => {
-      if (this.state.progressBar === 0) {
+      if (this.state.progressBar === 100) {
         clearInterval(interval)
         return this.setAnswerStage()
       }
 
-      this.state.progressBar--
+      this.state.progressBar++
     }, this.QUESTION_ASKED_TIME / 60)
   }
 
   setAnswerStage() {
     this.state.stage = "answer"
-    this.state.progressBar = 100
+    this.state.progressBar = 0
 
     const question = this.state.questions[this.state.activeQuestion]
 
     const interval = setInterval(() => {
-      if (this.state.progressBar === 0) {
+      if (this.state.progressBar === 100) {
         clearInterval(interval)
         return this.setResultStage()
       }
 
-      this.state.progressBar--
+      this.state.progressBar++
     }, question.timeLimit / 60)
   }
 
   setResultStage() {
     this.state.stage = "result"
-    this.state.progressBar = 100
+    this.state.progressBar = 0
 
     const interval = setInterval(() => {
-      if (this.state.progressBar === 0) {
+      if (this.state.progressBar === 100) {
         clearInterval(interval)
         return this.setNextQuestion()
       }
 
-      this.state.progressBar--
+      this.state.progressBar++
     }, this.QUESTION_RESULT_TIME / 60)
   }
 

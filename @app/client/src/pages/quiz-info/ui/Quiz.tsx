@@ -1,11 +1,11 @@
 import { useContext } from "react"
 import { NavLink } from "react-router-dom"
 import Skeleton from "react-loading-skeleton"
+import { StartQuiz } from "features/start-quiz/ui"
 import { SetFavoriteQuiz } from "features/set-favorite-quiz"
 import { QuizInfoContext } from "entities/quiz"
 import { Box } from "shared/ui/Box"
 import { Caption, Subheading } from "shared/ui/Typography"
-import { Button } from "shared/ui/Button"
 import { Edit } from "shared/icons/Edit"
 
 export function Quiz() {
@@ -28,9 +28,7 @@ export function Quiz() {
         </div>
         <Caption className="mb-5 block">{quiz.plays} plays</Caption>
         <div className="mb-6 flex items-center justify-between">
-          <Button className="px-8" variant="secondary">
-            Start
-          </Button>
+          <StartQuiz quizId={quiz.id} />
           {isCreator && (
             <NavLink to={`/quiz/edit/${quiz.id}`}>
               <Edit width={1} />

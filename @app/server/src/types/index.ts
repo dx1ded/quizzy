@@ -7,7 +7,12 @@ import {
   RawServerDefault,
   RouteGenericInterface,
 } from "fastify"
-import { AnswerType, AuthTokenType, JoinType } from "@quizzy/common"
+import {
+  AnswerType,
+  AuthTokenType,
+  ChangeAvatarType,
+  JoinType,
+} from "@quizzy/common"
 
 export type FastifyHandler<
   RequestInterface extends Partial<RouteGenericInterface>,
@@ -41,7 +46,9 @@ export type FastifyWebsocketHandler<
 export type WithUserId<T = unknown> = T & AuthTokenType & { userId: number }
 
 export type PlaySessionMessage =
+  | { type: "menu" }
   | { type: "start" }
   | { type: "join"; body: JoinType }
   | { type: "answer"; body: AnswerType }
+  | { type: "change_avatar"; body: ChangeAvatarType }
   | { type: "leave"; body: string }

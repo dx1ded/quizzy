@@ -1,6 +1,7 @@
-import { QuestionType } from "@quizzy/common"
+import { useContext } from "react"
 import { Button } from "shared/ui/Button"
 import { Caption, Heading, Subheading } from "shared/ui/Typography"
+import { PlayContext } from "../../model"
 import {
   CircleAnswer,
   RhombusAnswer,
@@ -8,12 +9,12 @@ import {
   TriangleAnswer,
 } from "../Answer"
 
-interface AnswerStageProps {
-  question: QuestionType
-}
-
-export function AnswerStage({ question }: AnswerStageProps) {
-  const hasAnswered = true
+export function AnswerStage() {
+  const { state, playerToken } = useContext(PlayContext)
+  const question = state.questions[state.activeQuestion]
+  const hasAnswered = state.answers.find(
+    (answer) => answer.playerToken === playerToken
+  )
 
   return (
     <div className="absolute h-full w-full">

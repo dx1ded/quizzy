@@ -1,5 +1,12 @@
-import { IGameState } from "@quizzy/common"
+import { PlayResponse } from "@quizzy/common"
+import { useEffect, useMemo, useState } from "react"
+import { useSelector } from "react-redux"
+import { useSearchParams } from "react-router-dom"
+import useWebSocket from "react-use-websocket"
+import { AccountState } from "entities/account"
+import type { AppStore } from "app/model"
 import { NotFound } from "shared/ui/NotFound"
+import { PlayContextProvider } from "../model"
 import { AnswerStage } from "./stages/AnswerStage"
 import { ChooseAvatar } from "./stages/ChooseAvatar"
 import { EndStage } from "./stages/EndStage"
@@ -8,70 +15,76 @@ import { PlayersList } from "./stages/PlayersList"
 import { QuestionResult } from "./stages/QuestionResult"
 import { QuestionStage } from "./stages/QuestionStage"
 
-const state: IGameState = {
-  token: "1231241",
-  creatorId: 12312312,
-  quizId: "sadasd21e12das",
-  quizName: "New Quiz",
-  stage: "end",
-  players: [
-    {
-      nickname: "vovados1",
-      token: "askdadnjn21",
-      points: 0,
-      avatar: "monkey",
-    },
-  ],
-  activeQuestion: 0,
-  questions: [
-    {
-      name: "Do you believe in God",
-      picture: "",
-      background:
-        "https://firebasestorage.googleapis.com/v0/b/quizzy-222b7.appspot.com/o/quiz-background.png?alt=media",
-      answers: ["Yes", "No", "Not sure", "Miguel"],
-      correctAnswers: [false, false, true, false],
-      timeLimit: 30,
-      points: 10,
-    },
-  ],
-  answers: [
-    {
-      playerToken: "123asdas",
-      answerIndex: 0,
-    },
-  ],
-  progressBar: 10,
-}
-
 export function Play() {
-  switch (state.stage) {
-    case "settings":
-      return <ChooseAvatar avatar="monkey" nickname="dx1ded" token="asdas" />
-    case "menu":
-      return <PlayersList pin={state.token} players={state.players} />
-    case "start":
-      return <GetReady progressBar={state.progressBar} />
-    case "question":
-      return (
-        <QuestionStage
-          progressBar={20}
-          question={state.questions[state.activeQuestion]}
-        />
-      )
-    case "answer":
-      return <AnswerStage question={state.questions[state.activeQuestion]} />
-    case "result":
-      return (
-        <QuestionResult
-          answers={state.answers}
-          players={state.players.length}
-          question={state.questions[state.activeQuestion]}
-        />
-      )
-    case "end":
-      return <EndStage />
-    default:
-      return <NotFound />
+  const [searchParams] = useSearchParams()
+  const [stage, setStage] = useState("")
+  const { id, nickname } = useSelector<AppStore, AccountState>(
+    (state) => state.account
+  )
+  const playerToken = localStorage.getItem("playerToken")!
+  const { lastJsonMessage, sendJsonMessage, readyState } =
+    useWebSocket<PlayResponse>("ws://localhost:5000/api/play", {
+      queryParams: {
+        sessionId: searchParams.get("sessionId")!,
+        playerToken,
+      },
+      onOpen() {
+        sendJsonMessage({
+          type: "join",
+          body: {
+            ...(id ? { id } : {}),
+            nickname,
+            avatar: "monkey",
+          },
+        })
+      },
+    })
+
+  useEffect(() => {
+    if (lastJsonMessage?.state.stage) {
+      setStage(lastJsonMessage.state.stage)
+      localStorage.setItem("playerToken", lastJsonMessage.playerToken)
+    }
+  }, [lastJsonMessage])
+
+  const contextState = useMemo(
+    () => ({
+      ...lastJsonMessage,
+      sendJsonMessage,
+    }),
+    [lastJsonMessage, sendJsonMessage]
+  )
+
+  if (!readyState) {
+    return <NotFound />
   }
+
+  return (
+    <PlayContextProvider value={contextState}>
+      {stage === "settings" ? (
+        <ChooseAvatar />
+      ) : stage === "menu" ? (
+        playerToken ===
+        lastJsonMessage.state.players.find(
+          (player) => player.id === lastJsonMessage.state.creatorId
+        )!.token ? (
+          <PlayersList />
+        ) : (
+          <ChooseAvatar />
+        )
+      ) : stage === "start" ? (
+        <GetReady />
+      ) : stage === "question" ? (
+        <QuestionStage />
+      ) : stage === "answer" ? (
+        <AnswerStage />
+      ) : stage === "result" ? (
+        <QuestionResult />
+      ) : stage === "end" ? (
+        <EndStage />
+      ) : (
+        <NotFound />
+      )}
+    </PlayContextProvider>
+  )
 }

@@ -8,6 +8,7 @@ import {
   UsernameSchema,
 } from "@quizzy/common"
 import { AuthController } from "../controllers/AuthController"
+import { validateToken } from "../middleware/validateToken"
 
 export const AuthRoute = async (f: FastifyInstance) => {
   f.withTypeProvider<ZodTypeProvider>().post(
@@ -58,5 +59,16 @@ export const AuthRoute = async (f: FastifyInstance) => {
       },
     },
     AuthController.checkTokenValidity
+  )
+
+  f.withTypeProvider<ZodTypeProvider>().post(
+    "/get-info",
+    {
+      preHandler: [validateToken],
+      schema: {
+        body: AuthToken,
+      },
+    },
+    AuthController.getAccountInfo
   )
 }

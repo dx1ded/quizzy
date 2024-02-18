@@ -64,7 +64,9 @@ module.exports = {
     "@typescript-eslint/no-throw-literal": "off",
     "no-param-reassign": "off",
     "@typescript-eslint/lines-between-class-members": "off",
-    "no-new": "off"
+    "no-new": "off",
+    "@typescript-eslint/no-shadow": "off",
+    "@typescript-eslint/no-use-before-define": "off"
   },
   settings: {
     "import/resolver": {
