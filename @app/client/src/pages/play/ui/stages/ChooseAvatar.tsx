@@ -1,6 +1,6 @@
+import { Dispatch, SetStateAction, useContext, useState } from "react"
 import { Modal } from "@mui/material"
 import { AvatarType } from "@quizzy/common"
-import { Dispatch, SetStateAction, useContext, useState } from "react"
 import { Edit } from "shared/icons/Edit"
 import { Avatar } from "shared/ui/Avatar"
 import { Button } from "shared/ui/Button"

@@ -1,4 +1,3 @@
-import { customAlphabet } from "nanoid"
 import {
   AnswerType,
   ChangeAvatarType,
@@ -6,16 +5,19 @@ import {
   JoinType,
   RecordType,
 } from "@quizzy/common"
+import { generateNumberedId } from "../utils"
 
 export class GameState {
   public state: IGameState
   public record: RecordType | undefined
 
   static sessions: GameState[] = []
+  static broadcast: (message: string) => void
 
-  readonly START_MESSAGE_TIME = 5
-  readonly QUESTION_ASKED_TIME = 10
-  readonly QUESTION_RESULT_TIME = 10
+  // in ms
+  readonly START_MESSAGE_TIME = 5000
+  readonly QUESTION_ASKED_TIME = 5000
+  readonly QUESTION_RESULT_TIME = 5000
 
   constructor(defaultState: IGameState) {
     this.state = defaultState
@@ -28,18 +30,19 @@ export class GameState {
 
   start() {
     this.state.stage = "start"
+
     const interval = setInterval(() => {
       if (this.state.progressBar === 100) {
         clearInterval(interval)
         return this.setNextQuestion()
       }
       this.state.progressBar++
-    }, this.START_MESSAGE_TIME / 60)
+      GameState.broadcast(JSON.stringify({ state: this.state }))
+    }, this.START_MESSAGE_TIME / 100)
   }
 
   join(player: JoinType) {
-    const nanoid = customAlphabet("123456789", 7)
-    const playerToken = nanoid()
+    const playerToken = generateNumberedId()
 
     this.state.players.push({
       ...player,
@@ -98,6 +101,8 @@ export class GameState {
     this.state.answers = []
     this.state.progressBar = 0
 
+    GameState.broadcast(JSON.stringify({ state: this.state }))
+
     const interval = setInterval(() => {
       if (this.state.progressBar === 100) {
         clearInterval(interval)
@@ -105,28 +110,40 @@ export class GameState {
       }
 
       this.state.progressBar++
-    }, this.QUESTION_ASKED_TIME / 60)
+      GameState.broadcast(JSON.stringify({ state: this.state }))
+    }, this.QUESTION_ASKED_TIME / 100)
   }
 
   setAnswerStage() {
     this.state.stage = "answer"
     this.state.progressBar = 0
 
+    GameState.broadcast(JSON.stringify({ state: this.state }))
+
     const question = this.state.questions[this.state.activeQuestion]
 
-    const interval = setInterval(() => {
-      if (this.state.progressBar === 100) {
-        clearInterval(interval)
-        return this.setResultStage()
-      }
+    const interval = setInterval(
+      () => {
+        if (
+          this.state.progressBar === 100 ||
+          this.state.answers.length === this.state.players.length
+        ) {
+          clearInterval(interval)
+          return this.setResultStage()
+        }
 
-      this.state.progressBar++
-    }, question.timeLimit / 60)
+        this.state.progressBar++
+        GameState.broadcast(JSON.stringify({ state: this.state }))
+      },
+      (question.timeLimit * 1000) / 100
+    )
   }
 
   setResultStage() {
     this.state.stage = "result"
     this.state.progressBar = 0
+
+    GameState.broadcast(JSON.stringify({ state: this.state }))
 
     const interval = setInterval(() => {
       if (this.state.progressBar === 100) {
@@ -135,11 +152,14 @@ export class GameState {
       }
 
       this.state.progressBar++
-    }, this.QUESTION_RESULT_TIME / 60)
+      GameState.broadcast(JSON.stringify({ state: this.state }))
+    }, this.QUESTION_RESULT_TIME / 100)
   }
 
   async finish() {
     this.state.stage = "end"
+
+    GameState.broadcast(JSON.stringify({ state: this.state }))
 
     const record = {
       quizId: this.state.quizId,

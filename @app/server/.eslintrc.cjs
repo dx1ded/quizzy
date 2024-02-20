@@ -3,6 +3,7 @@ module.exports = {
   extends: ["@quizzy/default"],
   plugins: [],
   rules: {
-    "@typescript-eslint/no-shadow": "off"
+    "@typescript-eslint/no-shadow": "off",
+    "import/no-cycle": "off"
   }
 }

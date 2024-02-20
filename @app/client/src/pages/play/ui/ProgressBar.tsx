@@ -7,7 +7,7 @@ export function ProgressBar({ progress }: ProgressBarProps) {
     <div className="w-full">
       <div className="relative mx-4 mb-14 h-8 rounded-full bg-white shadow-lg">
         <div
-          className="absolute left-0 top-0 h-8 rounded-full bg-secondary"
+          className="absolute left-0 top-0 h-8 rounded-full bg-secondary transition-all ease-linear"
           style={{ width: `${progress}%` }}
         />
       </div>

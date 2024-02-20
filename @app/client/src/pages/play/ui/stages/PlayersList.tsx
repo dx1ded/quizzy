@@ -1,4 +1,5 @@
-import { useContext } from "react"
+import { Snackbar } from "@mui/material"
+import { useContext, useState } from "react"
 import { Avatar } from "shared/ui/Avatar"
 import { Button } from "shared/ui/Button"
 import { Logo } from "shared/ui/Logo"
@@ -6,10 +7,27 @@ import { Subheading, Text } from "shared/ui/Typography"
 import { PlayContext } from "../../model"
 
 export function PlayersList() {
-  const { state } = useContext(PlayContext)
+  const [snackbarOpen, setSnackbarOpen] = useState(false)
+  const { state, sendJsonMessage } = useContext(PlayContext)
+
+  const start = () => {
+    if (state.players.length < 3) {
+      return setSnackbarOpen(true)
+    }
+
+    sendJsonMessage({
+      type: "start",
+    })
+  }
 
   return (
     <div className="absolute flex h-full w-full flex-col items-center pt-16">
+      <Snackbar
+        autoHideDuration={3000}
+        message="There should be at least 3 players"
+        open={snackbarOpen}
+        onClose={() => setSnackbarOpen(false)}
+      />
       <img
         alt="Quiz"
         className="absolute left-0 top-0 -z-10 h-full w-full object-cover"
@@ -18,7 +36,8 @@ export function PlayersList() {
       {/* Start button */}
       <Button
         className="absolute right-5 top-1/3 px-8 shadow"
-        variant="secondary">
+        variant="secondary"
+        onClick={start}>
         Start
       </Button>
       <div>

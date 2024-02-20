@@ -1,6 +1,6 @@
-import { CreateGameResponse, QuizId } from "@quizzy/common"
-import { customAlphabet } from "nanoid"
 import { z } from "zod"
+import { CreateGameResponse, QuizId } from "@quizzy/common"
+import { server } from "../index"
 import { publishedQuizRepository, userRepository } from "../database"
 import {
   PlaySessionIdSchema,
@@ -13,15 +13,20 @@ import {
   PlaySessionMessage,
   WithUserId,
 } from "../types"
+import { generateNumberedId } from "../utils"
 
-const nanoid = customAlphabet("123456789", 7)
+function broadcast(message: string) {
+  server.websocketServer.clients.forEach((client) => client.send(message))
+}
+
+GameState.broadcast = broadcast
 
 export const createPlaySession: FastifyHandler<{
   Body: WithUserId<QuizId>
   Reply: CreateGameResponse
 }> = async (req, res) => {
   const { userId, id } = req.body
-  const sessionId = nanoid()
+  const sessionId = generateNumberedId()
 
   const quiz = await publishedQuizRepository.findOne({ where: { id } })
   const user = await userRepository.findOne({ where: { id: userId } })
@@ -102,33 +107,25 @@ export const play: FastifyWebsocketHandler<{
 
       const newPlayerToken = session.join(response.body)
 
-      connection.socket.send(
+      broadcast(
         JSON.stringify({ state: session.state, playerToken: newPlayerToken })
       )
     } else if (response.type === "menu") {
       session.menu()
 
-      connection.socket.send(
-        JSON.stringify({ state: session.state, playerToken })
-      )
+      broadcast(JSON.stringify({ state: session.state }))
     } else if (response.type === "start") {
       session.start()
 
-      connection.socket.send(
-        JSON.stringify({ state: session.state, playerToken })
-      )
+      broadcast(JSON.stringify({ state: session.state }))
     } else if (response.type === "answer") {
       session.answer(response.body)
 
-      connection.socket.send(
-        JSON.stringify({ state: session.state, playerToken })
-      )
+      broadcast(JSON.stringify({ state: session.state }))
     } else if (response.type === "change_avatar") {
       session.changeAvatar(response.body)
 
-      connection.socket.send(
-        JSON.stringify({ state: session.state, playerToken })
-      )
+      broadcast(JSON.stringify({ state: session.state }))
     }
   })
 

@@ -1,7 +1,9 @@
-import { GetAccountInfo } from "@quizzy/common"
-import { Dispatch, SetStateAction, useRef } from "react"
+import { Dispatch, SetStateAction } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { useNavigate } from "react-router-dom"
+import { SubmitHandler, useForm } from "react-hook-form"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { GetAccountInfo } from "@quizzy/common"
 import type { AppStore } from "app/model"
 import {
   AccountState,
@@ -9,9 +11,10 @@ import {
   setNickname,
   useSecuredRequest,
 } from "entities/account"
-import { Heading } from "shared/ui/Typography"
+import { Caption, Heading } from "shared/ui/Typography"
 import { Input } from "shared/ui/Input"
 import { Button } from "shared/ui/Button"
+import { GamePinSchema, GamePinType } from "../lib"
 
 interface GamePinProps {
   setPin: Dispatch<SetStateAction<string>>
@@ -24,22 +27,31 @@ export function GamePin({ setPin }: GamePinProps) {
   const { token } = useSelector<AppStore, AccountState>(
     (state) => state.account
   )
-  const inputRef = useRef<HTMLInputElement>(null)
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    setError,
+  } = useForm<GamePinType>({
+    resolver: zodResolver(GamePinSchema),
+  })
 
-  const clickHandler = async () => {
-    if (!inputRef.current) return
+  const submitHandler: SubmitHandler<GamePinType> = async (data) => {
+    const pin = data.pin.replaceAll(" ", "")
 
-    const { value } = inputRef.current
     const req = await fetch("/api/play/exists", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ sessionId: value }),
+      body: JSON.stringify({ sessionId: pin }),
     })
     const sessionExists = (await req.json()) as Promise<boolean>
 
-    if (!sessionExists) return alert("Session doesn't exist")
+    if (!sessionExists)
+      return setError("pin", {
+        message: "Session doesn't exist",
+      })
 
     if (token) {
       const user = await request<GetAccountInfo>("/api/auth/get-info")
@@ -47,11 +59,11 @@ export function GamePin({ setPin }: GamePinProps) {
       if (user) {
         dispatch(setId(user.id))
         dispatch(setNickname(user.username))
-        return navigate(`/play?sessionId=${value}`)
+        return navigate(`/play?sessionId=${pin}`)
       }
     }
 
-    setPin(value)
+    setPin(pin)
   }
 
   return (
@@ -61,17 +73,19 @@ export function GamePin({ setPin }: GamePinProps) {
       </Heading>
       <div className="flex w-96 flex-col gap-2.5 rounded-xl bg-white p-4">
         <Input
-          ref={inputRef}
           className="rounded-lg py-2 font-semibold"
           placeholder="Game PIN"
           variant="secondary"
-          width={100}
           isCentered
+          {...register("pin")}
         />
+        {errors.pin && (
+          <Caption className="text-red-600">{errors.pin.message}</Caption>
+        )}
         <Button
           className="rounded-lg py-2 font-semibold"
           variant="secondary"
-          onClick={clickHandler}>
+          onClick={handleSubmit(submitHandler)}>
           Enter
         </Button>
       </div>

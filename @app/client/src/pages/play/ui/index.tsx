@@ -1,12 +1,13 @@
-import { PlayResponse } from "@quizzy/common"
 import { useEffect, useMemo, useState } from "react"
 import { useSelector } from "react-redux"
 import { useSearchParams } from "react-router-dom"
 import useWebSocket from "react-use-websocket"
+import { PlayResponse } from "@quizzy/common"
 import { AccountState } from "entities/account"
-import type { AppStore } from "app/model"
 import { NotFound } from "shared/ui/NotFound"
+import type { AppStore } from "app/model"
 import { PlayContextProvider } from "../model"
+
 import { AnswerStage } from "./stages/AnswerStage"
 import { ChooseAvatar } from "./stages/ChooseAvatar"
 import { EndStage } from "./stages/EndStage"
@@ -18,12 +19,15 @@ import { QuestionStage } from "./stages/QuestionStage"
 export function Play() {
   const [searchParams] = useSearchParams()
   const [stage, setStage] = useState("")
+  const [playerToken, setPlayerToken] = useState(
+    localStorage.getItem("playerToken") || ""
+  )
   const { id, nickname } = useSelector<AppStore, AccountState>(
     (state) => state.account
   )
-  const playerToken = localStorage.getItem("playerToken")!
-  const { lastJsonMessage, sendJsonMessage, readyState } =
-    useWebSocket<PlayResponse>("ws://localhost:5000/api/play", {
+  const { lastJsonMessage, sendJsonMessage } = useWebSocket<PlayResponse>(
+    "ws://localhost:5000/api/play",
+    {
       queryParams: {
         sessionId: searchParams.get("sessionId")!,
         playerToken,
@@ -38,26 +42,26 @@ export function Play() {
           },
         })
       },
-    })
+    }
+  )
 
   useEffect(() => {
-    if (lastJsonMessage?.state.stage) {
+    if (lastJsonMessage?.state) {
+      if (!stage) setPlayerToken(lastJsonMessage.playerToken)
+
       setStage(lastJsonMessage.state.stage)
       localStorage.setItem("playerToken", lastJsonMessage.playerToken)
     }
-  }, [lastJsonMessage])
+  }, [stage, playerToken, lastJsonMessage])
 
   const contextState = useMemo(
     () => ({
       ...lastJsonMessage,
+      playerToken,
       sendJsonMessage,
     }),
-    [lastJsonMessage, sendJsonMessage]
+    [lastJsonMessage, playerToken, sendJsonMessage]
   )
-
-  if (!readyState) {
-    return <NotFound />
-  }
 
   return (
     <PlayContextProvider value={contextState}>

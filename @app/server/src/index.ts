@@ -10,7 +10,7 @@ import { PlayRoute } from "./routes/PlayRoute"
 import { QuizRoute } from "./routes/QuizRoute"
 import { RecordRoute } from "./routes/RecordRoute"
 
-const server = fastify({
+export const server = fastify({
   // 200mb
   bodyLimit: 2097152000,
 })

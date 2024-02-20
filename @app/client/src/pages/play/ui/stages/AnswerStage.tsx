@@ -45,11 +45,16 @@ export function AnswerStage() {
           </div>
           <div className="flex items-center justify-between">
             <div className="flex h-28 w-28 items-center justify-center rounded-full bg-secondary shadow-lg">
-              <Heading className="text-white">10</Heading>
+              <Heading className="text-white">
+                {question.timeLimit -
+                  Math.round(state.progressBar / question.timeLimit)}
+              </Heading>
             </div>
             <div>
               <div className="mx-auto mb-3 flex h-14 w-14 items-center justify-center rounded-full bg-secondary shadow-lg">
-                <Subheading className="font-bold text-white">3</Subheading>
+                <Subheading className="font-bold text-white">
+                  {state.answers.length}
+                </Subheading>
               </div>
               <div className="rounded bg-white px-5 py-1 shadow-lg">
                 <Caption className="font-semibold">answers</Caption>
