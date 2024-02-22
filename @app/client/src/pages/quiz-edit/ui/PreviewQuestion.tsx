@@ -67,7 +67,7 @@ export function PreviewQuestion({
               src={background}
             />
             <div className="relative z-10 flex h-full flex-col items-center justify-between px-1 py-2">
-              <p className="inline-block rounded-sm bg-white px-1 py-0.5 text-[0.3rem]">
+              <p className="inline-block max-w-[7rem] overflow-hidden truncate rounded-sm bg-white px-1 py-0.5 text-center text-[0.3rem]">
                 {name}
               </p>
               {picture && (

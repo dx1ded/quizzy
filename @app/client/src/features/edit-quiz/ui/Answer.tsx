@@ -157,16 +157,16 @@ interface SmallAnswer extends PropsWithChildren {
 }
 
 export function SmallTriangleAnswer({ children, isChecked }: SmallAnswer) {
-  const checkedClassName = `ml-auto flex h-1 w-1 items-center justify-center rounded-full border ${
+  const checkedClassName = `ml-auto shrink-0 flex h-1 w-1 items-center justify-center rounded-full border ${
     isChecked
       ? "border-secondary bg-secondary text-white"
       : "border-white bg-transparent text-transparent"
   }`
 
   return (
-    <div className="flex items-center rounded-sm bg-[#E01D3B] px-1 py-[0.1rem] text-[0.2rem] text-white shadow-lg">
-      <div className="mr-1 border-x-[0.1rem] border-b-[0.2rem] border-transparent border-b-white" />
-      {children}
+    <div className="flex items-center gap-1 rounded-sm bg-[#E01D3B] px-1 py-[0.1rem] shadow-lg">
+      <div className="shrink-0 border-x-[0.1rem] border-b-[0.2rem] border-transparent border-b-white" />
+      <p className="line-clamp-1 text-[0.2rem] text-white">{children}</p>
       <div className={checkedClassName}>
         <Tick width={0.1} />
       </div>
@@ -175,16 +175,16 @@ export function SmallTriangleAnswer({ children, isChecked }: SmallAnswer) {
 }
 
 export function SmallRhombusAnswer({ children, isChecked }: SmallAnswer) {
-  const checkedClassName = `ml-auto flex h-1 w-1 items-center justify-center rounded-full border ${
+  const checkedClassName = `ml-auto flex shrink-0 h-1 w-1 items-center justify-center rounded-full border ${
     isChecked
       ? "border-secondary bg-secondary text-white"
       : "border-white bg-transparent text-transparent"
   }`
 
   return (
-    <div className="flex items-center rounded-sm bg-[#1368CF] px-1 py-[0.1rem] text-[0.2rem] text-white shadow-lg">
-      <div className="mr-1 h-[0.2rem] w-[0.2rem] rotate-45 bg-white" />
-      {children}
+    <div className="flex items-center rounded-sm bg-[#1368CF] px-1 py-[0.1rem] shadow-lg">
+      <div className="mr-1 h-[0.2rem] w-[0.2rem] shrink-0 rotate-45 bg-white" />
+      <p className="line-clamp-1 text-[0.2rem] text-white">{children}</p>
       <div className={checkedClassName}>
         <Tick width={0.1} />
       </div>
@@ -193,16 +193,16 @@ export function SmallRhombusAnswer({ children, isChecked }: SmallAnswer) {
 }
 
 export function SmallCircleAnswer({ children, isChecked }: SmallAnswer) {
-  const checkedClassName = `ml-auto flex h-1 w-1 items-center justify-center rounded-full border ${
+  const checkedClassName = `ml-auto flex shrink-0 h-1 w-1 items-center justify-center rounded-full border ${
     isChecked
       ? "border-secondary bg-secondary text-white"
       : "border-white bg-transparent text-transparent"
   }`
 
   return (
-    <div className="flex items-center rounded-sm bg-[#FFB800] px-1 py-[0.1rem] text-[0.2rem] text-white shadow-lg">
-      <span className="mr-1 h-1 w-1 rounded-full bg-white" />
-      {children}
+    <div className="flex items-center rounded-sm bg-[#FFB800] px-1 py-[0.1rem] shadow-lg">
+      <span className="mr-1 h-1 w-1 shrink-0 rounded-full bg-white" />
+      <p className="line-clamp-1 text-[0.2rem] text-white">{children}</p>
       <div className={checkedClassName}>
         <Tick width={0.1} />
       </div>
@@ -211,16 +211,16 @@ export function SmallCircleAnswer({ children, isChecked }: SmallAnswer) {
 }
 
 export function SmallSquareAnswer({ children, isChecked }: SmallAnswer) {
-  const checkedClassName = `ml-auto flex h-1 w-1 items-center justify-center rounded-full border ${
+  const checkedClassName = `ml-auto flex shrink-0 h-1 w-1 items-center justify-center rounded-full border ${
     isChecked
       ? "border-secondary bg-secondary text-white"
       : "border-white bg-transparent text-transparent"
   }`
 
   return (
-    <div className="flex items-center rounded-sm bg-[#28BC01] px-1 py-[0.1rem] text-[0.2rem] text-white shadow-lg">
-      <span className="mr-1 h-1 w-1 bg-white" />
-      {children}
+    <div className="flex items-center rounded-sm bg-[#28BC01] px-1 py-[0.1rem] shadow-lg">
+      <span className="mr-1 h-1 w-1 shrink-0 bg-white" />
+      <p className="line-clamp-1 text-[0.2rem] text-white">{children}</p>
       <div className={checkedClassName}>
         <Tick width={0.1} />
       </div>

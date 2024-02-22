@@ -15,7 +15,9 @@ export function AuthValidation({ error, initialErrors }: AuthValidationProps) {
       <ul>
         {initialErrors.map((initialError, i) =>
           error.message === initialError ||
-          Object.values(error.types || []).includes(initialError) ||
+          Object.values(error.types?.invalid_string || []).includes(
+            initialError
+          ) ||
           ["custom", "too_big"].includes(error.type) ? (
             <li
               key={i}

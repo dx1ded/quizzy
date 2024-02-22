@@ -54,6 +54,11 @@ export const createPlaySession: FastifyHandler<{
     avatar: "monkey",
   })
 
+  // Incrementing quiz plays
+
+  quiz.plays += 1
+  await publishedQuizRepository.update({ id: quiz.id }, quiz)
+
   return { sessionId, playerToken }
 }
 

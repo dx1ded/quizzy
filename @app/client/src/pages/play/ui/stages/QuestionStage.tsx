@@ -25,7 +25,7 @@ export function QuestionStage() {
           />
           <div className="bg-white py-7 shadow-lg">
             <h2 className="text-center text-2xl font-bold text-black">
-              {question.name} ?
+              {question.name}
             </h2>
           </div>
         </div>

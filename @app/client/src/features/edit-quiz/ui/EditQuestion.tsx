@@ -85,6 +85,8 @@ export function ChangeQuestionBackground() {
 
     const base64 = await convertToBase64(fileList[0])
     dispatch(changeQuestionBackground(base64))
+
+    e.target.value = ""
   }
 
   return (
@@ -122,6 +124,8 @@ export function ChangeQuestionPicture() {
 
     const base64 = await convertToBase64(fileList[0])
     dispatch(changeQuestionPicture(base64))
+
+    e.target.value = ""
   }
 
   return (

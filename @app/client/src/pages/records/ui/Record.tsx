@@ -17,6 +17,7 @@ import { SelectedState } from "./index"
 
 interface RecordProps {
   id: string
+  quizId: string
   quizName: string
   date: number
   numberOfPlayers: number
@@ -28,6 +29,7 @@ interface RecordProps {
 
 export function Record({
   id,
+  quizId,
   quizName,
   date,
   numberOfPlayers,
@@ -115,7 +117,7 @@ export function Record({
             anchorEl={anchorEl.current}
             open={menuOpen}
             onClose={() => setMenuOpen(false)}>
-            <MenuItem onClick={() => navigate(`/quiz/${id}`)}>
+            <MenuItem onClick={() => navigate(`/quiz/${quizId}`)}>
               <span className="text-sm">Play</span>
             </MenuItem>
             {isCreator && (

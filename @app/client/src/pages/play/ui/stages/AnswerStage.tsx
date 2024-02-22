@@ -45,7 +45,7 @@ export function AnswerStage() {
         <div className="flex h-full w-full flex-col justify-between px-6 py-8">
           <div className="relative flex items-center justify-center">
             <div className="rounded-lg bg-white px-14 py-4 shadow-lg">
-              <Subheading>{question.name} ?</Subheading>
+              <Subheading>{question.name}</Subheading>
             </div>
             <Button
               className="absolute right-0 top-1/2 -translate-y-1/2 px-9 shadow-lg"
