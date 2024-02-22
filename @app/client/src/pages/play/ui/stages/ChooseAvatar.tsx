@@ -102,6 +102,8 @@ export function ChooseAvatar() {
   const { state, playerToken, sendJsonMessage } = useContext(PlayContext)
   const [modalOpen, setModalOpen] = useState(false)
 
+  if (!state) return
+
   const player = state.players.find((player) => player.token === playerToken)!
 
   const setMenu = () => {
@@ -119,7 +121,7 @@ export function ChooseAvatar() {
       />
       <img
         alt="Quiz"
-        className="absolute left-0 top-0 -z-10 h-full w-full object-cover"
+        className="fixed left-0 top-0 -z-10 h-full w-full object-cover"
         src="https://firebasestorage.googleapis.com/v0/b/quizzy-222b7.appspot.com/o/quiz-background.png?alt=media"
       />
       <div className="text-center">

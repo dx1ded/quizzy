@@ -30,9 +30,7 @@ const listReport: FastifyHandler<{
     where: [
       { userRef: userId },
       {
-        result: Raw((columnAlias) => `:userId = ${columnAlias}->>'id'`, {
-          userId,
-        }),
+        result: Raw((alias) => `${alias} @> '[{"id": ${userId}}]'`),
       },
     ],
   })
@@ -79,9 +77,7 @@ const searchReport: FastifyHandler<{
         quizName: Raw(
           (alias) => `LOWER(${alias}) Like '${quizName.toLowerCase()}%'`
         ),
-        result: Raw((columnAlias) => `:userId = ${columnAlias}->>'id'`, {
-          userId,
-        }),
+        result: Raw((alias) => `${alias} @> '[{"id": ${userId}}]'`),
       },
     ],
   })

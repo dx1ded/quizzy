@@ -21,6 +21,6 @@ export class Record implements RecordType {
   @Column("int8")
   date!: number
 
-  @Column("jsonb", { array: true })
+  @Column("jsonb")
   result!: RecordResult[]
 }

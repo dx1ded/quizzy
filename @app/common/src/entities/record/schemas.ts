@@ -7,7 +7,7 @@ export const RecordSchema = z.object({
   date: z.number(),
   result: z
     .object({
-      id: z.number().optional(),
+      id: z.number(),
       nickname: z.string(),
       points: z.number(),
     })

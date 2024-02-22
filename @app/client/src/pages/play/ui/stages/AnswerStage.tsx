@@ -10,17 +10,27 @@ import {
 } from "../Answer"
 
 export function AnswerStage() {
-  const { state, playerToken } = useContext(PlayContext)
+  const { state, playerToken, sendJsonMessage } = useContext(PlayContext)
   const question = state.questions[state.activeQuestion]
   const hasAnswered = state.answers.find(
     (answer) => answer.playerToken === playerToken
   )
 
+  const clickAnswer = () => {
+    sendJsonMessage({
+      type: "answer",
+      body: {
+        playerToken,
+        answerIndex: -1,
+      },
+    })
+  }
+
   return (
     <div className="absolute h-full w-full">
       <img
         alt="Quiz"
-        className="absolute left-0 top-0 -z-10 h-full w-full object-cover"
+        className="fixed left-0 top-0 -z-10 h-full w-full object-cover"
         src={question.background}
       />
       {hasAnswered ? (
@@ -39,17 +49,27 @@ export function AnswerStage() {
             </div>
             <Button
               className="absolute right-0 top-1/2 -translate-y-1/2 px-9 shadow-lg"
-              variant="secondary">
+              variant="secondary"
+              onClick={clickAnswer}>
               Skip
             </Button>
           </div>
           <div className="flex items-center justify-between">
             <div className="flex h-28 w-28 items-center justify-center rounded-full bg-secondary shadow-lg">
               <Heading className="text-white">
-                {question.timeLimit -
-                  Math.round(state.progressBar / question.timeLimit)}
+                {Math.round(
+                  question.timeLimit -
+                    (question.timeLimit / 100) * state.progressBar
+                )}
               </Heading>
             </div>
+            {question.picture && (
+              <img
+                alt="Quiz"
+                className="h-72 w-96 rounded-lg object-cover"
+                src={question.picture}
+              />
+            )}
             <div>
               <div className="mx-auto mb-3 flex h-14 w-14 items-center justify-center rounded-full bg-secondary shadow-lg">
                 <Subheading className="font-bold text-white">

@@ -1,5 +1,5 @@
 export type RecordResult = {
-  id?: number
+  id: number
   nickname: string
   points: number
 }

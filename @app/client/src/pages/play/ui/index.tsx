@@ -42,17 +42,24 @@ export function Play() {
           },
         })
       },
+      onClose() {
+        sendJsonMessage({
+          type: "leave",
+        })
+      },
     }
   )
 
   useEffect(() => {
     if (lastJsonMessage?.state) {
-      if (!stage) setPlayerToken(lastJsonMessage.playerToken)
+      if (!stage) {
+        setPlayerToken(lastJsonMessage.playerToken)
+        localStorage.setItem("playerToken", lastJsonMessage.playerToken)
+      }
 
       setStage(lastJsonMessage.state.stage)
-      localStorage.setItem("playerToken", lastJsonMessage.playerToken)
     }
-  }, [stage, playerToken, lastJsonMessage])
+  }, [stage, playerToken, lastJsonMessage, sendJsonMessage])
 
   const contextState = useMemo(
     () => ({
@@ -68,10 +75,11 @@ export function Play() {
       {stage === "settings" ? (
         <ChooseAvatar />
       ) : stage === "menu" ? (
+        lastJsonMessage?.state &&
         playerToken ===
-        lastJsonMessage.state.players.find(
-          (player) => player.id === lastJsonMessage.state.creatorId
-        )!.token ? (
+          lastJsonMessage.state.players.find(
+            (player) => player.id === lastJsonMessage.state.creatorId
+          )!.token ? (
           <PlayersList />
         ) : (
           <ChooseAvatar />
@@ -87,7 +95,7 @@ export function Play() {
       ) : stage === "end" ? (
         <EndStage />
       ) : (
-        <NotFound />
+        <NotFound to="/" />
       )}
     </PlayContextProvider>
   )

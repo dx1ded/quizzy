@@ -129,12 +129,9 @@ export const play: FastifyWebsocketHandler<{
     }
   })
 
-  connection.socket.on("close", (message) => {
-    const response: PlaySessionMessage = JSON.parse(message.toString())
-
-    if (response.type === "leave") {
-      session.leave(response.body)
-    }
+  connection.socket.on("close", () => {
+    if (!["settings", "end"].includes(session.state.stage)) return
+    session.leave()
   })
 }
 

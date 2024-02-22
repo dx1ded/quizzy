@@ -9,7 +9,7 @@ export function GetReady() {
     <div className="absolute h-full w-full">
       <img
         alt="Quiz"
-        className="absolute left-0 top-0 -z-10 h-full w-full object-cover"
+        className="fixed left-0 top-0 -z-10 h-full w-full object-cover"
         src="https://firebasestorage.googleapis.com/v0/b/quizzy-222b7.appspot.com/o/quiz-background.png?alt=media"
       />
       <div className="flex h-full w-full flex-col items-center justify-between">

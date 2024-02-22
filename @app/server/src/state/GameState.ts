@@ -3,13 +3,11 @@ import {
   ChangeAvatarType,
   IGameState,
   JoinType,
-  RecordType,
 } from "@quizzy/common"
 import { generateNumberedId } from "../utils"
 
 export class GameState {
   public state: IGameState
-  public record: RecordType | undefined
 
   static sessions: GameState[] = []
   static broadcast: (message: string) => void
@@ -53,12 +51,12 @@ export class GameState {
     return playerToken
   }
 
-  leave(playerToken: string) {
-    this.state.players = this.state.players.filter(
-      (player) => player.token !== playerToken
-    )
+  leave() {
+    if (!["settings", "end"].includes(this.state.stage)) return
 
-    if (!this.state.players) {
+    this.state.players = this.state.players.filter((_, i) => i !== 0)
+
+    if (!this.state.players.length) {
       GameState.sessions = GameState.sessions.filter(
         (session) => session !== this
       )
@@ -78,7 +76,10 @@ export class GameState {
 
     this.state.answers.push(answer)
 
-    if (question.correctAnswers[answer.answerIndex]) {
+    if (
+      answer.answerIndex !== -1 &&
+      question.correctAnswers[answer.answerIndex]
+    ) {
       this.state.players = this.state.players.map((player) =>
         player.token === answer.playerToken
           ? {
@@ -91,11 +92,11 @@ export class GameState {
   }
 
   setNextQuestion() {
-    this.state.activeQuestion++
-
-    if (this.state.activeQuestion === this.state.questions.length) {
+    if (this.state.activeQuestion === this.state.questions.length - 1) {
       return this.finish()
     }
+
+    this.state.activeQuestion++
 
     this.state.stage = "question"
     this.state.answers = []
@@ -169,12 +170,12 @@ export class GameState {
       result: this.state.players,
     }
 
-    this.record = await fetch("http://localhost:5000/api/record/create", {
+    await fetch("http://localhost:5000/api/record/create", {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({ record }),
-    }).then((res) => res.json() as Promise<RecordType>)
+    })
   }
 }

@@ -51,4 +51,4 @@ export type PlaySessionMessage =
   | { type: "join"; body: JoinType }
   | { type: "answer"; body: AnswerType }
   | { type: "change_avatar"; body: ChangeAvatarType }
-  | { type: "leave"; body: string }
+  | { type: "leave" }

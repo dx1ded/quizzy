@@ -30,7 +30,7 @@ export function PlayersList() {
       />
       <img
         alt="Quiz"
-        className="absolute left-0 top-0 -z-10 h-full w-full object-cover"
+        className="fixed left-0 top-0 -z-10 h-full w-full object-cover"
         src="https://firebasestorage.googleapis.com/v0/b/quizzy-222b7.appspot.com/o/quiz-background.png?alt=media"
       />
       {/* Start button */}
@@ -40,7 +40,7 @@ export function PlayersList() {
         onClick={start}>
         Start
       </Button>
-      <div>
+      <div className="pb-16">
         <div className="mb-12 flex w-[54rem] items-center rounded-lg bg-secondary px-10 text-white shadow-lg">
           <Subheading>
             <span className="font-normal">Join at </span>

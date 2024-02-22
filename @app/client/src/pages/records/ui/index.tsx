@@ -136,7 +136,7 @@ export function Records() {
                     <Record
                       key={record.id}
                       date={record.date}
-                      id={record.id}
+                      id={record.quizId}
                       isCreator={page.isCreator[i]}
                       numberOfPlayers={record.result.length}
                       quizName={record.quizName}

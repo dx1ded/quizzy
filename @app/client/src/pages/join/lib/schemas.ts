@@ -1,7 +1,7 @@
 import { z } from "zod"
 
 export const GamePinSchema = z.object({
-  pin: z.string().min(8, "Game PIN should be 8 numbers in length"),
+  pin: z.string().min(7, "Game PIN should be 7 numbers in length"),
 })
 
 export const NicknameSchema = z.object({

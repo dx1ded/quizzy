@@ -11,7 +11,7 @@ export function QuestionStage() {
     <div className="absolute h-full w-full">
       <img
         alt="Quiz"
-        className="absolute left-0 top-0 -z-10 h-full w-full object-cover"
+        className="fixed left-0 top-0 -z-10 h-full w-full object-cover"
         src={question.background}
       />
       <div className="flex h-full w-full flex-col justify-between">
