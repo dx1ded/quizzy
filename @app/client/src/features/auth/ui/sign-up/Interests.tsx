@@ -50,7 +50,7 @@ export function Interests({
           .then(({ token }: AuthTokenType) => dispatch(login(token)))
       }}>
       {({ register }) => (
-        <div className="-m-2 grid max-h-56 grid-cols-2 gap-4 overflow-y-auto p-2">
+        <div className="-m-2 grid max-h-56 grid-cols-2 gap-4 overflow-y-auto p-2 md:mt-3 sm:max-h-48">
           <AuthCheckbox
             Icon={Language}
             value="Languages"

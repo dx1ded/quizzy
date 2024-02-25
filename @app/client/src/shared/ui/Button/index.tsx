@@ -18,7 +18,7 @@ const sizes = {
   // 16 px
   lg: "text-base xl:text-sm",
   // 14 px
-  md: "text-sm",
+  md: "text-sm sm:text-xs",
   // 12 px
   sm: "text-xs",
   // 10 px

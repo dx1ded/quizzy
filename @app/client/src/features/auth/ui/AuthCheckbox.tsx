@@ -23,13 +23,13 @@ export const AuthCheckbox = forwardRef<HTMLInputElement, AuthCheckboxProps>(
           value={value}
         />
         <label
-          className="flex cursor-pointer items-center gap-4 rounded border border-white bg-white p-4 drop-shadow transition peer-checked:border-black peer-checked:bg-accent peer-checked:[&>div]:visible peer-checked:[&>div]:flex peer-checked:[&>div]:opacity-100"
+          className="flex cursor-pointer items-center gap-4 rounded border border-white bg-white p-4 drop-shadow transition peer-checked:border-black peer-checked:bg-accent sm:p-3 peer-checked:[&>div]:visible peer-checked:[&>div]:flex peer-checked:[&>div]:opacity-100"
           htmlFor={id}>
           <div className="invisible absolute -right-1.5 -top-1.5 hidden h-5 w-5 items-center justify-center rounded-full bg-black opacity-0">
             <Tick color="#fff" width={1} />
           </div>
-          <Icon width={1.2} />
-          <p>{value}</p>
+          <Icon className="sm:w-4" width={1.2} />
+          <p className="text-sm">{value}</p>
         </label>
       </div>
     )

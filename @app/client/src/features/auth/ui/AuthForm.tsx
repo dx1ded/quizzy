@@ -185,23 +185,25 @@ export function AuthForm<T extends FieldValues>({
   )
 
   return (
-    <div className="mx-auto flex min-h-[26rem] max-w-4xl flex-1 animate-fadeIn gap-2 rounded-lg bg-white">
-      <div className="flex max-w-[24rem] flex-col justify-center rounded-l-lg bg-gradient-to-br from-accent via-white via-70% to-accent p-10">
-        <Subheading className="mb-4">{cardTitle}</Subheading>
+    <div className="mx-auto flex min-h-[26rem] max-w-4xl flex-1 animate-fadeIn gap-x-2 rounded-lg bg-white md:min-h-full md:flex-col">
+      <div className="flex max-w-[24rem] flex-col justify-center rounded-l-lg bg-gradient-to-br from-accent via-white via-70% to-accent p-10 md:max-w-full sm:px-4 sm:py-6">
+        <Subheading className="mb-4 sm:mb-2.5">{cardTitle}</Subheading>
         <Caption>{cardCaption}</Caption>
       </div>
-      <div className="flex flex-1 flex-col justify-between p-5">
-        <Subheading style={{ marginTop: title ? "1rem" : "0" }}>
+      <div className="flex flex-1 flex-col justify-between p-5 sm:p-3.5">
+        <Subheading
+          className="md:!mt-0"
+          style={{ marginTop: title ? "1rem" : "0" }}>
           {title}
         </Subheading>
         <form>{invokedChildren}</form>
         {withNavigation && (
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between md:mt-6">
             <button
-              className="flex items-center gap-2.5 text-sm"
+              className="flex items-center gap-2.5 text-sm sm:gap-2 sm:text-xs"
               type="button"
               onClick={setPrevStep}>
-              <ArrowBack width={0.75} />
+              <ArrowBack className="sm:w-2.5" width={0.75} />
               Previous step
             </button>
             <Button

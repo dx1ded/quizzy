@@ -32,9 +32,9 @@ export function Auth() {
               withNavigation={false}
               {...props}>
               {() => (
-                <div className="flex gap-4">
+                <div className="grid grid-cols-2 gap-x-4 sm:gap-x-3">
                   <Button
-                    className="flex-1"
+                    className="sm:text-xs"
                     data-method="sign-up"
                     size="lg"
                     variant="white"
@@ -42,7 +42,7 @@ export function Auth() {
                     Sign up
                   </Button>
                   <Button
-                    className="flex-1"
+                    className="sm:text-xs"
                     data-method="sign-in"
                     size="lg"
                     variant="secondary"

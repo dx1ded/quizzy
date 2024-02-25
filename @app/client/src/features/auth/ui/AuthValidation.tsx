@@ -11,7 +11,7 @@ export function AuthValidation({ error, initialErrors }: AuthValidationProps) {
   if (!error) return
 
   return (
-    <div className="absolute -right-4 top-1/2 -translate-y-1/2 translate-x-full rounded bg-white py-2 pl-2.5 pr-4 drop-shadow before:absolute before:left-0 before:top-1/2 before:-translate-x-full before:-translate-y-1/2 before:border-8 before:border-solid before:border-transparent before:border-r-white">
+    <div className="v:translate-x-0 v:translate-y-0 v:mt-4 v:before:hidden v:drop-shadow-none v:p-0 v:static absolute -right-4 top-1/2 -translate-y-1/2 translate-x-full rounded bg-white py-2 pl-2.5 pr-4 drop-shadow before:absolute before:left-0 before:top-1/2 before:-translate-x-full before:-translate-y-1/2 before:border-8 before:border-solid before:border-transparent before:border-r-white">
       <ul>
         {initialErrors.map((initialError, i) =>
           error.message === initialError ||

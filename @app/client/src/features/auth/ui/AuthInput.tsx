@@ -15,7 +15,7 @@ export function AuthInput<T>({
   loadingField,
   ...props
 }: AuthInputProps<T>) {
-  const inputClassName = `w-full !py-1.5 text-sm ${className || ""}`
+  const inputClassName = `w-full !py-1.5 text-sm sm:text-xs ${className || ""}`
 
   return (
     <>

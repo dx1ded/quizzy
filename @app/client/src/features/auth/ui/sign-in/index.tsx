@@ -39,7 +39,7 @@ export function SignIn({ parentSetPrev }: ParentMultistepControls) {
       {({ control, initialErrors }) => (
         <>
           <AuthLabel htmlFor="login">Login</AuthLabel>
-          <div className="relative [&:not(:last-of-type)]:mb-5">
+          <div className="relative [&:not(:last-of-type)]:mb-5 sm:[&:not(:last-of-type)]:mb-3">
             <Controller
               control={control}
               name="login"
@@ -60,7 +60,7 @@ export function SignIn({ parentSetPrev }: ParentMultistepControls) {
             />
           </div>
           <AuthLabel htmlFor="password">Password</AuthLabel>
-          <div className="relative [&:not(:last-of-type)]:mb-5">
+          <div className="relative [&:not(:last-of-type)]:mb-5 sm:[&:not(:last-of-type)]:mb-3">
             <Controller
               control={control}
               name="password"

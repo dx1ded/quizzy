@@ -12,7 +12,7 @@ export const AuthLabel = forwardRef<
       ref={ref}
       htmlFor={props.htmlFor}
       {...props}
-      className="mb-2 inline-block text-sm font-semibold leading-5">
+      className="mb-2 inline-block text-sm font-semibold leading-5 sm:text-xs">
       {children}
     </label>
   )
