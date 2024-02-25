@@ -1,1 +1,1 @@
-export { Index } from "./ui"
+export { Footer } from "./ui"

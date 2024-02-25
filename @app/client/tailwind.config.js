@@ -36,6 +36,14 @@ export default {
         fadeIn: "fadeIn 0.5s ease-in-out forwards",
         appear: "appear 0.5s ease-in-out forwards"
       }
+    },
+    screens: {
+      xl: { max: "80rem" }, // 1280px
+      lg: { max: "64rem" }, // 1024px
+      md: { max: "48rem" }, // 768px
+      sm: { max: "36rem" }, // 576px
+      xs: { max: "26.25rem" }, // 420px
+      xss: { max: "23.4375rem" } // 375px
     }
   },
 }

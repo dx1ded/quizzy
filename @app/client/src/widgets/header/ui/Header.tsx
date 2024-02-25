@@ -31,9 +31,9 @@ export function Header() {
 
   return (
     <Container className="flex grow flex-wrap items-center justify-between after:mt-2 after:block after:h-px after:w-full after:bg-black/20">
-      <Logo as={NavLink} size={3} to="/" />
+      <Logo as={NavLink} className="xl:!text-4xl" size={3} to="/" />
       <nav>
-        <ul className="flex list-none items-center gap-x-6">
+        <ul className="flex list-none items-center gap-x-6 md:gap-x-5 sm:gap-x-4">
           <li>
             <NavLink
               className="text-sm font-bold text-black no-underline"
@@ -44,12 +44,15 @@ export function Header() {
           <li>
             {data ? (
               <NavLink
-                className="flex h-9 w-9 items-center justify-center rounded-full bg-primary"
+                className="flex h-9 w-9 items-center justify-center rounded-full bg-primary md:h-7 md:w-7"
                 to="/app">
-                <Person color="#fff" width={0.8} />
+                <Person className="md:w-3" color="#fff" width={0.8} />
               </NavLink>
             ) : (
-              <Button as="a" className="px-7 py-2" href="/auth">
+              <Button
+                as="a"
+                className="px-7 py-2 xl:px-5 sm:px-4 sm:py-1.5"
+                href="/auth">
                 Sign up
               </Button>
             )}

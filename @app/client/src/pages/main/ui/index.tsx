@@ -1,5 +1,5 @@
 import { Header } from "widgets/header"
-import { Index } from "widgets/footer"
+import { Footer } from "widgets/footer"
 import { Hero } from "./Hero"
 import { Examples } from "./Examples"
 import { Levels } from "./Levels"
@@ -17,7 +17,7 @@ export function Main() {
         <HowToStart />
         <Invite />
       </main>
-      <Index />
+      <Footer />
     </div>
   )
 }

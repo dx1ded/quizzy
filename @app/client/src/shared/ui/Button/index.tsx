@@ -16,7 +16,7 @@ type ButtonVariants = keyof typeof variants
 
 const sizes = {
   // 16 px
-  lg: "text-base",
+  lg: "text-base xl:text-sm",
   // 14 px
   md: "text-sm",
   // 12 px
