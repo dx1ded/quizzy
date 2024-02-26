@@ -104,7 +104,7 @@ export function QuizItem({
     <div
       className={`${
         isExpanded ? "" : "smaller"
-      } flex h-20 items-center gap-4 rounded-md border border-gray bg-white pl-4 pr-3 [&.smaller]:h-14`}>
+      } flex h-20 items-center gap-4 rounded-md border border-gray bg-white pl-4 pr-3 sm:h-16 xs:h-12 [&.smaller]:h-14`}>
       {/* Confirm modal (for unpublish / delete) */}
       <ConfirmModal
         buttonText={content.buttonText}
@@ -121,10 +121,12 @@ export function QuizItem({
           onChange={checkboxChangeHandler}
         />
       )}
-      <div className="relative h-full">
+      <div className="relative h-full sm:hidden">
         <img
           alt="Quiz"
-          className={`${isExpanded ? "w-40" : "w-24"} h-full object-cover`}
+          className={`${
+            isExpanded ? "w-40 lg:w-20" : "w-24"
+          } h-full object-cover`}
           src={quiz.cover}
         />
         {isExpanded && (
@@ -133,14 +135,14 @@ export function QuizItem({
           </span>
         )}
       </div>
-      <div className="flex h-full flex-1 pb-2.5 pt-3">
+      <div className="flex h-full flex-1 pb-2.5 pt-3 sm:items-center xs:gap-x-3">
         <div
           className={`${
             isExpanded ? "justify-between" : "justify-center"
-          } flex flex-col items-start`}>
+          } flex flex-col items-start gap-2`}>
           <Text className="font-semibold leading-[1rem]">{quiz.name}</Text>
           {isExpanded && (
-            <div className="flex items-center gap-1.5">
+            <div className="flex items-center gap-1.5 xs:hidden">
               <img
                 alt="Profile"
                 className="h-5 w-5 rounded-full"
@@ -152,7 +154,7 @@ export function QuizItem({
         </div>
         <div
           className={`${
-            isExpanded ? "flex-col" : "flex-row"
+            isExpanded ? "flex-col xs:flex-row" : "flex-row"
           } ml-auto flex justify-between gap-3.5`}>
           {!noEdit && (
             <div className="flex items-center justify-end gap-2.5">
@@ -202,7 +204,7 @@ export function QuizItem({
             {isPublished && (
               <>
                 {isExpanded && (
-                  <span className="text-[0.75rem] font-semibold">
+                  <span className="text-[0.75rem] font-semibold xs:hidden">
                     {quiz.plays} plays
                   </span>
                 )}

@@ -50,7 +50,7 @@ export function Caption({
   children,
   ...attrs
 }: PropsWithChildren<HTMLAttributes<HTMLSpanElement>>) {
-  const className = `text-sm sm:text-[0.625rem] leading-5 sm:leading-4 font-normal ${
+  const className = `text-sm sm:text-[0.625rem] sm:leading-4 font-normal ${
     attrs.className || ""
   }`
 

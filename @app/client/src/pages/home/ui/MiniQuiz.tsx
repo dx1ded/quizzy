@@ -19,7 +19,9 @@ export function MiniQuiz({ id, name, cover, plays }: QuizProps) {
         src={cover}
       />
       <div>
-        <Caption className="mb-2 block leading-[1rem]">{name}</Caption>
+        <Caption className="mb-2 block leading-[1rem] sm:text-sm">
+          {name}
+        </Caption>
         <span className="rounded-3xl bg-secondary px-2 py-0.5 text-[0.65rem] font-bold text-white">
           {plays} plays
         </span>

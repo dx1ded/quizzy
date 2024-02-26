@@ -43,8 +43,10 @@ export function AppHeader() {
               onClose={() => setMenuOpen(false)}>
               <MenuItem onClick={() => dispatch(logout())}>
                 <div className="flex items-center gap-2">
-                  <Logout color="#FF0000" width={0.8} />
-                  <span className="text-sm text-red-600">Sign out</span>
+                  <Logout className="md:w-3" color="#FF0000" width={0.8} />
+                  <span className="text-sm text-red-600 md:text-xs">
+                    Sign out
+                  </span>
                 </div>
               </MenuItem>
             </Menu>

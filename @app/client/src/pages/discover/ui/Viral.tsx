@@ -24,13 +24,22 @@ export function Viral() {
         <SliderNavPrev sliderName="viral" />
         <SliderNavNext sliderName="viral" />
         <Swiper
+          breakpoints={{
+            375: {
+              slidesPerView: 2,
+            },
+            1024: {
+              slidesPerView: 3,
+              spaceBetween: 30,
+            },
+          }}
           modules={[Navigation]}
           navigation={{
             prevEl: ".viral__nav--prev",
             nextEl: ".viral__nav--next",
           }}
-          slidesPerView={3}
-          spaceBetween={30}
+          slidesPerView={1}
+          spaceBetween={15}
           loop>
           {isLoading ? (
             <>

@@ -30,7 +30,8 @@ export default {
         }
       },
       gridTemplateColumns: {
-        "reports-table": "1rem repeat(3, 1fr) 1.5rem"
+        "reports-table": "1rem repeat(3, 1fr) 1.5rem",
+        "reports-table-sm": "repeat(3, 1fr) 1.5rem"
       },
       animation: {
         fadeIn: "fadeIn 0.5s ease-in-out forwards",

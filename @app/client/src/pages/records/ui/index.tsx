@@ -2,8 +2,8 @@ import { ChangeEvent, useState } from "react"
 import { useSearchParams } from "react-router-dom"
 import Skeleton from "react-loading-skeleton"
 import { useDebouncedCallback } from "use-debounce"
-import { GetRecordsType } from "@quizzy/common"
 import { useInfiniteQuery } from "@tanstack/react-query"
+import { GetRecordsType } from "@quizzy/common"
 import { AppHeader } from "widgets/header"
 import { Screen } from "widgets/screen"
 import { useSecuredRequest } from "entities/account"
@@ -89,10 +89,10 @@ export function Records() {
       <AppHeader />
       <Screen>
         <Box className="flex-1">
-          <Heading className="mb-5">Records</Heading>
-          <div className="mb-8 flex items-center justify-between border-b border-gray pb-5">
+          <Heading className="mb-5 md:mb-3.5">Records</Heading>
+          <div className="mb-8 flex items-center justify-between gap-4 border-b border-gray pb-5 md:mb-5">
             <Input
-              className="w-80 rounded-md py-1.5 pl-5 text-sm"
+              className="w-full max-w-[20rem] rounded-md py-1.5 pl-5 text-sm"
               defaultValue={searchParams.get("quizName") || ""}
               placeholder="Search"
               onChange={debouncedChangeHandler}
@@ -107,9 +107,9 @@ export function Records() {
               </button>
             )}
           </div>
-          <div className="mb-4 text-sm font-semibold">
-            <div className="grid grid-cols-reports-table items-center gap-4 rounded-t bg-primary px-3 py-3.5 text-white">
-              <div>
+          <div className="mb-4 text-sm font-semibold lg:text-xs xs:text-[0.6rem]">
+            <div className="sm:grid-cols-reports-table-sm grid grid-cols-reports-table items-center gap-4 rounded-t bg-primary px-3 py-3.5 text-white lg:px-2 lg:py-2.5">
+              <div className="sm:hidden">
                 <Checkbox
                   checkboxClassName="border-white"
                   checked={selected.checked}

@@ -12,7 +12,7 @@ export function Discover() {
     <div className="pt-2">
       <AppHeader />
       <Screen className="flex-col">
-        <Box className="flex w-full flex-col gap-12">
+        <Box className="flex w-full flex-col gap-12 lg:gap-8 md:gap-6">
           <Viral />
           <Newest />
           <SearchSection />

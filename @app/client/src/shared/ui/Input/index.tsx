@@ -24,6 +24,10 @@ interface InputProps
   magnifierWidth?: number
   magnifierHeight?: number
   /**
+   * Magnifier container
+   */
+  containerClassName?: string
+  /**
    * Determines if there's a placeholder in the center
    */
   isCentered?: boolean
@@ -37,6 +41,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
     magnifierWidth = 1,
     magnifierHeight = 1,
     magnifierClassName,
+    containerClassName,
     ...attrs
   }: InputProps,
   ref
@@ -49,9 +54,9 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
 
   if (withMagnifier) {
     return (
-      <div className="relative inline-block">
+      <div className={`relative ${containerClassName || ""}`}>
         <Magnifier
-          className={`absolute left-3.5 top-1/2 translate-y-[-50%] lg:left-3 lg:w-3.5 ${
+          className={`absolute left-3.5 top-1/2 -translate-y-1/2 lg:left-3 lg:w-3.5 ${
             magnifierClassName || ""
           }`}
           color="#FFB800"

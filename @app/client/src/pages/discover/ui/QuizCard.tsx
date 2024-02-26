@@ -8,20 +8,22 @@ interface QuizCardProps {
 
 export function QuizCard({ id, cover }: QuizCardProps) {
   return (
-    <div className="group h-[9.75rem]">
+    <div className="group h-[9.75rem] sm:h-[7rem]">
       <img
         alt="Quiz"
         className="h-full w-full rounded-lg object-cover"
         src={cover}
       />
-      <Button
-        as={NavLink}
-        className="absolute bottom-4 left-1/2 -translate-x-1/2 translate-y-20 px-20 opacity-0 transition-all group-hover:translate-y-0 group-hover:opacity-100"
-        size="md"
-        to={`/quiz/${id}`}
-        variant="secondary">
-        Practice
-      </Button>
+      <div className="absolute bottom-4 left-1/2 flex w-full -translate-x-1/2 translate-y-20 justify-center opacity-0 transition-all group-hover:translate-y-0 group-hover:opacity-100">
+        <Button
+          as={NavLink}
+          className="mx-5 w-full max-w-[15rem] text-center"
+          size="md"
+          to={`/quiz/${id}`}
+          variant="secondary">
+          Practice
+        </Button>
+      </div>
     </div>
   )
 }

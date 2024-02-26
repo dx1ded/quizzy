@@ -90,8 +90,8 @@ export function Record({
         title="Delete the record?"
         onConfirm={deleteRecord}
       />
-      <div className="grid grid-cols-reports-table items-center gap-4 border-gray px-3 py-3.5 [&:not(:last-child)]:border-b">
-        <div>
+      <div className="sm:grid-cols-reports-table-sm grid grid-cols-reports-table items-center gap-4 border-gray px-3 py-3.5 lg:px-2 lg:py-2.5 [&:not(:last-child)]:border-b">
+        <div className="sm:hidden">
           {isCreator && (
             <Checkbox
               ref={checkboxRef}

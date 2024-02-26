@@ -59,7 +59,7 @@ export function Library() {
     <div className="pt-2">
       <AppHeader />
       <Screen>
-        <Box className="flex-1">
+        <Box className="w-full flex-1">
           {/* Delete all confirm modal */}
           <ConfirmModal
             buttonText="Delete"
@@ -69,7 +69,7 @@ export function Library() {
             title="Are you sure you want to delete the quizzes?"
             onConfirm={deleteSelected}
           />
-          <div className="mb-5 flex items-center justify-between">
+          <div className="mb-5 flex items-center justify-between sm:mb-3.5">
             <Heading>Library</Heading>
             {!!selected.length && (
               <button
@@ -81,12 +81,12 @@ export function Library() {
               </button>
             )}
           </div>
-          <div className="mb-8 flex items-center justify-between rounded border border-gray px-2.5 py-2">
-            <div className="flex gap-3">
+          <div className="mb-8 flex items-center justify-between rounded border border-gray px-2.5 py-2 md:mb-4 xs:border-none xs:p-0">
+            <div className="flex gap-3 sm:gap-2">
               {options.map((option, i) => (
                 <Button
                   key={i}
-                  className="px-5"
+                  className="px-5 md:px-4 sm:px-3 xs:px-2"
                   size="md"
                   variant={option.isActive ? "secondary" : "white"}
                   onClick={() => optionClickHandler(i)}>
@@ -94,27 +94,42 @@ export function Library() {
                 </Button>
               ))}
             </div>
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-4 md:gap-2.5">
               <button
                 aria-label="Smaller"
                 className={`${
                   view === "small" ? "text-secondary" : "text-gray"
-                } flex w-7 flex-col gap-[0.2rem]`}
+                } flex w-7 flex-col gap-[0.2rem] md:w-5 xs:w-4`}
                 type="button"
                 onClick={() => setView("small")}>
-                <span className="h-[0.175rem] w-full bg-current" aria-hidden />
-                <span className="h-[0.175rem] w-full bg-current" aria-hidden />
+                <span
+                  className="h-[0.175rem] w-full bg-current md:h-[0.15rem]"
+                  aria-hidden
+                />
+                <span
+                  className="h-[0.175rem] w-full bg-current md:h-[0.15rem]"
+                  aria-hidden
+                />
               </button>
               <button
                 aria-label="Expanded"
                 className={`${
                   view === "expanded" ? "text-secondary" : "text-gray"
-                } flex w-7 flex-col gap-[0.2rem]`}
+                } flex w-7 flex-col gap-[0.2rem] md:w-5 xs:w-4`}
                 type="button"
                 onClick={() => setView("expanded")}>
-                <span className="h-[0.175rem] w-full bg-current" aria-hidden />
-                <span className="h-[0.175rem] w-full bg-current" aria-hidden />
-                <span className="h-[0.175rem] w-full bg-current" aria-hidden />
+                <span
+                  className="h-[0.175rem] w-full bg-current md:h-[0.15rem]"
+                  aria-hidden
+                />
+                <span
+                  className="h-[0.175rem] w-full bg-current md:h-[0.15rem]"
+                  aria-hidden
+                />
+                <span
+                  className="h-[0.175rem] w-full bg-current md:h-[0.15rem]"
+                  aria-hidden
+                />
               </button>
             </div>
           </div>

@@ -8,9 +8,11 @@ export function About() {
       <AppHeader />
       <Screen>
         <div className="max-w-3xl">
-          <div className="mb-12">
-            <Subheading className="mb-4">About Quizzy</Subheading>
-            <Caption>
+          <div className="mb-12 lg:mb-8 sm:mb-6">
+            <Subheading className="mb-4 lg:mb-2.5 md:mb-1.5">
+              About Quizzy
+            </Subheading>
+            <Caption className="sm:inline-block">
               Welcome to Quizzy, your go-to destination for creating and
               participating in interactive quizzes that make learning engaging
               and enjoyable. At Quizzy, we believe that education should be fun,
@@ -20,9 +22,11 @@ export function About() {
               their interests and needs.
             </Caption>
           </div>
-          <div className="mb-12">
-            <Subheading className="mb-4">Our Vision</Subheading>
-            <Caption>
+          <div className="mb-12 lg:mb-8 sm:mb-6">
+            <Subheading className="mb-2.5 lg:mb-4 md:mb-1.5">
+              Our Vision
+            </Subheading>
+            <Caption className="sm:inline-block">
               Our vision at Quizzy is to empower educators, students, and
               lifelong learners to unlock their full potential through
               interactive learning experiences. We strive to create a community
@@ -30,9 +34,11 @@ export function About() {
               knows no bounds.
             </Caption>
           </div>
-          <div className="mb-12">
-            <Subheading className="mb-4">Why Quizzy?</Subheading>
-            <Caption>
+          <div className="mb-12 lg:mb-8 sm:mb-6">
+            <Subheading className="mb-2.5 lg:mb-4 md:mb-1.5">
+              Why Quizzy?
+            </Subheading>
+            <Caption className="sm:inline-block">
               Quizzy stands out as a versatile and user-friendly platform for
               creating and engaging with quizzes. Whether you're a teacher
               looking to gamify your lessons, a student seeking an interactive
@@ -41,46 +47,48 @@ export function About() {
               is the ultimate choice for interactive learning:
             </Caption>
             <ol className="mt-4 flex list-inside list-decimal flex-col gap-3">
-              <li className="text-sm">
+              <li className="text-sm sm:text-xs">
                 <span className="font-bold">Ease of Use:</span> Quizzy's
                 intuitive interface makes it easy for anyone to create quizzes
                 in minutes, without any prior technical knowledge.
               </li>
-              <li className="text-sm">
+              <li className="text-sm sm:text-xs">
                 <span className="font-bold">Interactive Gameplay:</span> Engage
                 your audience with real-time quizzes that foster excitement,
                 competition, and collaboration.
               </li>
-              <li className="text-sm">
+              <li className="text-sm sm:text-xs">
                 <span className="font-bold">Customization:</span> Tailor quizzes
                 to your preferences with customizable options for themes,
                 backgrounds, time limits, and scoring systems.
               </li>
-              <li className="text-sm">
+              <li className="text-sm sm:text-xs">
                 <span className="font-bold">Multi-Device Compatibility:</span>{" "}
                 Access Quizzy from any device, anywhere, anytime, ensuring
                 seamless participation and accessibility.
               </li>
-              <li className="text-sm">
+              <li className="text-sm sm:text-xs">
                 <span className="font-bold">Real-Time Feedback:</span> Receive
                 instant feedback on answers to track progress and identify areas
                 for improvement.
               </li>
-              <li className="text-sm">
+              <li className="text-sm sm:text-xs">
                 <span className="font-bold">Comprehensive Analytics:</span> Gain
                 insights into participant performance with detailed analytics
                 and reporting tools.
               </li>
-              <li className="text-sm">
+              <li className="text-sm sm:text-xs">
                 <span className="font-bold">Educational and Fun:</span> Combine
                 educational content with engaging gameplay to make learning
                 enjoyable and rewarding for all.
               </li>
             </ol>
           </div>
-          <div className="mb-12">
-            <Subheading className="mb-4">Get Started with Quizzy</Subheading>
-            <Caption>
+          <div>
+            <Subheading className="mb-2.5 lg:mb-4 md:mb-1.5">
+              Get Started with Quizzy
+            </Subheading>
+            <Caption className="sm:inline-block">
               Ready to embark on a journey of interactive learning with Quizzy?
               Join our community today and unlock a world of knowledge,
               creativity, and fun! Whether you're a teacher, student, or

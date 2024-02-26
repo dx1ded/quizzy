@@ -2,6 +2,7 @@ import { useState } from "react"
 import { createPortal } from "react-dom"
 import { NavLink } from "react-router-dom"
 import { Button } from "../Button"
+import { Caption } from "../Typography"
 
 export function Burger() {
   const [open, setOpen] = useState(false)
@@ -37,7 +38,7 @@ export function Burger() {
               <span className="absolute left-1/2 top-0 h-full w-0.5 -translate-x-1/2 bg-black" />
             </button>
             <nav>
-              <ul className="flex list-none flex-col gap-2">
+              <ul className="mb-4 flex list-none flex-col gap-2">
                 <li>
                   <Button
                     as={NavLink}
@@ -83,6 +84,18 @@ export function Burger() {
                   </Button>
                 </li>
               </ul>
+              <div className="mt-auto border-t border-gray pt-4 text-center">
+                <Button
+                  as={NavLink}
+                  className="mb-2.5 block sm:mb-1 [&.active]:border-primary [&.active]:bg-primary [&.active]:text-white"
+                  size="sm"
+                  to="/app/about"
+                  variant="white"
+                  end>
+                  About
+                </Button>
+                <Caption>v0.1 beta</Caption>
+              </div>
             </nav>
           </div>
         </div>,

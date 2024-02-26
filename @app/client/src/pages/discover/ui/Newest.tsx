@@ -24,13 +24,22 @@ export function Newest() {
         <SliderNavPrev sliderName="newest" />
         <SliderNavNext sliderName="newest" />
         <Swiper
+          breakpoints={{
+            375: {
+              slidesPerView: 2,
+            },
+            1024: {
+              slidesPerView: 3,
+              spaceBetween: 30,
+            },
+          }}
           modules={[Navigation]}
           navigation={{
             prevEl: ".newest__nav--prev",
             nextEl: ".newest__nav--next",
           }}
-          slidesPerView={3}
-          spaceBetween={30}
+          slidesPerView={1}
+          spaceBetween={15}
           loop>
           {isLoading ? (
             <>

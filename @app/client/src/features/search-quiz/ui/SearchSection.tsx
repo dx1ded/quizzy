@@ -48,12 +48,15 @@ export function SearchSection() {
   }, [searchParams])
 
   return (
-    <section className="rounded bg-accent py-20 text-center">
-      <Subheading className="mb-6 text-white">Search for</Subheading>
+    <section className="rounded bg-accent px-5 py-20 lg:py-14 md:py-10 sm:px-3">
+      <Subheading className="mb-6 text-center text-white">
+        Search for
+      </Subheading>
       <Input
         key={searchParams.get("name")!}
         ref={inputRef}
-        className="inline-block w-[30rem] rounded-lg border-none py-2"
+        className="w-full rounded-lg border-none py-2"
+        containerClassName="max-w-[30rem] mx-auto"
         defaultValue={searchParams.get("name")!}
         id="search"
         placeholder="Search for public quizzes"
