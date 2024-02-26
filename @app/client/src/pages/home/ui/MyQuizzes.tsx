@@ -17,9 +17,9 @@ export function MyQuizzes() {
   })
 
   return (
-    <Box className="basis-80">
+    <Box className="basis-80 lg:basis-72 sm:w-full sm:basis-auto">
       <Subheading className="mb-5">My Quizzes</Subheading>
-      <div className="flex flex-col gap-2.5">
+      <div className="flex flex-col gap-2.5 sm:flex-row sm:flex-wrap sm:justify-between sm:gap-5">
         {isLoading ? (
           <>
             <Skeleton height={50} />

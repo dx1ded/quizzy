@@ -27,7 +27,7 @@ export function GetStarted() {
         Become a <span className="font-lobster text-secondary">Quizzy</span>{" "}
         master by practicing our top quizzes.
       </Text>
-      <div className="grid grid-cols-3 gap-x-6 gap-y-7">
+      <div className="grid grid-cols-3 gap-x-6 gap-y-7 xl:grid-cols-2 xl:gap-4 lg:grid-cols-1">
         <AddQuizBox />
         {isLoading ? (
           <>

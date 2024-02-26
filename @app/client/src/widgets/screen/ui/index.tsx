@@ -7,7 +7,7 @@ export function Screen({
   children,
   className,
 }: PropsWithChildren<PropsWithClassname>) {
-  const screenClassName = `flex flex-1 min-w-0 items-start gap-8 pb-8 pl-9 pt-5 ${
+  const screenClassName = `flex flex-1 min-w-0 items-start gap-8 pb-8 pl-9 pt-5 xl:pl-4 xl:gap-6 md:pl-0 sm:flex-col ${
     className || ""
   }`
 

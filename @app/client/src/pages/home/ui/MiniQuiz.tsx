@@ -15,11 +15,11 @@ export function MiniQuiz({ id, name, cover, plays }: QuizProps) {
       to={`/quiz/${id}`}>
       <img
         alt="Quiz"
-        className="h-[3.5rem] w-[6rem] rounded-l-lg object-cover"
+        className="h-[3.5rem] w-[6rem] rounded-l-lg object-cover lg:w-[5rem]"
         src={cover}
       />
       <div>
-        <Caption className="mb-2 block leading-[0.5rem]">{name}</Caption>
+        <Caption className="mb-2 block leading-[1rem]">{name}</Caption>
         <span className="rounded-3xl bg-secondary px-2 py-0.5 text-[0.65rem] font-bold text-white">
           {plays} plays
         </span>

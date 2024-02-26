@@ -43,7 +43,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
 ) {
   const className = `${
     variants[variant]
-  } rounded text-base bg-white py-1 px-2.5 outline-none placeholder:text-current ${
+  } rounded text-base bg-white py-1 px-2.5 outline-none placeholder:text-current lg:text-sm ${
     isCentered ? "text-center" : ""
   } ${attrs.className || ""}`
 
@@ -51,14 +51,14 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
     return (
       <div className="relative inline-block">
         <Magnifier
-          className={`absolute left-3.5 top-1/2 translate-y-[-50%] ${
+          className={`absolute left-3.5 top-1/2 translate-y-[-50%] lg:left-3 lg:w-3.5 ${
             magnifierClassName || ""
           }`}
           color="#FFB800"
           height={magnifierHeight}
           width={magnifierWidth}
         />
-        <input ref={ref} {...attrs} className={`${className} pl-10`} />
+        <input ref={ref} {...attrs} className={`${className} pl-10 lg:pl-8`} />
       </div>
     )
   }
