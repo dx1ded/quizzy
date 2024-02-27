@@ -13,7 +13,7 @@ export function TriangleAnswerColumn({
 }: AnswerColumnProps) {
   return (
     <div className="w-32">
-      <div className="flex h-72 items-end">
+      <div className="flex h-72 items-end lg:h-60 md:h-52">
         <div
           className="w-full bg-[#E01D3B]"
           style={{ height: `${(answers / players) * 100}%` }}
@@ -35,7 +35,7 @@ export function RhombusAnswerColumn({
 }: AnswerColumnProps) {
   return (
     <div className="w-32">
-      <div className="flex h-72 items-end">
+      <div className="flex h-72 items-end lg:h-60 md:h-52">
         <div
           className="w-full bg-[#1368CF]"
           style={{ height: `${(answers / players) * 100}%` }}
@@ -57,7 +57,7 @@ export function CircleAnswerColumn({
 }: AnswerColumnProps) {
   return (
     <div className="w-32">
-      <div className="flex h-72 items-end">
+      <div className="flex h-72 items-end lg:h-60 md:h-52">
         <div
           className="w-full bg-[#FFB800]"
           style={{ height: `${(answers / players) * 100}%` }}
@@ -79,7 +79,7 @@ export function SquareAnswerColumn({
 }: AnswerColumnProps) {
   return (
     <div className="w-32">
-      <div className="flex h-72 items-end">
+      <div className="flex h-72 items-end lg:h-60 md:h-52">
         <div
           className="w-full bg-[#28BC01]"
           style={{ height: `${(answers / players) * 100}%` }}

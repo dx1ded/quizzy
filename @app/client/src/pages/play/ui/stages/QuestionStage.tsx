@@ -18,13 +18,13 @@ export function QuestionStage() {
         <div />
         <div>
           <QuestionIcon
-            className="mx-auto mb-6 drop-shadow"
+            className="mx-auto mb-6 drop-shadow lg:mb-4 lg:w-20 md:mb-1 md:w-16 sm:mb-0"
             color="none"
             height={6}
             width={6}
           />
-          <div className="bg-white py-7 shadow-lg">
-            <h2 className="text-center text-2xl font-bold text-black">
+          <div className="bg-white px-4 py-7 shadow-lg lg:py-5 md:py-4">
+            <h2 className="text-center text-2xl font-bold text-black lg:text-xl md:text-lg sm:text-base">
               {question.name}
             </h2>
           </div>

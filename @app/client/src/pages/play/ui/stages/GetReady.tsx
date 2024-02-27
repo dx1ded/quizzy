@@ -14,8 +14,10 @@ export function GetReady() {
       />
       <div className="flex h-full w-full flex-col items-center justify-between">
         <div />
-        <div className="flex h-60 w-60 animate-bounce items-center justify-center rounded-full bg-secondary">
-          <h1 className="font-lobster text-5xl text-white">Get ready!</h1>
+        <div className="flex h-60 w-60 animate-bounce items-center justify-center rounded-full bg-secondary lg:h-48 lg:w-48">
+          <h1 className="font-lobster text-5xl text-white lg:text-3xl">
+            Get ready!
+          </h1>
         </div>
         <ProgressBar progress={state.progressBar} />
       </div>

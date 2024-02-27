@@ -56,8 +56,8 @@ function ChooseAvatarModal({
 
   return (
     <Modal open={open} onClose={() => setOpen(false)}>
-      <div className="absolute left-1/2 top-1/2 w-[28rem] -translate-x-1/2 -translate-y-1/2 rounded-md bg-white p-4 pt-6">
-        <div className="grid grid-cols-4 gap-3">
+      <div className="absolute left-1/2 top-1/2 h-full w-full max-w-[28rem] -translate-x-1/2 -translate-y-1/2 overflow-auto rounded-md bg-white p-4 pt-6">
+        <div className="grid grid-cols-4 gap-3 sm:grid-cols-3">
           {avatarsList.map((avatarName, i) => (
             <div key={i} className="relative">
               <input
@@ -125,19 +125,19 @@ export function ChooseAvatar() {
         src="https://firebasestorage.googleapis.com/v0/b/quizzy-222b7.appspot.com/o/quiz-background.png?alt=media"
       />
       <div className="text-center">
-        <div className="relative mb-3 inline-block">
+        <div className="relative mb-3 inline-block sm:mb-1.5">
           <Avatar
-            className="mx-auto"
+            className="mx-auto !h-40 sm:!w-40"
             height="12.5rem"
             name={player.avatar}
             width="12.5rem"
           />
           <button
             aria-label="Open the menu to choose avatar"
-            className="absolute -right-1.5 top-3 flex h-9 w-9 items-center justify-center rounded bg-white shadow"
+            className="absolute -right-1.5 top-3 flex h-9 w-9 items-center justify-center rounded bg-white shadow sm:h-7 sm:w-7"
             type="button"
             onClick={() => setModalOpen(true)}>
-            <Edit width={1.25} />
+            <Edit className="sm:w-4" width={1.25} />
           </button>
         </div>
         <Subheading className="text-white">{player.nickname}</Subheading>

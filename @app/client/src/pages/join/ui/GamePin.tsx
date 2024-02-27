@@ -67,11 +67,11 @@ export function GamePin({ setPin }: GamePinProps) {
   }
 
   return (
-    <div className="flex h-screen w-full flex-col items-center justify-center gap-5 bg-primary">
-      <Heading className="font-lobster text-5xl text-white">
+    <div className="flex h-screen w-full flex-col items-center justify-center gap-5 bg-primary px-4">
+      <Heading className="font-lobster text-5xl text-white lg:text-3xl sm:text-3xl">
         Quizzy Time!
       </Heading>
-      <div className="flex w-96 flex-col gap-2.5 rounded-xl bg-white p-4">
+      <div className="flex w-full max-w-[24rem] flex-col gap-2.5 rounded-xl bg-white p-4">
         <Input
           className="rounded-lg py-2 font-semibold"
           placeholder="Game PIN"

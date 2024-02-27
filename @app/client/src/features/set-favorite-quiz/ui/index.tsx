@@ -16,7 +16,11 @@ export function SetFavoriteQuiz() {
 
   return (
     <button type="button" onClick={clickHandler}>
-      <Star color={isFavorite ? "#FDB800" : "#FFFFFF"} width={1.5} />
+      <Star
+        className="lg:w-5"
+        color={isFavorite ? "#FDB800" : "#FFFFFF"}
+        width={1.5}
+      />
     </button>
   )
 }

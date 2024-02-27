@@ -24,7 +24,7 @@ export function QuizInfo() {
   return (
     <div className="pt-2">
       <AppHeader />
-      <Screen>
+      <Screen className="lg:gap-4">
         <QuizInfoProvider value={{ ...data!, isLoading }}>
           <Quiz />
           <Questions />

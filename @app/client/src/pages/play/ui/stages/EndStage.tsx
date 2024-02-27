@@ -16,26 +16,26 @@ export function EndStage() {
   )
 
   return (
-    <div className="absolute flex h-full w-full flex-col items-center justify-end">
+    <div className="absolute flex h-full w-full flex-col items-center justify-end p-4 pb-0">
       <img
         alt="Quiz"
         className="fixed left-0 top-0 -z-10 h-full w-full object-cover"
         src="https://firebasestorage.googleapis.com/v0/b/quizzy-222b7.appspot.com/o/quiz-background.png?alt=media"
       />
       <NavLink
-        className="absolute left-5 top-5 rounded-lg bg-secondary p-2 shadow"
+        className="absolute left-5 top-5 rounded-lg bg-secondary p-2 shadow sm:left-2 sm:top-2"
         to={hasAccount ? "/app" : "/"}>
-        <ExitToApp color="#fff" width={1.5} />
+        <ExitToApp className="sm:w-4" color="#fff" width={1.5} />
       </NavLink>
-      <Logo className="mb-4" color="#fff" size={3.5} />
-      <div className="mb-10 bg-white px-14 py-2.5 shadow-2xl">
+      <Logo className="mb-4 lg:!text-5xl" color="#fff" size={3.5} />
+      <div className="mb-10 bg-white px-14 py-2.5 shadow-2xl lg:px-8">
         <Heading>{state.quizName}</Heading>
       </div>
-      <div className="flex basis-[28rem] items-end">
-        <div className="h-[65%] w-52 rounded-t-xl bg-primary py-6 shadow-2xl">
+      <div className="flex basis-[28rem] items-end lg:basis-[20rem]">
+        <div className="h-[65%] w-52 rounded-t-xl bg-primary py-6 shadow-2xl lg:w-44 sm:w-32 xs:w-28 xss:w-20">
           <div className="relative mb-2">
             <svg
-              className="mx-auto"
+              className="mx-auto sm:!h-16 sm:!w-16"
               fill="none"
               height="70"
               viewBox="0 0 77 70"
@@ -59,9 +59,9 @@ export function EndStage() {
             {topPlayers[1].points}
           </p>
         </div>
-        <div className="flex h-full w-52 flex-col items-center">
+        <div className="flex h-full w-52 flex-col items-center lg:w-44 sm:w-32 xs:w-24 xss:w-20">
           <Avatar
-            className="mx-auto mb-2 shadow-xl"
+            className="mx-auto mb-2 shadow-xl lg:!h-20 lg:!w-20"
             height="5.5rem"
             name={topPlayers[0].avatar}
             width="5.5rem"
@@ -69,7 +69,7 @@ export function EndStage() {
           <div className="w-full flex-1 rounded-t-xl bg-primary py-6 shadow-2xl">
             <div className="relative mb-2">
               <svg
-                className="mx-auto"
+                className="mx-auto sm:!h-16 sm:!w-16"
                 fill="none"
                 height="70"
                 viewBox="0 0 77 70"
@@ -94,10 +94,10 @@ export function EndStage() {
             </p>
           </div>
         </div>
-        <div className="h-[55%] w-52 rounded-t-xl bg-primary py-6 shadow-2xl">
+        <div className="h-[55%] w-52 rounded-t-xl bg-primary py-6 shadow-2xl lg:w-44 sm:w-32 xs:w-28 xss:w-20">
           <div className="relative mb-2">
             <svg
-              className="mx-auto"
+              className="mx-auto sm:!h-16 sm:!w-16"
               fill="none"
               height="70"
               viewBox="0 0 77 70"

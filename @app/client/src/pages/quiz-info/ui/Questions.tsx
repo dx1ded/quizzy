@@ -9,8 +9,8 @@ export function Questions() {
   const { quiz, isLoading } = useContext(QuizInfoContext)
 
   return (
-    <Box className="h-full flex-1">
-      <Subheading className="mb-5 flex">
+    <Box className="h-full w-full flex-1 lg:px-3">
+      <Subheading className="mb-5 flex lg:mb-4">
         Questions (
         {isLoading ? (
           <Skeleton containerClassName="mx-1" width={30} />

@@ -24,7 +24,7 @@ export function StartQuiz({ quizId }: StartQuizProps) {
   }
 
   return (
-    <Button className="px-8" variant="secondary" onClick={clickHandler}>
+    <Button className="px-8 lg:px-6" variant="secondary" onClick={clickHandler}>
       Start
     </Button>
   )

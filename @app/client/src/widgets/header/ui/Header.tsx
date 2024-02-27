@@ -37,7 +37,7 @@ export function Header() {
           <li>
             <NavLink
               className="text-sm font-bold text-black no-underline"
-              to="/play">
+              to="/join">
               Play
             </NavLink>
           </li>

@@ -140,7 +140,7 @@ export function QuizEdit() {
       <Snackbar message="Saving your quiz" open={isSaving} />
       <FileTooLargeMessage />
       <FormProvider {...methods}>
-        <form onChange={debouncedSubmit}>
+        <form className="min-w-[70rem]" onChange={debouncedSubmit}>
           <SettingsModal />
           <Header />
           <div className="flex h-[54rem]">

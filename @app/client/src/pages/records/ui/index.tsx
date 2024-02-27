@@ -108,7 +108,7 @@ export function Records() {
             )}
           </div>
           <div className="mb-4 text-sm font-semibold lg:text-xs xs:text-[0.6rem]">
-            <div className="sm:grid-cols-reports-table-sm grid grid-cols-reports-table items-center gap-4 rounded-t bg-primary px-3 py-3.5 text-white lg:px-2 lg:py-2.5">
+            <div className="grid grid-cols-reports-table items-center gap-4 rounded-t bg-primary px-3 py-3.5 text-white lg:px-2 lg:py-2.5 sm:grid-cols-reports-table-sm">
               <div className="sm:hidden">
                 <Checkbox
                   checkboxClassName="border-white"

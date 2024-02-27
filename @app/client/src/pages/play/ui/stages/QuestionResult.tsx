@@ -26,13 +26,13 @@ export function QuestionResult() {
         src={question.background}
       />
       <div className="absolute left-0 top-0 -z-10 h-full w-full bg-black opacity-50" />
-      <div className="flex h-full w-full flex-col justify-between px-6 py-8">
+      <div className="flex h-full w-full flex-col justify-between gap-12 px-6 py-8 lg:px-4 lg:py-6 md:px-3 md:py-4 sm:p-2 sm:pt-4">
         <div className="relative flex items-center justify-center">
-          <div className="rounded-lg bg-white px-14 py-4 shadow-lg">
-            <Subheading>{question.name}</Subheading>
+          <div className="rounded-lg bg-white px-14 py-4 shadow-lg lg:px-8 lg:py-3 sm:px-4">
+            <Subheading className="text-center">{question.name}</Subheading>
           </div>
         </div>
-        <div className="flex items-end justify-center gap-7">
+        <div className="flex items-end justify-center gap-7 lg:gap-5 md:gap-3.5">
           <TriangleAnswerColumn
             answers={
               state.answers.filter((answer) => answer.answerIndex === 0).length
@@ -62,7 +62,7 @@ export function QuestionResult() {
             players={state.players.length}
           />
         </div>
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-2 gap-4 md:gap-2 sm:grid-cols-1 sm:gap-1.5">
           <TriangleAnswer
             isCorrect={question.correctAnswers[0]}
             name={question.answers[0]}
