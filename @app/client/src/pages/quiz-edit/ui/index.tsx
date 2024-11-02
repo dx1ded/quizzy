@@ -1,6 +1,6 @@
 import _ from "lodash"
 import { useCallback, useEffect, useMemo, useState } from "react"
-import { useDispatch, useSelector } from "react-redux"
+import { shallowEqual, useDispatch, useSelector } from "react-redux"
 import { useParams } from "react-router-dom"
 import { FieldErrors, FormProvider, useForm } from "react-hook-form"
 import { useDebouncedCallback } from "use-debounce"
@@ -40,10 +40,20 @@ export function QuizEdit() {
   const { id } = useParams()
   const request = useSecuredRequest()
   const dispatch = useDispatch()
-  const { data, isSaving, isTouched, isPublished } = useSelector<
+  const data = useSelector<AppStore, QuizState["data"]>(
+    (state) => state.quiz.data
+  )
+  const { isSaving, isTouched, isPublished } = useSelector<
     AppStore,
-    QuizState
-  >((state) => state.quiz)
+    Pick<QuizState, "isSaving" | "isTouched" | "isPublished">
+  >(
+    (state) => ({
+      isSaving: state.quiz.isSaving,
+      isTouched: state.quiz.isTouched,
+      isPublished: state.quiz.isPublished,
+    }),
+    shallowEqual
+  )
 
   const [modalOpen, setModalOpen] = useState(false)
   const [messageOpen, setMessageOpen] = useState(false)
@@ -143,7 +153,7 @@ export function QuizEdit() {
         <form className="min-w-[70rem]" onChange={debouncedSubmit}>
           <SettingsModal />
           <Header />
-          <div className="flex h-[54rem]">
+          <div className="flex h-[calc(100vh-5.125rem)] min-h-[42rem]">
             <Preview />
             <Question />
             <Settings submit={debouncedSubmit} />

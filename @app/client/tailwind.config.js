@@ -10,7 +10,7 @@ export default {
         "primary": "#273ED4",
         "secondary": "#FFB800",
         "accent": "#DFCFF9",
-        "gray": "#C8C8C8"
+        "grayish": "#C8C8C8"
       },
       fontFamily: {
         sans: ["Open Sans", "sans-serif"],

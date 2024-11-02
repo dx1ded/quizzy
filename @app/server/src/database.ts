@@ -28,13 +28,5 @@ export const publishedQuizRepository =
   AppDataSource.getRepository(PublishedQuiz)
 
 AppDataSource.initialize()
-  .then(() => console.log("Connected to the DB!"))
-  .catch((e) => console.log("Error connecting to the DB!", e))
-
-// const records = await recordRepository
-//   .createQueryBuilder("record")
-//   .take(nPerPage)
-//   .skip(skip)
-//   .where(`record.result @> '[{"id": ${userId}}]'`)
-//   .orWhere("record.userRef = :userId", { userId })
-//   .getMany()
+  .then(() => console.log("Connected to the DB"))
+  .catch((e) => console.log("Error connecting to the DB", e))

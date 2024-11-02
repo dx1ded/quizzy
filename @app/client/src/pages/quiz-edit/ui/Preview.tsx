@@ -8,15 +8,18 @@ import type { AppStore } from "app/model"
 import { PreviewQuestion } from "./PreviewQuestion"
 
 export function Preview() {
-  const { activeQuestion, isPublished } = useSelector<AppStore, QuizState>(
-    (state) => state.quiz
+  const activeQuestion = useSelector<AppStore, QuizState["activeQuestion"]>(
+    (state) => state.quiz.activeQuestion
+  )
+  const isPublished = useSelector<AppStore, QuizState["isPublished"]>(
+    (state) => state.quiz.isPublished
   )
 
   const { control } = useFormContext<DraftQuizType>()
   const questions = useWatch({ control, name: "questions" })
 
   return (
-    <aside className="flex basis-56 flex-col gap-4 overflow-y-auto px-2 py-1.5">
+    <aside className="flex basis-56 flex-col gap-4 overflow-y-auto px-1.5 pb-3 pt-2">
       {questions.map((question, i) => (
         <PreviewQuestion
           key={i}

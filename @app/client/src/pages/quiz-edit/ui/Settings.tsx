@@ -12,14 +12,17 @@ interface SettingsProps {
 }
 
 export function Settings({ submit }: SettingsProps) {
-  const { activeQuestion, isPublished } = useSelector<AppStore, QuizState>(
-    (state) => state.quiz
+  const activeQuestion = useSelector<AppStore, QuizState["activeQuestion"]>(
+    (state) => state.quiz.activeQuestion
+  )
+  const isPublished = useSelector<AppStore, QuizState["isPublished"]>(
+    (state) => state.quiz.isPublished
   )
   const { control, getValues } = useFormContext<DraftQuizType>()
   const question = getValues().questions[activeQuestion]
 
   return (
-    <aside className="flex basis-48 flex-col px-3 pb-1 pt-4">
+    <aside className="flex basis-48 flex-col px-3 pb-3 pt-4">
       <div className="mb-5">
         <p className="mb-1.5 font-bold">Time limit</p>
         <Controller

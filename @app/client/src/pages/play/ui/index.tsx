@@ -22,8 +22,11 @@ export function Play() {
   const [playerToken, setPlayerToken] = useState(
     localStorage.getItem("playerToken") || ""
   )
-  const { id, nickname } = useSelector<AppStore, AccountState>(
-    (state) => state.account
+  const id = useSelector<AppStore, AccountState["id"]>(
+    (state) => state.account.id
+  )
+  const nickname = useSelector<AppStore, AccountState["nickname"]>(
+    (state) => state.account.nickname
   )
   const { lastJsonMessage, sendJsonMessage } = useWebSocket<PlayResponse>(
     "ws://localhost:5000/api/play",

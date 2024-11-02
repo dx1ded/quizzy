@@ -9,8 +9,8 @@ import { Logo } from "shared/ui/Logo"
 import { Button } from "shared/ui/Button"
 
 export function Header() {
-  const { token } = useSelector<AppStore, AccountState>(
-    (state) => state.account
+  const token = useSelector<AppStore, AccountState["token"]>(
+    (state) => state.account.token
   )
   const { data } = useQuery({
     queryKey: ["authToken"],

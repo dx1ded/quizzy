@@ -12,8 +12,8 @@ import { Text } from "shared/ui/Typography"
 import type { AppStore } from "app/model"
 
 export function Question() {
-  const { activeQuestion } = useSelector<AppStore, QuizState>(
-    (state) => state.quiz
+  const activeQuestion = useSelector<AppStore, QuizState["activeQuestion"]>(
+    (state) => state.quiz.activeQuestion
   )
   const { control } = useFormContext<DraftQuizType>()
   const question = useWatch({ control, name: "questions" })[activeQuestion]

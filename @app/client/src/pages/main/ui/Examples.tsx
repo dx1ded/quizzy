@@ -20,21 +20,21 @@ export function Examples() {
             <img
               alt="In-game functionaly"
               className="w-full rounded"
-              src="https://dummyimage.com/350x190/D9D9D9/fff"
+              src="https://firebasestorage.googleapis.com/v0/b/quizzy-222b7.appspot.com/o/screenshots%2FScreenshot%202024-11-02%20at%202.24.00%E2%80%AFPM.png?alt=media&token=1d8527b3-d874-47d0-b05e-5f056d94a020"
             />
           </div>
           <div>
             <img
               alt="In-game functionaly"
               className="w-full rounded"
-              src="https://dummyimage.com/350x190/D9D9D9/fff"
+              src="https://firebasestorage.googleapis.com/v0/b/quizzy-222b7.appspot.com/o/screenshots%2FScreenshot%202024-11-02%20at%202.31.02%E2%80%AFPM.png?alt=media&token=85cb4b73-ee0b-46dc-9771-c1762c21a53d"
             />
           </div>
           <div className="sm:col-span-2">
             <img
               alt="In-game functionaly"
               className="w-full rounded"
-              src="https://dummyimage.com/350x190/D9D9D9/fff"
+              src="https://firebasestorage.googleapis.com/v0/b/quizzy-222b7.appspot.com/o/screenshots%2FScreenshot%202024-11-02%20at%202.33.22%E2%80%AFPM.png?alt=media&token=3e732c72-aaaf-497e-8163-36ad4cec5656"
             />
           </div>
         </div>

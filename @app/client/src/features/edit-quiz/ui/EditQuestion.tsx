@@ -47,8 +47,8 @@ export function AddQuestion({ render }: ElementRenderProp) {
 
 export function DeleteQuestion({ render }: ElementRenderProp) {
   const dispatch = useDispatch()
-  const { activeQuestion } = useSelector<AppStore, QuizState>(
-    (state) => state.quiz
+  const activeQuestion = useSelector<AppStore, QuizState["activeQuestion"]>(
+    (state) => state.quiz.activeQuestion
   )
 
   return cloneElement(render(), {
@@ -58,8 +58,8 @@ export function DeleteQuestion({ render }: ElementRenderProp) {
 
 export function DuplicateQuestion({ render }: ElementRenderProp) {
   const dispatch = useDispatch()
-  const { activeQuestion } = useSelector<AppStore, QuizState>(
-    (state) => state.quiz
+  const activeQuestion = useSelector<AppStore, QuizState["activeQuestion"]>(
+    (state) => state.quiz.activeQuestion
   )
 
   return cloneElement(render(), {
@@ -69,8 +69,8 @@ export function DuplicateQuestion({ render }: ElementRenderProp) {
 
 export function ChangeQuestionBackground() {
   const dispatch = useDispatch()
-  const { isPublished } = useSelector<AppStore, QuizState>(
-    (state) => state.quiz
+  const isPublished = useSelector<AppStore, QuizState["isPublished"]>(
+    (state) => state.quiz.isPublished
   )
   const { setMessageOpen } = useContext(EditContext)
 
@@ -108,8 +108,8 @@ export function ChangeQuestionBackground() {
 
 export function ChangeQuestionPicture() {
   const dispatch = useDispatch()
-  const { isPublished } = useSelector<AppStore, QuizState>(
-    (state) => state.quiz
+  const isPublished = useSelector<AppStore, QuizState["isPublished"]>(
+    (state) => state.quiz.isPublished
   )
   const { setMessageOpen } = useContext(EditContext)
 
@@ -146,8 +146,11 @@ export function ChangeQuestionPicture() {
 }
 
 export function EditQuestionName() {
-  const { activeQuestion, isPublished } = useSelector<AppStore, QuizState>(
-    (state) => state.quiz
+  const activeQuestion = useSelector<AppStore, QuizState["activeQuestion"]>(
+    (state) => state.quiz.activeQuestion
+  )
+  const isPublished = useSelector<AppStore, QuizState["isPublished"]>(
+    (state) => state.quiz.isPublished
   )
   const {
     register,
@@ -193,8 +196,11 @@ const answerComponents: Record<
 }
 
 export function QuestionAnswer({ type }: QuestionAnswerProps) {
-  const { activeQuestion, isPublished } = useSelector<AppStore, QuizState>(
-    (state) => state.quiz
+  const activeQuestion = useSelector<AppStore, QuizState["activeQuestion"]>(
+    (state) => state.quiz.activeQuestion
+  )
+  const isPublished = useSelector<AppStore, QuizState["isPublished"]>(
+    (state) => state.quiz.isPublished
   )
   const {
     getValues,

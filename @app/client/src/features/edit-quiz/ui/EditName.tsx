@@ -7,8 +7,8 @@ import type { AppStore } from "app/model"
 import { EditValidation } from "./EditValidation"
 
 export function EditName() {
-  const { isPublished } = useSelector<AppStore, QuizState>(
-    (state) => state.quiz
+  const isPublished = useSelector<AppStore, QuizState["isPublished"]>(
+    (state) => state.quiz.isPublished
   )
   const {
     register,

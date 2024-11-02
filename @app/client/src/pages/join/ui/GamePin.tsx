@@ -24,8 +24,8 @@ export function GamePin({ setPin }: GamePinProps) {
   const request = useSecuredRequest()
   const navigate = useNavigate()
   const dispatch = useDispatch()
-  const { token } = useSelector<AppStore, AccountState>(
-    (state) => state.account
+  const token = useSelector<AppStore, AccountState["token"]>(
+    (state) => state.account.token
   )
   const {
     register,

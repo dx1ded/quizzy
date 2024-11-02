@@ -14,8 +14,8 @@ export function PublishQuiz() {
   const request = useSecuredRequest()
   const dispatch = useDispatch()
   const { submitHandler } = useContext(EditContext)
-  const { isPublished } = useSelector<AppStore, QuizState>(
-    (state) => state.quiz
+  const isPublished = useSelector<AppStore, QuizState["isPublished"]>(
+    (state) => state.quiz.isPublished
   )
   const { control, trigger } = useFormContext<DraftQuizType>()
   const [isOpen, setIsOpen] = useState(false)

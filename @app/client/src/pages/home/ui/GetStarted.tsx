@@ -53,7 +53,7 @@ export function GetStarted() {
       </div>
       {hasNextPage && (
         <Button
-          className="mx-auto mt-6 block px-6"
+          className="mx-auto mt-9 block px-6"
           size="md"
           variant="white"
           onClick={() => fetchNextPage()}>

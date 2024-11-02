@@ -5,8 +5,8 @@ import { AccountState } from "./store"
 
 export function useSecuredRequest() {
   const dispatch = useDispatch()
-  const { token } = useSelector<AppStore, AccountState>(
-    (state) => state.account
+  const token = useSelector<AppStore, AccountState["token"]>(
+    (state) => state.account.token
   )
 
   return function send<T = unknown>(

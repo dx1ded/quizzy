@@ -18,7 +18,7 @@ export function AppHeader() {
 
   return (
     <Container
-      className="flex grow flex-wrap items-center justify-between after:mt-2 after:block after:h-px after:w-full after:bg-black/20"
+      className="flex grow flex-wrap items-center justify-between after:mt-2 after:block after:h-px after:w-full after:bg-black/10"
       maxWidth={86}>
       <div className="flex basis-36 items-center gap-3 lg:basis-28">
         <Burger />

@@ -23,7 +23,7 @@ export function HeaderSearch() {
 
   return (
     <Input
-      className="w-96 lg:w-72 md:w-60 sm:hidden"
+      className="w-96 text-[0.9375rem] lg:w-72 md:w-60 sm:hidden"
       defaultValue={searchParams.get("name")!}
       magnifierClassName="sm:hidden"
       placeholder="Search for public quizzes"

@@ -11,7 +11,7 @@ export function CreateQuiz({
 }: ComponentPropsWithoutRef<"button">) {
   const request = useSecuredRequest()
   const navigate = useNavigate()
-  const buttonClassName = `px-5 ${className || ""}`
+  const buttonClassName = `px-5 text-sm ${className || ""}`
 
   const clickHandler = async () => {
     const { id } = await request<DraftQuizType>("/api/quiz/create", {

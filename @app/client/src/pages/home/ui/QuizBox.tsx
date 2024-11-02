@@ -11,18 +11,18 @@ interface QuizBoxProps {
 
 export function QuizBox({ id, name, description, cover }: QuizBoxProps) {
   return (
-    <div className="rounded-lg shadow-md">
+    <div className="flex flex-col items-start rounded-lg shadow-md">
       <img
         alt="Quiz"
         className="mb-3 h-[4.5rem] w-full rounded-t-md object-cover"
         src={cover}
       />
-      <div className="px-3.5 pb-4 pt-2">
+      <div className="flex w-full flex-1 flex-col px-3.5 pb-4 pt-2">
         <p className="mb-1.5">{name}</p>
         <span className="mb-4 line-clamp-2 text-[0.75rem]">{description}</span>
         <Button
           as={NavLink}
-          className="w-full text-center"
+          className="mt-auto w-full text-center"
           size="sm"
           to={`/quiz/${id}`}
           variant="white">

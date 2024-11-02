@@ -5,11 +5,6 @@
     "useDefineForClassFields": true,
     "module": "ESNext",
     "skipLibCheck": true,
-
-    /* Bundler mode */
-    "allowImportingTsExtensions": false,
-
-    /* Linting */
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,

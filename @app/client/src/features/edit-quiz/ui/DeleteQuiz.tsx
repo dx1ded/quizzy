@@ -10,8 +10,11 @@ import type { AppStore } from "app/model"
 export function DeleteQuiz() {
   const request = useSecuredRequest()
   const navigate = useNavigate()
-  const { data, isPublished } = useSelector<AppStore, QuizState>(
-    (state) => state.quiz
+  const data = useSelector<AppStore, QuizState["data"]>(
+    (state) => state.quiz.data
+  )
+  const isPublished = useSelector<AppStore, QuizState["isPublished"]>(
+    (state) => state.quiz.isPublished
   )
   const [dialogOpen, setDialogOpen] = useState(false)
 

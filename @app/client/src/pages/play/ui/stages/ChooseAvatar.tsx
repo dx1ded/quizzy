@@ -56,7 +56,7 @@ function ChooseAvatarModal({
 
   return (
     <Modal open={open} onClose={() => setOpen(false)}>
-      <div className="absolute left-1/2 top-1/2 h-full w-full max-w-[28rem] -translate-x-1/2 -translate-y-1/2 overflow-auto rounded-md bg-white p-4 pt-6">
+      <div className="absolute left-1/2 top-1/2 h-fit w-full max-w-[28rem] -translate-x-1/2 -translate-y-1/2 overflow-auto rounded-md bg-white p-4 pt-6">
         <div className="grid grid-cols-4 gap-3 sm:grid-cols-3">
           {avatarsList.map((avatarName, i) => (
             <div key={i} className="relative">
