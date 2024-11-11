@@ -84,7 +84,7 @@ export function Burger() {
                   </Button>
                 </li>
               </ul>
-              <div className="mt-auto border-t border-gray pt-4 text-center">
+              <div className="border-gray mt-auto border-t pt-4 text-center">
                 <Button
                   as={NavLink}
                   className="mb-2.5 block sm:mb-1 [&.active]:border-primary [&.active]:bg-primary [&.active]:text-white"

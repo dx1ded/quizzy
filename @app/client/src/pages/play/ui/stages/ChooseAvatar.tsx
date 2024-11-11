@@ -77,7 +77,7 @@ function ChooseAvatarModal({
             </div>
           ))}
         </div>
-        <div className="mt-4 flex justify-end gap-2 border-t border-gray pt-4">
+        <div className="border-gray mt-4 flex justify-end gap-2 border-t pt-4">
           <Button
             className="px-5"
             size="md"

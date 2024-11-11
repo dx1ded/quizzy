@@ -90,7 +90,7 @@ export function Records() {
       <Screen>
         <Box className="flex-1">
           <Heading className="mb-5 md:mb-3.5">Records</Heading>
-          <div className="mb-8 flex items-center justify-between gap-4 border-b border-gray pb-5 md:mb-5">
+          <div className="border-gray mb-8 flex items-center justify-between gap-4 border-b pb-5 md:mb-5">
             <Input
               className="w-full max-w-[20rem] rounded-md py-1.5 pl-5 text-sm"
               defaultValue={searchParams.get("quizName") || ""}
@@ -123,7 +123,7 @@ export function Records() {
               <span>No. of players</span>
               <span />
             </div>
-            <div className="rounded-b border border-gray">
+            <div className="border-gray rounded-b border">
               {isLoading ? (
                 <>
                   <Skeleton height="3rem" />

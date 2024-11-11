@@ -9,7 +9,7 @@ export function Sidebar() {
         <li className="[&:not(:last-child)]:mb-2.5">
           <Button
             as={NavLink}
-            className="text-gray-600 block pl-4 [&.active]:border-primary [&.active]:bg-primary [&.active]:text-white"
+            className="block pl-4 text-gray-600 [&.active]:border-primary [&.active]:bg-primary [&.active]:text-white"
             size="md"
             to="/app"
             variant="white"
@@ -20,7 +20,7 @@ export function Sidebar() {
         <li className="[&:not(:last-child)]:mb-2.5">
           <Button
             as={NavLink}
-            className="text-gray-700 block pl-4 [&.active]:border-primary [&.active]:bg-primary [&.active]:text-white"
+            className="block pl-4 text-gray-700 [&.active]:border-primary [&.active]:bg-primary [&.active]:text-white"
             size="md"
             to="/app/discover"
             variant="white"
@@ -31,7 +31,7 @@ export function Sidebar() {
         <li className="[&:not(:last-child)]:mb-2.5">
           <Button
             as={NavLink}
-            className="text-gray-700 block pl-4 [&.active]:border-primary [&.active]:bg-primary [&.active]:text-white"
+            className="block pl-4 text-gray-700 [&.active]:border-primary [&.active]:bg-primary [&.active]:text-white"
             size="md"
             to="/app/library"
             variant="white"
@@ -42,7 +42,7 @@ export function Sidebar() {
         <li className="[&:not(:last-child)]:mb-2.5">
           <Button
             as={NavLink}
-            className="text-gray-700 block pl-4 [&.active]:border-primary [&.active]:bg-primary [&.active]:text-white"
+            className="block pl-4 text-gray-700 [&.active]:border-primary [&.active]:bg-primary [&.active]:text-white"
             size="md"
             to="/app/records"
             variant="white"
@@ -51,7 +51,7 @@ export function Sidebar() {
           </Button>
         </li>
       </ul>
-      <div className="mt-auto border-t border-gray pt-4 text-center">
+      <div className="border-gray mt-auto border-t pt-4 text-center">
         <Button
           as={NavLink}
           className="mb-2.5 block [&.active]:border-primary [&.active]:bg-primary [&.active]:text-white"

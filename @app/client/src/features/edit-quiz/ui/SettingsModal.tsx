@@ -90,7 +90,7 @@ export function SettingsModal() {
           />
           <div>
             <textarea
-              className="w-full resize-none rounded border border-gray px-2.5 py-1.5 text-sm outline-0"
+              className="border-gray w-full resize-none rounded border px-2.5 py-1.5 text-sm outline-0"
               disabled={isPublished}
               placeholder="Enter quiz description"
               rows={6}

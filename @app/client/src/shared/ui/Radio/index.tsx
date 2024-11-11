@@ -39,7 +39,7 @@ export function Radio({
         name={name}
         type="checkbox"
       />
-      <div className="flex h-4 w-4 cursor-pointer items-center justify-center rounded-full border border-gray text-white peer-checked:border-secondary peer-checked:text-secondary">
+      <div className="border-gray flex h-4 w-4 cursor-pointer items-center justify-center rounded-full border text-white peer-checked:border-secondary peer-checked:text-secondary">
         <Tick className="text-current" height={0.75} width={0.75} />
       </div>
       {children}

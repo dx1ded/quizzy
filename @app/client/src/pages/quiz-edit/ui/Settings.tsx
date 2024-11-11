@@ -76,7 +76,7 @@ export function Settings({ submit }: SettingsProps) {
           )}
         />
       </div>
-      <div className="mt-auto flex flex-col gap-2.5 border-t border-gray pt-3">
+      <div className="border-gray mt-auto flex flex-col gap-2.5 border-t pt-3">
         <DeleteQuestion
           render={() => (
             <Button disabled={isPublished} size="md" variant="white">

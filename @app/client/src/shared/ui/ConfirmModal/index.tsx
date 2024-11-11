@@ -29,7 +29,7 @@ export function ConfirmModal({
       <div className="max-w-md p-4">
         <Text className="mb-3 !font-semibold">{title}</Text>
         <Caption className="mb-5 inline-block leading-5">{description}</Caption>
-        <div className="flex items-center gap-2.5 border-t border-gray pt-3">
+        <div className="border-gray flex items-center gap-2.5 border-t pt-3">
           <Button
             className="px-5"
             size="md"

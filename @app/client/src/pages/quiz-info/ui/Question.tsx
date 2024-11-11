@@ -9,7 +9,7 @@ interface QuestionProps {
 
 export function Question({ n, name, cover, time }: QuestionProps) {
   return (
-    <div className="flex items-center justify-between rounded border border-gray">
+    <div className="border-gray flex items-center justify-between rounded border">
       <div className="p-2">
         <p className="font-bold">{n}</p>
         <Caption className="inline-block lg:text-xs">{name}</Caption>

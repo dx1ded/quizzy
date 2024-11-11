@@ -104,7 +104,7 @@ export function QuizItem({
     <div
       className={`${
         isExpanded ? "" : "smaller"
-      } flex h-20 items-center gap-4 rounded-md border border-gray bg-white pl-4 pr-3 sm:h-16 xs:h-12 [&.smaller]:h-14`}>
+      } border-gray flex h-20 items-center gap-4 rounded-md border bg-white pl-4 pr-3 sm:h-16 xs:h-12 [&.smaller]:h-14`}>
       {/* Confirm modal (for unpublish / delete) */}
       <ConfirmModal
         buttonText={content.buttonText}

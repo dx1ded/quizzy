@@ -81,7 +81,7 @@ export function Library() {
               </button>
             )}
           </div>
-          <div className="mb-8 flex items-center justify-between rounded border border-gray px-2.5 py-2 md:mb-4 xs:border-none xs:p-0">
+          <div className="border-gray mb-8 flex items-center justify-between rounded border px-2.5 py-2 md:mb-4 xs:border-none xs:p-0">
             <div className="flex gap-3 sm:gap-2">
               {options.map((option, i) => (
                 <Button
