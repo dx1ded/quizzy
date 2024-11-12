@@ -24,9 +24,10 @@ await server.register(QuizRoute, { prefix: "/api/quiz" })
 await server.register(RecordRoute, { prefix: "/api/record" })
 await server.register(PlayRoute, { prefix: "/api/play" })
 
-const PORT = Number(process.env.PORT)
+const PORT = Number(process.env.PORT) || "5000"
+const HOST = String(process.env.HOST) || "localhost"
 
-server.listen({ port: PORT }, (err) => {
+server.listen({ port: PORT, host: HOST }, (err) => {
   if (err) console.log(err)
   console.log(`Server is listening port ${PORT}`)
 })

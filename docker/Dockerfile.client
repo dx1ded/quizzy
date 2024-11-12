@@ -5,6 +5,8 @@ WORKDIR /app
 COPY ../ .
 
 RUN npm install --workspace=@app/common --workspace=@app/client --legacy-peer-deps
+
+RUN npm run common:build
 RUN npm run client:build
 
 # Serving client
