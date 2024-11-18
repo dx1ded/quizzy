@@ -6,6 +6,9 @@ COPY ../ .
 
 RUN npm install --workspace=@app/common --workspace=@app/client --legacy-peer-deps
 
+ARG VITE_WS_URL
+ENV VITE_WS_URL=${VITE_WS_URL}
+
 RUN npm run common:build
 RUN npm run client:build
 

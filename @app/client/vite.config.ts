@@ -6,8 +6,8 @@ import eslintPlugin from "vite-plugin-eslint"
 
 export default defineConfig({
   plugins: [
-    tsconfigPaths(),
     react(),
+    tsconfigPaths(),
     eslintPlugin({
       include: ["./src/**/*.ts", "./src/**/*.tsx"]
     })

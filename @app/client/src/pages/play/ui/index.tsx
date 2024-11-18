@@ -29,7 +29,7 @@ export function Play() {
     (state) => state.account.nickname
   )
   const { lastJsonMessage, sendJsonMessage } = useWebSocket<PlayResponse>(
-    "ws://localhost:5000/api/play",
+    `${import.meta.env.VITE_WS_URL}/api/play`,
     {
       queryParams: {
         sessionId: searchParams.get("sessionId")!,
