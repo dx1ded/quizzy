@@ -18,5 +18,9 @@ WORKDIR /app
 
 COPY --from=builder /app .
 
+# Mount secrets
+RUN --mount=type=secret,id=env_file \
+    cp /run/secrets/env_file .env
+
 EXPOSE 5000
 CMD ["npm", "run", "server:serve"]
