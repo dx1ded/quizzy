@@ -1,0 +1,94 @@
+name: CI/CD
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-client-docker-image:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build and push client
+        uses: docker/build-push-action@v6
+        with:
+          push: true
+          context: ./docker/Dockerfile.client
+          tags: ${{ secrets.DOCKERHUB_REPO }}:client-latest
+          build-args: |
+            VITE_WS_URL=wss://quizzy.vovados.com
+
+  build-server-docker-image:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Create .env file for server
+        run: |
+          cat > .env << EOF
+          HOST=${{ secrets.HOST }}
+          PORT=${{ secrets.PORT }}
+          DB_USERNAME=${{ secrets.DB_USERNAME }}
+          DB_PASSWORD=${{ secrets.DB_PASSWORD }}
+          DB_HOST=${{ secrets.DB_HOST }}
+          DB_NAME=${{ secrets.DB_NAME }}
+          DB_PORT=${{ secrets.DB_PORT }}
+          SALT_ROUNDS=${{ secrets.SALT_ROUNDS }}
+          SECRET_TOKEN=${{ secrets.SECRET_TOKEN }}
+          FIREBASE_API_KEY=${{ secrets.FIREBASE_API_KEY }}
+          FIREBASE_AUTH_DOMAIN=${{ secrets.FIREBASE_AUTH_DOMAIN }}
+          FIREBASE_PROJECT_ID=${{ secrets.FIREBASE_PROJECT_ID }}
+          FIREBASE_STORAGE_BUCKET=${{ secrets.FIREBASE_STORAGE_BUCKET }}
+          FIREBASE_MESSAGING_SENDER_ID=${{ secrets.FIREBASE_MESSAGING_SENDER_ID }}
+          FIREBASE_APP_ID=${{ secrets.FIREBASE_APP_ID }}
+          FIREBASE_MEASUREMENT_ID=${{ secrets.FIREBASE_MEASUREMENT_ID }}
+          EOF
+
+      - name: Build and push server
+        uses: docker/build-push-action@v6
+        with:
+          push: true
+          context: ./docker/Dockerfile.server
+          tags: ${{ secrets.DOCKERHUB_REPO }}:server-latest
+          secret-files: |
+            "env_file=.env"
+
+  deploy:
+    needs: [build-client-docker-image, build-server-docker-image]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USERNAME }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          passphrase: ${{ secrets.VPS_SSH_PASSPHRASE }}
+          script: |
+            cd ./www
+            export QUIZZY_CLIENT_IMAGE=${{ secrets.DOCKERHUB_REPO }}:client-latest
+            export QUIZZY_SERVER_IMAGE=${{ secrets.DOCKERHUB_REPO }}:server-latest
+            docker compose down quizzy-client quizzy-server
+            docker rmi ${{ secrets.DOCKERHUB_REPO }}:client-latest
+            docker rmi ${{ secrets.DOCKERHUB_REPO }}:server-latest
+            docker compose up traefik quizzy-client quizzy-server -d --no-recreate

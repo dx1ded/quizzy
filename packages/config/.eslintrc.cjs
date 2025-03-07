@@ -72,5 +72,10 @@ module.exports = {
     "import/resolver": {
       "typescript": {}
     }
+  },
+  parserOptions: {
+    project: {
+      typescript: true
+    }
   }
 }

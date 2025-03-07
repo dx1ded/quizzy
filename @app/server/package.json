@@ -4,7 +4,7 @@
   "version": "0.0.1",
   "scripts": {
     "dev": "tsx watch ./src/index.ts",
-    "build": "pkgroll",
+    "serve": "tsx ./src/index.ts",
     "lint": "eslint . --ext ts --report-unused-disable-directives",
     "lint:fix": "eslint . --ext ts --fix"
   },

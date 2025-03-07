@@ -6,15 +6,16 @@
     "packages/*"
   ],
   "scripts": {
+    "server:serve": "npm run --prefix @app/server serve",
+
     "client:dev": "npm run --prefix @app/client dev",
     "server:dev": "npm run --prefix @app/server dev",
     "common:dev": "npm run --prefix @app/common dev",
     "dev": "run-p client:dev server:dev common:dev",
 
     "client:build": "npm run --prefix @app/client build",
-    "server:build": "npm run --prefix @app/server build",
     "common:build": "npm run --prefix @app/common build",
-    "build": "run-p client:build server:build common:build",
+    "build": "run-p client:build common:build",
 
     "client:lint": "npm run --prefix @app/client lint",
     "server:lint": "npm run --prefix @app/server lint",
