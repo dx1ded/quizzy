@@ -70,8 +70,8 @@ jobs:
           push: true
           file: ./docker/Dockerfile.server
           tags: ${{ secrets.DOCKERHUB_REPO }}:server-latest
-          secret-files: |
-            "env_file=.env"
+          secrets: |
+            env_file=.env
 
   deploy:
     needs: [build-client-docker-image, build-server-docker-image]
