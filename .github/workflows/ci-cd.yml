@@ -24,7 +24,6 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           push: true
-          context: ./docker
           file: ./docker/Dockerfile.client
           tags: ${{ secrets.DOCKERHUB_REPO }}:client-latest
           build-args: |
@@ -69,7 +68,6 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           push: true
-          context: ./docker
           file: ./docker/Dockerfile.server
           tags: ${{ secrets.DOCKERHUB_REPO }}:server-latest
           secret-files: |
