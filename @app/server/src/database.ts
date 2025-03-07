@@ -9,8 +9,6 @@ import { PublishedQuiz } from "./entities/PublishedQuiz"
 
 const dirnamePath = dirname(fileURLToPath(import.meta.url))
 
-console.log(process.env)
-
 export const AppDataSource = new DataSource({
   type: "postgres",
   host: process.env.DB_HOST,

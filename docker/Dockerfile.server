@@ -19,8 +19,13 @@ WORKDIR /app
 COPY --from=builder /app .
 
 # Mount secrets
-RUN --mount=type=secret,id=env_file \
-    cp /run/secrets/env_file .env
+# Create a startup script
+RUN echo '#!/bin/sh\n\
+if [ -f /run/secrets/env_file ]; then\n\
+  cp /run/secrets/env_file .env\n\
+fi\n\
+npm run server:serve' > /app/start.sh && chmod +x /app/start.sh
 
+# Use the script as entrypoint
 EXPOSE 5000
-CMD ["npm", "run", "server:serve"]
+CMD ["/app/start.sh"]
