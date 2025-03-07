@@ -17,7 +17,7 @@ ENV VITE_WS_URL=${VITE_WS_URL}
 RUN npm run common:build && \
     npm run client:build
 
-FROM nginx:alpine AS runner
+FROM nginx:stable-alpine AS runner
 WORKDIR /usr/share/nginx/html
 
 COPY --from=builder /app/@app/client/dist .
