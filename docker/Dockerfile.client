@@ -7,6 +7,7 @@ COPY ../@app/client/package*.json ./@app/client/
 
 RUN npm ci --workspace=@app/common --workspace=@app/client --legacy-peer-deps
 
+COPY ../packages ./packages
 COPY ../@app/common ./@app/common
 COPY ../@app/client ./@app/client
 
