@@ -24,7 +24,8 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           push: true
-          context: ./docker/Dockerfile.client
+          context: ./docker
+          file: Dockerfile.client
           tags: ${{ secrets.DOCKERHUB_REPO }}:client-latest
           build-args: |
             VITE_WS_URL=wss://quizzy.vovados.com
@@ -68,7 +69,8 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           push: true
-          context: ./docker/Dockerfile.server
+          context: ./docker
+          file: Dockerfile.server
           tags: ${{ secrets.DOCKERHUB_REPO }}:server-latest
           secret-files: |
             "env_file=.env"
