@@ -18,14 +18,17 @@ WORKDIR /app
 
 COPY --from=builder /app .
 
-# Mount secrets
-# Create a startup script
-RUN echo '#!/bin/sh\n\
-if [ -f /run/secrets/env_file ]; then\n\
-  cp /run/secrets/env_file .env\n\
-fi\n\
-npm run server:serve' > /app/start.sh && chmod +x /app/start.sh
+# Create a startup script with absolute path
+RUN echo '#!/bin/sh' > /app/start.sh && \
+    echo 'if [ -f /run/secrets/env_file ]; then' >> /app/start.sh && \
+    echo '  cp /run/secrets/env_file /app/.env' >> /app/start.sh && \
+    echo '  echo "Copied env file"' >> /app/start.sh && \
+    echo 'else' >> /app/start.sh && \
+    echo '  echo "No env file found"' >> /app/start.sh && \
+    echo 'fi' >> /app/start.sh && \
+    echo 'exec npm run server:serve' >> /app/start.sh && \
+    chmod +x /app/start.sh
 
-# Use the script as entrypoint
 EXPOSE 5000
-CMD ["/app/start.sh"]
+# Use explicit path and make sure to use exec form
+ENTRYPOINT ["/app/start.sh"]
