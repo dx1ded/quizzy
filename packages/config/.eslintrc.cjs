@@ -74,8 +74,7 @@ module.exports = {
     }
   },
   parserOptions: {
-    project: {
-      typescript: true
-    }
+    parser: "@typescript-eslint/parser",
+    project: true
   }
 }
