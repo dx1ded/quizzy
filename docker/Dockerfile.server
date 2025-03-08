@@ -20,17 +20,10 @@ ARG PORT=5000
 
 COPY --from=builder /app .
 
-# Create a startup script with absolute path
-RUN echo '#!/bin/sh' > /app/start.sh && \
-    echo 'if [ -f /run/secrets/env_file ]; then' >> /app/start.sh && \
-    echo '  cp /run/secrets/env_file /app/.env' >> /app/start.sh && \
-    echo '  echo "Copied env file"' >> /app/start.sh && \
-    echo 'else' >> /app/start.sh && \
-    echo '  echo "No env file found"' >> /app/start.sh && \
-    echo 'fi' >> /app/start.sh && \
-    echo 'exec npm run server:serve' >> /app/start.sh && \
-    chmod +x /app/start.sh
+RUN --mount=type=secret,id=env_file \
+    if [ -f /run/secrets/env_file ]; then \
+      cat /run/secrets/env_file > .env; \
+    fi
 
 EXPOSE ${PORT}
-# Use explicit path and make sure to use exec form
-ENTRYPOINT ["/app/start.sh"]
+CMD ["npm", "run", "server:serve"]
