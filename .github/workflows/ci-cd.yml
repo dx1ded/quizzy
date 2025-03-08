@@ -26,10 +26,9 @@ jobs:
           push: true
           file: ./docker/Dockerfile.client
           tags: ${{ secrets.DOCKERHUB_REPO }}:client-latest
-          build-args: |
-            VITE_WS_URL=wss://quizzy.vovados.com
 
   build-server-docker-image:
+    environment: Server-Build
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -46,13 +45,6 @@ jobs:
       - name: Create .env file for server
         run: |
           cat > .env << EOF
-          HOST=${{ secrets.HOST }}
-          PORT=${{ secrets.PORT }}
-          DB_USERNAME=${{ secrets.DB_USERNAME }}
-          DB_PASSWORD=${{ secrets.DB_PASSWORD }}
-          DB_HOST=${{ secrets.DB_HOST }}
-          DB_NAME=${{ secrets.DB_NAME }}
-          DB_PORT=${{ secrets.DB_PORT }}
           SALT_ROUNDS=${{ secrets.SALT_ROUNDS }}
           SECRET_TOKEN=${{ secrets.SECRET_TOKEN }}
           FIREBASE_API_KEY=${{ secrets.FIREBASE_API_KEY }}
@@ -70,7 +62,7 @@ jobs:
           push: true
           file: ./docker/Dockerfile.server
           tags: ${{ secrets.DOCKERHUB_REPO }}:server-latest
-          secrets: |
+          secret-files: |
             env_file=.env
 
   deploy:
